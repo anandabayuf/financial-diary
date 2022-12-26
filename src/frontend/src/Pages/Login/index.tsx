@@ -11,14 +11,15 @@ import StyledRegisterContainer from './styled/StyledRegisterContainer';
 import { login } from '../../Api/Auth';
 import { useState } from 'react';
 import { useAppDispatch } from '../../Hooks/useRedux';
-import { setDarkMode } from '../../Store/Theme/ThemeSlice';
 import { setUserLoggedIn } from '../../Store/User/UserSlice';
 import { decodeJWT } from '../../Utils/AuthUtils';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage: React.FC = () => {
 	const [loading, setLoading] = useState(false);
 	const [messageApi, contextHolder] = message.useMessage();
 	const dispatch = useAppDispatch();
+	const navigate = useNavigate();
 
 	const handleLogin = async (values: string) => {
 		setLoading(true);
@@ -41,6 +42,10 @@ const LoginPage: React.FC = () => {
 
 	const handleLoginFailed = (errorInfo: string) => {
 		// console.log(errorInfo);
+	};
+
+	const handleClickRegister = () => {
+		navigate('/register');
 	};
 
 	return (
@@ -77,7 +82,7 @@ const LoginPage: React.FC = () => {
 							/>
 							<AppButton
 								type='link'
-								onClick={() => dispatch(setDarkMode())}
+								onClick={handleClickRegister}
 							>
 								Register
 							</AppButton>

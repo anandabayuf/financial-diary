@@ -9,3 +9,18 @@ export const login = async (credential: any): Promise<any> => {
 		return err;
 	}
 };
+
+export const register = async (user: any): Promise<any> => {
+	try {
+		const response = await instance({
+			url: '/auth/register',
+			method: 'POST',
+			data: user,
+			headers: { 'Content-Type': 'multipart/form-data' },
+		});
+
+		return response;
+	} catch (err) {
+		return err;
+	}
+};
