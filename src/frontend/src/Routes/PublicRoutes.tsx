@@ -1,12 +1,24 @@
-import { Navigate, PathRouteProps } from 'react-router-dom';
+import { Navigate, Outlet, RouteObject } from 'react-router-dom';
 import { getRouteNames } from '../Utils/RouteUtils';
 import RouteNames from '../Constants/RouteNames';
 import LoginPage from '../Pages/Login';
+import useAuth from '../Hooks/useAuth';
 
-const PublicRoutes: PathRouteProps[] = [
+const LoginRoute = () => {
+	const isLoggedIn = useAuth();
+
+	return isLoggedIn ? <Navigate to='/' /> : <Outlet />;
+};
+
+const PublicRoutes: RouteObject[] = [
 	{
-		path: getRouteNames(RouteNames.LOGIN),
-		element: <LoginPage />,
+		element: <LoginRoute />,
+		children: [
+			{
+				path: getRouteNames(RouteNames.LOGIN),
+				element: <LoginPage />,
+			},
+		],
 	},
 	{
 		path: '*',

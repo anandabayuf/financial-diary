@@ -1,18 +1,18 @@
-import { AppTitleProps } from './interfaces/interfaces';
-import StyledTitle from './styled/StyledTitle';
+import { AppTextProps } from './interfaces/interfaces';
 import useTheme from '../../../Hooks/useTheme';
+import StyledText from './styled/StyledText';
 
-const AppTitle: React.FC<AppTitleProps> = ({ title, level }) => {
+const AppText: React.FC<AppTextProps> = ({ text, ...rest }) => {
 	const theme = useTheme();
 
 	return (
-		<StyledTitle
-			level={level}
-			titlecolor={theme?.title}
+		<StyledText
+			textcolor={theme?.text}
+			{...rest}
 		>
-			{title}
-		</StyledTitle>
+			{text}
+		</StyledText>
 	);
 };
 
-export default AppTitle;
+export default AppText;

@@ -1,23 +1,12 @@
-import { PathRouteProps, Route, Routes } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import PublicRoutes from './PublicRoutes';
-import React, { Suspense } from 'react';
+import SecuredRoutes from './SecuredRoutes';
 
 const AppRoutes = () => {
 	return (
-		<React.Fragment>
-			<Suspense fallback='Loading...'>
-				<Routes>
-					{PublicRoutes.map(
-						(route: PathRouteProps, index: React.Key) => (
-							<Route
-								key={index}
-								{...route}
-							/>
-						)
-					)}
-				</Routes>
-			</Suspense>
-		</React.Fragment>
+		<RouterProvider
+			router={createBrowserRouter([...PublicRoutes, ...SecuredRoutes])}
+		/>
 	);
 };
 

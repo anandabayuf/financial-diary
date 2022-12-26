@@ -4,14 +4,15 @@ import { persistReducer } from 'redux-persist';
 import thunk from 'redux-thunk';
 import { persistConfigType } from './interfaces/interfaces';
 import ThemeReducer from './Theme/ThemeSlice';
+import UserReducer from './User/UserSlice';
 
 const reducers = combineReducers({
 	theme: ThemeReducer,
-	// language: LanguageReducer,
+	user: UserReducer,
 });
 
 const persistConfig: persistConfigType = {
-	key: 'inswb',
+	key: 'financialdiary',
 	storage,
 };
 

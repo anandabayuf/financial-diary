@@ -1,6 +1,7 @@
-export interface AppTitleProps {
+import { TitleProps } from 'antd/es/typography/Title';
+
+export interface AppTitleProps extends TitleProps {
 	title?: string;
-	level?: 1 | 2 | 3 | 4 | 5;
 }
 
 export interface StyledTitleProps {

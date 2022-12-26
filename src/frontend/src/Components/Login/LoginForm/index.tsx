@@ -1,4 +1,4 @@
-import { Button, Form, Input } from 'antd';
+import { Form } from 'antd';
 import { LoginFormProps } from './interfaces/interfaces';
 import AppFormItem from '../../General/AppFormItem/index';
 import AppButton from '../../General/AppButton/index';
@@ -7,6 +7,7 @@ import AppInput from '../../General/AppInput/index';
 const LoginForm: React.FC<LoginFormProps> = ({
 	handleFinish,
 	handleFinishFailed,
+	loading,
 }) => {
 	return (
 		<Form
@@ -39,12 +40,16 @@ const LoginForm: React.FC<LoginFormProps> = ({
 				/>
 			</AppFormItem>
 
-			<AppButton
-				htmlType='submit'
-				block
-			>
-				Login
-			</AppButton>
+			<AppFormItem>
+				<AppButton
+					htmlType='submit'
+					block
+					type='primary'
+					loading={loading}
+				>
+					Login
+				</AppButton>
+			</AppFormItem>
 		</Form>
 	);
 };

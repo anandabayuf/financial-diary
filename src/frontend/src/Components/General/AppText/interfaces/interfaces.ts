@@ -1,8 +1,9 @@
-export interface AppTitleProps {
-	title?: string;
-	level?: 1 | 2 | 3 | 4 | 5;
+import { TextProps } from 'antd/es/typography/Text';
+
+export interface AppTextProps extends TextProps {
+	text?: React.ReactNode;
 }
 
-export interface StyledTitleProps {
-	titlecolor?: string;
+export interface StyledTextProps {
+	textcolor?: string;
 }
