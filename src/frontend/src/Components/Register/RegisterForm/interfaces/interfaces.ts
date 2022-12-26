@@ -1,7 +1,7 @@
 import { UploadFile, UploadProps, RcFile } from 'antd/es/upload';
 
 export interface RegisterFormProps {
-	handleFinish?: (values: string) => void;
+	handleFinish?: (values: any) => void;
 	handleFinishFailed?: (errorInfo: any) => void;
 	loading?: boolean;
 	handleUploadImage?: {
