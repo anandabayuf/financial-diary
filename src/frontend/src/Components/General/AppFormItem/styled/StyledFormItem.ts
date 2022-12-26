@@ -18,6 +18,10 @@ const StyledFormItem = styled(Form.Item)<StyledFormItemProps>`
 		font-family: 'Comfortaa', cursive !important;
 		font-weight: 400 !important;
 	}
+
+	.ant-form-item-optional {
+		display: none !important;
+	}
 `;
 
 export default StyledFormItem;

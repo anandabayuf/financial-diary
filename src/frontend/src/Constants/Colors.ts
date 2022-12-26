@@ -8,12 +8,12 @@ export const Dark = {
 };
 
 export const Light = {
-	text: '',
-	title: '',
+	text: '#393E46',
+	title: '#222831',
 	subTitle: '',
 	bg: '#F9F7F7',
-	container: '',
-	button: '',
+	container: '#DBE2EF',
+	button: '#91c3ff',
 };
 
 export type ColorState = typeof Dark | typeof Light;
