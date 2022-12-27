@@ -5,10 +5,12 @@ import thunk from 'redux-thunk';
 import { persistConfigType } from './interfaces/interfaces';
 import ThemeReducer from './Theme/ThemeSlice';
 import UserReducer from './User/UserSlice';
+import MenuReducer from './Menu/MenuSlice';
 
 const reducers = combineReducers({
 	theme: ThemeReducer,
 	user: UserReducer,
+	menu: MenuReducer,
 });
 
 const persistConfig: persistConfigType = {

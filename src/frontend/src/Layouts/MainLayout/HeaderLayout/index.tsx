@@ -1,5 +1,4 @@
 import StyledHeader from './styled/StyledHeader';
-import useTheme from '../../../Hooks/useTheme';
 import AppButton from '../../../Components/General/AppButton/index';
 import { MdOutlineMenu } from 'react-icons/md';
 import { Avatar, Dropdown } from 'antd';
@@ -18,8 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import ThemeModeNames from '../../../Constants/ThemeModeNames';
 import { setDarkMode, setLightMode } from '../../../Store/Theme/ThemeSlice';
 
-const HeaderLayout: React.FC<HeaderLayoutProps> = ({ user }) => {
-	const theme = useTheme();
+const HeaderLayout: React.FC<HeaderLayoutProps> = ({ user, theme }) => {
 	const themeMode = useAppSelector((state) => state.theme);
 	const [isOpen, setIsOpen] = useState(false);
 	const dispatch = useAppDispatch();

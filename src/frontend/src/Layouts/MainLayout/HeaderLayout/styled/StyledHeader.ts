@@ -11,6 +11,7 @@ const StyledHeader = styled(Layout.Header)<StyledHeaderProps>`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	z-index: 10;
 
 	.logo-container {
 		display: flex;

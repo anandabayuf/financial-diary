@@ -1,5 +1,7 @@
+import { ColorState } from '../../../../Constants/Colors';
 export interface HeaderLayoutProps {
 	user?: any;
+	theme?: ColorState;
 }
 
 export interface StyledDropwdownProps {

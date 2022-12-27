@@ -14,6 +14,7 @@ import { setUserLoggedIn } from '../../Store/User/UserSlice';
 import { decodeJWT } from '../../Utils/AuthUtils';
 import { useLocation, useNavigate } from 'react-router-dom';
 import StyledTitle from './styled/StyledTitle';
+import { getUserById } from '../../Api/User';
 
 const LoginPage: React.FC = () => {
 	const [loading, setLoading] = useState(false);
@@ -30,10 +31,19 @@ const LoginPage: React.FC = () => {
 		if (res.request.status === 401) {
 			messageApi.error(res.response.data.detail);
 		} else {
+			const jwtDecoded: any = decodeJWT(res.data.token);
+
+			const responseGetUser = await getUserById(
+				jwtDecoded.id,
+				res.data.token
+			);
+
+			const user = await responseGetUser.data.data;
+
 			dispatch(
 				setUserLoggedIn({
 					accessToken: res.data.token,
-					data: decodeJWT(res.data.token),
+					data: await user,
 				})
 			);
 		}

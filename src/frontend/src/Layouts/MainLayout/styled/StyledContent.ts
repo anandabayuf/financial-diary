@@ -6,10 +6,10 @@ const { Content } = Layout;
 
 const StyledContent = styled(Content)<StyledContentProps>`
 	background-color: ${(props) => props.backgroundcolor};
-	padding: 30px;
+	padding: 10px;
 
-	@media screen and (max-width: 768px) {
-		padding: 10px;
+	@media screen and (min-width: 1024px) {
+		padding: 20px;
 	}
 `;
 
