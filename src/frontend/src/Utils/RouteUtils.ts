@@ -7,8 +7,14 @@ export const getRouteNames = (route: string): string => {
 		case RouteNames.REGISTER:
 			return '/register';
 		case RouteNames.DASHBOARD:
-			return '/';
+			return '/dashboard';
+		case RouteNames.MANAGEMENT_CATEGORY:
+			return '/management/category';
+		case RouteNames.MANAGEMENT_WALLETS:
+			return '/management/wallets';
+		case RouteNames.NOTES:
+			return '/notes';
 		default:
-			return '';
+			return '/';
 	}
 };

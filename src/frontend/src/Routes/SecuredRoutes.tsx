@@ -3,6 +3,9 @@ import useAuth from '../Hooks/useAuth';
 import { getRouteNames } from '../Utils/RouteUtils';
 import RouteNames from '../Constants/RouteNames';
 import DashboardPage from '../Pages/Dashboard';
+import ManagementCategoryPage from '../Pages/Management/Category';
+import ManagementWalletPage from '../Pages/Management/Wallet/index';
+import NotesPage from '../Pages/Notes/index';
 
 const ProtectedRoute = () => {
 	const isLoggedIn = useAuth();
@@ -17,6 +20,18 @@ const SecuredRoutes: RouteObject[] = [
 			{
 				path: getRouteNames(RouteNames.DASHBOARD),
 				element: <DashboardPage />,
+			},
+			{
+				path: getRouteNames(RouteNames.MANAGEMENT_CATEGORY),
+				element: <ManagementCategoryPage />,
+			},
+			{
+				path: getRouteNames(RouteNames.MANAGEMENT_WALLETS),
+				element: <ManagementWalletPage />,
+			},
+			{
+				path: getRouteNames(RouteNames.NOTES),
+				element: <NotesPage />,
 			},
 		],
 	},
