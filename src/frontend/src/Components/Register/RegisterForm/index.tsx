@@ -1,4 +1,3 @@
-import { Form } from 'antd';
 import { RegisterFormProps } from './interfaces/interfaces';
 import AppFormItem from '../../General/AppFormItem/index';
 import AppButton from '../../General/AppButton/index';

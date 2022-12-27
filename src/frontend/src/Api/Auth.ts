@@ -24,3 +24,17 @@ export const register = async (user: any): Promise<any> => {
 		return err;
 	}
 };
+
+export const checkToken = async (token?: string): Promise<any> => {
+	try {
+		const response = await instance({
+			url: '/auth/authToken',
+			method: 'GET',
+			headers: { Authorization: `Bearer ${token}` },
+		});
+
+		return response;
+	} catch (err) {
+		return err;
+	}
+};

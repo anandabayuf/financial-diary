@@ -1,7 +1,6 @@
 import { message, Modal } from 'antd';
 import AppCard from '../../Components/General/AppCard';
 import FrontLayout from '../../Layouts/FrontLayout';
-import AppTitle from '../../Components/General/AppTitle/index';
 import AppButton from '../../Components/General/AppButton';
 import AppText from '../../Components/General/AppText';
 import StyledRegisterContainer from './styled/StyledRegisterContainer';
@@ -11,6 +10,7 @@ import { RcFile, UploadFile, UploadProps } from 'antd/es/upload';
 import { useState } from 'react';
 import { getBase64 } from '../../Utils/ImageUtils';
 import { register } from '../../Api/Auth';
+import StyledTitle from './styled/StyledTitle';
 
 const RegisterPage: React.FC = () => {
 	const [loading, setLoading] = useState(false);
@@ -116,7 +116,7 @@ const RegisterPage: React.FC = () => {
 		<FrontLayout>
 			{contextHolder}
 			<AppCard>
-				<AppTitle
+				<StyledTitle
 					level={3}
 					title='Register'
 				/>
