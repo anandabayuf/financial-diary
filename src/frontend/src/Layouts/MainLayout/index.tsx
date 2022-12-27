@@ -6,11 +6,12 @@ import React from 'react';
 import HeaderLayout from './HeaderLayout/index';
 import SiderLayout from './SiderLayout';
 import { Layout, MenuProps } from 'antd';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../Hooks/useRedux';
 import { setOpenKeys, setSelectedKeys } from '../../Store/Menu/MenuSlice';
 import { rootSubmenuKeys } from './SiderLayout/MenuItems';
+import DrawerLayout from './DrawerLayout';
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 	const theme = useTheme();
@@ -18,6 +19,9 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 	const location = useLocation();
 	const dispatch = useAppDispatch();
 	const { openKeys, selectedKeys } = useAppSelector((state) => state.menu);
+	const [drawerState, setDrawerState] = useState({
+		isOpen: false,
+	});
 
 	useEffect(() => {
 		const setSelectedKeysByLocation = () => {
@@ -40,11 +44,26 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 		}
 	};
 
+	const handleCloseDrawer = () => {
+		setDrawerState({
+			...drawerState,
+			isOpen: false,
+		});
+	};
+
+	const handleOpenDrawer = () => {
+		setDrawerState({
+			...drawerState,
+			isOpen: true,
+		});
+	};
+
 	return (
 		<StyledLayout>
 			<HeaderLayout
 				user={user}
 				theme={theme}
+				handleOpenDrawer={handleOpenDrawer}
 			/>
 			<Layout hasSider>
 				<SiderLayout
@@ -59,6 +78,16 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 					{children}
 				</StyledContent>
 			</Layout>
+			<DrawerLayout
+				theme={theme}
+				handleClose={handleCloseDrawer}
+				isOpen={drawerState.isOpen}
+				menu={{
+					selectedKeys: selectedKeys,
+					opensKeys: openKeys,
+					onOpenChange: onOpenSubMenuChange,
+				}}
+			/>
 		</StyledLayout>
 	);
 };

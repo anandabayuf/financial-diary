@@ -12,8 +12,6 @@ const SiderLayout: React.FC<SiderLayoutProps> = ({ theme, menu }) => {
 		>
 			<StyledMenu
 				mode='inline'
-				// defaultSelectedKeys={['1']}
-				// defaultOpenKeys={['sub1']}
 				selectedKeys={menu?.selectedKeys}
 				openKeys={menu?.opensKeys}
 				onOpenChange={menu?.onOpenChange}

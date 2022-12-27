@@ -17,7 +17,11 @@ import { useNavigate } from 'react-router-dom';
 import ThemeModeNames from '../../../Constants/ThemeModeNames';
 import { setDarkMode, setLightMode } from '../../../Store/Theme/ThemeSlice';
 
-const HeaderLayout: React.FC<HeaderLayoutProps> = ({ user, theme }) => {
+const HeaderLayout: React.FC<HeaderLayoutProps> = ({
+	user,
+	theme,
+	handleOpenDrawer,
+}) => {
 	const themeMode = useAppSelector((state) => state.theme);
 	const [isOpen, setIsOpen] = useState(false);
 	const dispatch = useAppDispatch();
@@ -54,6 +58,7 @@ const HeaderLayout: React.FC<HeaderLayoutProps> = ({ user, theme }) => {
 					}
 					type='text'
 					size='large'
+					onClick={handleOpenDrawer}
 				/>
 				<StyledTitle
 					title='Financial Diary'
