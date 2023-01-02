@@ -5,7 +5,7 @@ import { StyledButtonProps } from '../interfaces/interfaces';
 const StyledButton = styled(Button)<StyledButtonProps>`
 	background-color: ${(props) =>
 		(props.type === 'default' || props.type === 'primary') &&
-		props.backgroundcolor} !important;
+		props.backgroundcolor};
 
 	font-family: 'Comfortaa', cursive !important;
 	font-weight: 500 !important;
@@ -16,8 +16,10 @@ const StyledButton = styled(Button)<StyledButtonProps>`
 
 	:hover {
 		background-color: ${(props) =>
-			(props.type === 'default' || props.type === 'primary') &&
-			'rgba(63, 114, 175, 0.5)'} !important;
+			props.danger
+				? 'rgba(255, 0, 0, 0.5)'
+				: (props.type === 'default' || props.type === 'primary') &&
+				  'rgba(63, 114, 175, 0.5)'} !important;
 
 		span {
 			text-decoration: ${(props) =>
