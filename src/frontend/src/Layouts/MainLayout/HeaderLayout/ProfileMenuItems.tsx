@@ -3,7 +3,6 @@ import { AiOutlineUser, AiOutlineSetting } from 'react-icons/ai';
 import { BsSun, BsMoon } from 'react-icons/bs';
 import AppText from '../../../Components/General/AppText';
 import { ProfileMenuItemsType } from '../interfaces/interfaces';
-import { Switch } from 'antd';
 import StyledSwitch from './styled/StyledSwitch';
 
 const ProfileMenuItems: ProfileMenuItemsType = (
@@ -40,7 +39,7 @@ const ProfileMenuItems: ProfileMenuItemsType = (
 						backgroundcolor={backgroundcolor}
 						checkedChildren={
 							<div className='flex justify-center items-center'>
-								<BsSun />
+								<BsSun color={textColor} />
 							</div>
 						}
 						unCheckedChildren={

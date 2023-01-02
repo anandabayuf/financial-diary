@@ -1,24 +1,28 @@
-import AppTitle from '../../../Components/General/AppTitle';
-import MainLayout from '../../../Layouts/MainLayout/index';
+import AppTitle from '../../../../Components/General/AppTitle';
+import MainLayout from '../../../../Layouts/MainLayout/index';
 import { useState, useEffect } from 'react';
-import { getAllUserWallet } from '../../../Api/Wallets';
-import { useAppSelector } from '../../../Hooks/useRedux';
-import AppButton from '../../../Components/General/AppButton';
+import { getAllUserWallet } from '../../../../Api/Wallets';
+import { useAppSelector } from '../../../../Hooks/useRedux';
+import AppButton from '../../../../Components/General/AppButton';
 import { BsPlusLg } from 'react-icons/bs';
 import { Space } from 'antd';
-import AppTable from '../../../Components/General/AppTable/index';
-import { IWallet } from '../../../Interfaces/WalletType';
+import AppTable from '../../../../Components/General/AppTable/index';
+import { IWallet } from '../../../../Interfaces/WalletType';
 import WalletColumns from './WalletColumns';
-import AppEmpty from '../../../Components/General/AppEmpty/index';
+import AppEmpty from '../../../../Components/General/AppEmpty/index';
+import AppLoader from '../../../../Components/General/AppLoader';
+import AppBreadcrumb from '../../../../Components/General/AppBreadcrumb';
 
 const ManagementWalletPage: React.FC = () => {
 	const [wallets, setWallets] = useState<IWallet[]>([]);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const token = useAppSelector((state) => state.user.accessToken);
 
 	useEffect(() => {
 		const getWallets = async () => {
+			setIsLoading(true);
 			const res = await getAllUserWallet(token);
-
+			console.log(res);
 			if (res.request.status === 200) {
 				const resWallets = [...res.data.data];
 				setWallets(
@@ -28,6 +32,8 @@ const ManagementWalletPage: React.FC = () => {
 					})
 				);
 			}
+
+			setIsLoading(false);
 		};
 
 		getWallets(); // eslint-disable-next-line
@@ -35,6 +41,7 @@ const ManagementWalletPage: React.FC = () => {
 
 	return (
 		<MainLayout>
+			<AppBreadcrumb />
 			<div className='flex justify-between items-center mb-5'>
 				<AppTitle
 					title='Management Wallets'
@@ -49,7 +56,9 @@ const ManagementWalletPage: React.FC = () => {
 					</Space>
 				</AppButton>
 			</div>
-			{wallets.length > 0 ? (
+			{isLoading ? (
+				<AppLoader />
+			) : wallets.length > 0 ? (
 				<AppTable
 					dataSource={wallets}
 					columns={WalletColumns}

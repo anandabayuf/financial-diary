@@ -2,7 +2,6 @@ import { FrontLayoutProps } from './interfaces/interfaces';
 import StyledLayout from './styled/StyledLayout';
 import StyledContent from './styled/StyledContent';
 import useTheme from '../../Hooks/useTheme';
-import { FloatButton } from 'antd';
 import { useAppSelector, useAppDispatch } from '../../Hooks/useRedux';
 import ThemeModeNames from '../../Constants/ThemeModeNames';
 import { setDarkMode, setLightMode } from '../../Store/Theme/ThemeSlice';

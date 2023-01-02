@@ -1,5 +1,6 @@
 import { ColorState } from '../../../../Constants/Colors';
 import { MenuProps } from 'antd';
+import ThemeModeNames from '../../../../Constants/ThemeModeNames';
 
 export interface SiderLayoutProps {
 	theme?: ColorState;
@@ -22,4 +23,5 @@ export interface MenuStateType {
 
 export interface StyledMenuProps {
 	theme?: ColorState;
+	thememode?: ThemeModeNames;
 }

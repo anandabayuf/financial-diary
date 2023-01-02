@@ -1,5 +1,6 @@
 import { Menu } from 'antd';
 import styled from 'styled-components';
+import ThemeModeNames from '../../../../Constants/ThemeModeNames';
 import { StyledMenuProps } from '../interfaces/interfaces';
 
 const StyledMenu = styled(Menu)<StyledMenuProps>`
@@ -9,7 +10,10 @@ const StyledMenu = styled(Menu)<StyledMenuProps>`
 
 	.ant-menu-item:hover,
 	.ant-menu-submenu:hover {
-		background-color: rgba(63, 114, 175, 0.5) !important;
+		background-color: ${(props) =>
+			props.thememode === ThemeModeNames.DARK
+				? 'rgba(63, 114, 175, 0.5)'
+				: 'rgba(145, 195, 255, 0.5)'} !important;
 	}
 
 	.ant-menu-submenu-arrow {

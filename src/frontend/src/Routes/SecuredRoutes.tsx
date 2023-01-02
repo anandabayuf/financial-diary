@@ -4,7 +4,7 @@ import { getRouteNames } from '../Utils/RouteUtils';
 import RouteNames from '../Constants/RouteNames';
 import DashboardPage from '../Pages/Dashboard';
 import ManagementCategoryPage from '../Pages/Management/Category';
-import ManagementWalletPage from '../Pages/Management/Wallet/index';
+import ManagementWalletPage from '../Pages/Management/Wallet/WalletList/index';
 import NotesPage from '../Pages/Notes/index';
 
 const ProtectedRoute = () => {
@@ -20,6 +20,14 @@ const SecuredRoutes: RouteObject[] = [
 			{
 				path: getRouteNames(RouteNames.DASHBOARD),
 				element: <DashboardPage />,
+			},
+			{
+				path: '/management/*',
+				element: (
+					<Navigate
+						to={getRouteNames(RouteNames.MANAGEMENT_WALLETS)}
+					/>
+				),
 			},
 			{
 				path: getRouteNames(RouteNames.MANAGEMENT_CATEGORY),

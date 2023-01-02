@@ -9,7 +9,6 @@ const StyledTable = styled(Table)<StyledTableProps>`
 
 	th.ant-table-cell {
 		background-color: ${(props) => props.tabletheme?.container} !important;
-		border-bottom: 0.1px solid ${(props) => props.tabletheme?.text} !important;
 	}
 
 	td.ant-table-cell {
@@ -57,7 +56,7 @@ const StyledTable = styled(Table)<StyledTableProps>`
 	}
 
 	li.ant-pagination-item-active {
-		background-color: ${(props) => props.tabletheme?.button};
+		background-color: ${(props) => props.tabletheme?.container};
 
 		a {
 			color: ${(props) => props.tabletheme?.text};
@@ -70,14 +69,15 @@ const StyledTable = styled(Table)<StyledTableProps>`
 
 	.ant-pagination-options-size-changer {
 		.ant-select-selector {
-			background-color: transparent;
-			border-color: ${(props) => props.tabletheme?.button};
+			background-color: ${(props) => props.tabletheme?.container};
+			border-color: transparent !important;
 			font-family: 'Comfortaa', cursive !important;
 			font-weight: 400 !important;
 			color: ${(props) => props.tabletheme?.text};
 
 			:hover {
-				border-color: ${(props) => props.tabletheme?.button} !important;
+				border-color: ${(props) =>
+					props.tabletheme?.container} !important;
 			}
 		}
 
@@ -106,11 +106,17 @@ const StyledTable = styled(Table)<StyledTableProps>`
 
 	.ant-select-focused {
 		.ant-select-selector {
-			border-color: ${(props) => props.tabletheme?.button} !important;
+			border-color: ${(props) => props.tabletheme?.container} !important;
 		}
 		.ant-select-selection-item {
 			color: ${(props) => props.tabletheme?.text} !important;
 		}
+	}
+
+	.ant-pagination-options-quick-jumper {
+		color: ${(props) => props.tabletheme?.text} !important;
+		font-family: 'Comfortaa', cursive !important;
+		font-weight: 400 !important;
 	}
 `;
 

@@ -1,8 +1,8 @@
 import { ColumnsType } from 'antd/es/table';
-import { IWallet } from '../../../Interfaces/WalletType';
+import { IWallet } from '../../../../Interfaces/WalletType';
 import { Space } from 'antd';
-import AppButton from '../../../Components/General/AppButton';
-import AppText from '../../../Components/General/AppText';
+import AppButton from '../../../../Components/General/AppButton';
+import AppText from '../../../../Components/General/AppText';
 
 const WalletColumns: ColumnsType<IWallet> = [
 	{
