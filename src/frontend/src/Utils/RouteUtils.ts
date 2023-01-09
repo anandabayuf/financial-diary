@@ -8,14 +8,18 @@ export const getRouteNames = (route: string): string => {
 			return '/register';
 		case RouteNames.DASHBOARD:
 			return '/dashboard';
-		case RouteNames.MANAGEMENT_CATEGORY:
-			return '/management/category';
 		case RouteNames.MANAGEMENT_WALLETS:
 			return '/management/wallets';
 		case RouteNames.CREATE_WALLETS:
 			return '/management/wallets/create';
 		case RouteNames.EDIT_WALLETS:
 			return '/management/wallets/edit/:id';
+		case RouteNames.MANAGEMENT_CATEGORY:
+			return '/management/category';
+		case RouteNames.CREATE_CATEGORY:
+			return '/management/category/create';
+		case RouteNames.EDIT_CATEGORY:
+			return '/management/category/edit/:id';
 		case RouteNames.NOTES:
 			return '/notes';
 		default:
