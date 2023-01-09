@@ -3,11 +3,13 @@ import useAuth from '../Hooks/useAuth';
 import { getRouteNames } from '../Utils/RouteUtils';
 import RouteNames from '../Constants/RouteNames';
 import DashboardPage from '../Pages/Dashboard';
-import ManagementCategoryPage from '../Pages/Management/Category';
+import ManagementCategoryPage from '../Pages/Management/Category/CategoryList';
 import ManagementWalletPage from '../Pages/Management/Wallet/WalletList/index';
 import NotesPage from '../Pages/Notes/index';
 import CreateWalletPage from '../Pages/Management/Wallet/CreateWallet/index';
 import EditWalletPage from '../Pages/Management/Wallet/EditWallet/index';
+import CreateCategoryPage from '../Pages/Management/Category/CreateCategory/index';
+import EditCategoryPage from '../Pages/Management/Category/EditCategory/index';
 
 const ProtectedRoute = () => {
 	const isLoggedIn = useAuth();
@@ -32,10 +34,6 @@ const SecuredRoutes: RouteObject[] = [
 				),
 			},
 			{
-				path: getRouteNames(RouteNames.MANAGEMENT_CATEGORY),
-				element: <ManagementCategoryPage />,
-			},
-			{
 				path: getRouteNames(RouteNames.MANAGEMENT_WALLETS),
 				element: <ManagementWalletPage />,
 			},
@@ -46,6 +44,18 @@ const SecuredRoutes: RouteObject[] = [
 			{
 				path: getRouteNames(RouteNames.EDIT_WALLETS),
 				element: <EditWalletPage />,
+			},
+			{
+				path: getRouteNames(RouteNames.MANAGEMENT_CATEGORY),
+				element: <ManagementCategoryPage />,
+			},
+			{
+				path: getRouteNames(RouteNames.CREATE_CATEGORY),
+				element: <CreateCategoryPage />,
+			},
+			{
+				path: getRouteNames(RouteNames.EDIT_CATEGORY),
+				element: <EditCategoryPage />,
 			},
 			{
 				path: getRouteNames(RouteNames.NOTES),
