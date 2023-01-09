@@ -3,7 +3,6 @@ import { AppBreadcrumbProps } from './interfaces/interfaces';
 import { useLocation, Link } from 'react-router-dom';
 import StyledBreadcrumb from './styled/StyledBreadcrumb';
 import useTheme from '../../../Hooks/useTheme';
-import AppButton from '../AppButton';
 
 const AppBreadcrumb: React.FC<AppBreadcrumbProps> = ({ ...rest }) => {
 	const location = useLocation();

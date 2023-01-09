@@ -6,6 +6,8 @@ import DashboardPage from '../Pages/Dashboard';
 import ManagementCategoryPage from '../Pages/Management/Category';
 import ManagementWalletPage from '../Pages/Management/Wallet/WalletList/index';
 import NotesPage from '../Pages/Notes/index';
+import CreateWalletPage from '../Pages/Management/Wallet/CreateWallet/index';
+import EditWalletPage from '../Pages/Management/Wallet/EditWallet/index';
 
 const ProtectedRoute = () => {
 	const isLoggedIn = useAuth();
@@ -36,6 +38,14 @@ const SecuredRoutes: RouteObject[] = [
 			{
 				path: getRouteNames(RouteNames.MANAGEMENT_WALLETS),
 				element: <ManagementWalletPage />,
+			},
+			{
+				path: getRouteNames(RouteNames.CREATE_WALLETS),
+				element: <CreateWalletPage />,
+			},
+			{
+				path: getRouteNames(RouteNames.EDIT_WALLETS),
+				element: <EditWalletPage />,
 			},
 			{
 				path: getRouteNames(RouteNames.NOTES),
