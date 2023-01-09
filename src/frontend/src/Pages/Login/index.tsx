@@ -27,10 +27,10 @@ const LoginPage: React.FC = () => {
 		setLoading(true);
 
 		const res = await login(values);
-		// console.log(res);
+		console.log(res);
 		if (res.request.status === 401) {
 			messageApi.error(res.response.data.detail);
-		} else {
+		} else if (res.request.status === 200) {
 			const jwtDecoded: any = decodeJWT(res.data.token);
 
 			const responseGetUser = await getUserById(
@@ -46,6 +46,8 @@ const LoginPage: React.FC = () => {
 					data: await user,
 				})
 			);
+		} else {
+			messageApi.error(res.message);
 		}
 
 		setLoading(false);

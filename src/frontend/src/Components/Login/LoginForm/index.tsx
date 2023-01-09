@@ -11,7 +11,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
 }) => {
 	return (
 		<Form
-			name='basic'
 			onFinish={handleFinish}
 			onFinishFailed={handleFinishFailed}
 			autoComplete='on'
