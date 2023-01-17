@@ -1,4 +1,4 @@
-import { Col, message } from 'antd';
+import { Col } from 'antd';
 import AppCard from '../../Components/General/AppCard';
 import FrontLayout from '../../Layouts/FrontLayout';
 import LoginIllustration from '../../Assets/Images/Login/login-illustration.jpg';
@@ -15,10 +15,10 @@ import { decodeJWT } from '../../Utils/AuthUtils';
 import { useLocation, useNavigate } from 'react-router-dom';
 import StyledTitle from './styled/StyledTitle';
 import { getUserById } from '../../Api/User';
+import AppMessage from '../../Components/General/AppMessage/index';
 
 const LoginPage: React.FC = () => {
 	const [loading, setLoading] = useState(false);
-	const [messageApi, contextHolder] = message.useMessage();
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -27,9 +27,9 @@ const LoginPage: React.FC = () => {
 		setLoading(true);
 
 		const res = await login(values);
-		console.log(res);
+
 		if (res.request.status === 401) {
-			messageApi.error(res.response.data.detail);
+			AppMessage({ content: res.response.data.detail, type: 'error' });
 		} else if (res.request.status === 200) {
 			const jwtDecoded: any = decodeJWT(res.data.token);
 
@@ -47,15 +47,13 @@ const LoginPage: React.FC = () => {
 				})
 			);
 		} else {
-			messageApi.error(res.message);
+			AppMessage({ content: res.message, type: 'error' });
 		}
 
 		setLoading(false);
 	};
 
-	const handleLoginFailed = (errorInfo: string) => {
-		// console.log(errorInfo);
-	};
+	const handleLoginFailed = (errorInfo: string) => {};
 
 	const handleClickRegister = () => {
 		navigate('/register');
@@ -64,7 +62,7 @@ const LoginPage: React.FC = () => {
 	useEffect(() => {
 		const stateReceiveAction = () => {
 			if (location.state) {
-				messageApi.info(location.state.message);
+				AppMessage({ content: location.state.message, type: 'info' });
 				window.history.replaceState({}, document.title);
 			}
 		};
@@ -74,7 +72,6 @@ const LoginPage: React.FC = () => {
 
 	return (
 		<FrontLayout>
-			{contextHolder}
 			<AppCard>
 				<StyledContainer
 					justify={'center'}

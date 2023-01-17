@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 import { useAppSelector } from '../../../../Hooks/useRedux';
 import AppButton from '../../../../Components/General/AppButton';
 import { BsPlusLg } from 'react-icons/bs';
-import { Space, message } from 'antd';
+import { Space } from 'antd';
 import AppTable from '../../../../Components/General/AppTable/index';
-import WalletColumns from './CategoryColumns';
+import WalletColumns from '../../../../Components/Management/Category/CategoryColumn';
 import AppEmpty from '../../../../Components/General/AppEmpty/index';
 import AppLoader from '../../../../Components/General/AppLoader';
 import AppBreadcrumb from '../../../../Components/General/AppBreadcrumb';
@@ -14,11 +14,11 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { getRouteNames } from '../../../../Utils/RouteUtils';
 import RouteNames from '../../../../Constants/RouteNames';
 import { getAllUserCategory } from '../../../../Api/Category';
+import AppMessage from '../../../../Components/General/AppMessage/index';
 
 const ManagementCategoryPage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
 	const navigate = useNavigate();
-	const [messageApi, contextHolder] = message.useMessage();
 	const location = useLocation();
 
 	const [categories, setCategories] = useState<any[]>([]);
@@ -28,7 +28,7 @@ const ManagementCategoryPage: React.FC = () => {
 		const getCategory = async () => {
 			setIsLoading(true);
 			const res = await getAllUserCategory(token);
-			// console.log(res);
+
 			if (res.request.status === 200) {
 				const resCategories = [...res.data.data];
 				setCategories(
@@ -52,7 +52,10 @@ const ManagementCategoryPage: React.FC = () => {
 	useEffect(() => {
 		const stateReceiveAction = () => {
 			if (location.state) {
-				messageApi.success(location.state.message);
+				AppMessage({
+					content: location.state.message,
+					type: 'success',
+				});
 				window.history.replaceState({}, document.title);
 			}
 		};
@@ -62,7 +65,6 @@ const ManagementCategoryPage: React.FC = () => {
 
 	return (
 		<MainLayout>
-			{contextHolder}
 			<AppBreadcrumb />
 			<div className='flex justify-between items-center mb-5'>
 				<AppTitle
@@ -86,7 +88,7 @@ const ManagementCategoryPage: React.FC = () => {
 			) : categories.length > 0 ? (
 				<AppTable
 					dataSource={categories}
-					columns={WalletColumns(navigate)}
+					columns={WalletColumns({ navigate: navigate })}
 				/>
 			) : (
 				<AppEmpty />

@@ -1,5 +1,6 @@
 import AppText from '../../../Components/General/AppText/index';
 import { MdDashboard } from 'react-icons/md';
+import { GiNotebook } from 'react-icons/gi';
 import { IoWalletOutline } from 'react-icons/io5';
 import { BsCreditCard2Front } from 'react-icons/bs';
 import { MenuProps } from 'antd';
@@ -57,7 +58,7 @@ const MenuItems: () => MenuProps['items'] = () => {
 					<AppText text='Notes' />
 				</Link>
 			),
-			icon: <MdDashboard />,
+			icon: <GiNotebook />,
 		},
 	];
 };

@@ -3,3 +3,9 @@
 @tailwind utilities;
 
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap');
+
+@import '../Components/General/AppMessage/styled/Styles.scss';
+@import '../Components/General/AppSelect/styled/Styles.scss';
+@import '../Components/General/AppDatePicker/styled/Style.scss';
+@import "../Components/General/AppInput/styled/Styles.scss";
+@import "../Layouts/MainLayout/HeaderLayout/styled/Styles.scss";

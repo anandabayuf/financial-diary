@@ -1,0 +1,22 @@
+@import '../../../../Styles/Library.scss';
+
+body {
+    .ant-message-notice-content{
+        font-family: 'Comfortaa', cursive !important;
+        font-weight: 400 !important;
+    }
+}
+
+body.dark {
+    .ant-message-notice-content {
+        background-color: $dark-container;
+        color: $dark-text;
+    }
+}
+
+body.light {
+    .ant-message-notice-content {
+        background-color: $light-container;
+        color: $light-text;
+    }
+}

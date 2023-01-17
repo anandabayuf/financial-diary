@@ -2,7 +2,11 @@ import { AppCardProps } from './interfaces/interfaces';
 import useTheme from '../../../Hooks/useTheme';
 import StyledCard from './styled/StyledCard';
 
-const AppCard: React.FC<AppCardProps> = ({ children, ...rest }) => {
+const AppCard: React.FC<AppCardProps> = ({
+	children,
+	isMobileShowCard = false,
+	...rest
+}) => {
 	const theme = useTheme();
 
 	return (
@@ -10,6 +14,7 @@ const AppCard: React.FC<AppCardProps> = ({ children, ...rest }) => {
 			className={`rounded-2xl shadow-2xl`}
 			bordered={false}
 			backgroundcolor={theme?.container}
+			ismobileshowcard={isMobileShowCard}
 			{...rest}
 		>
 			{children}

@@ -22,6 +22,8 @@ export const getRouteNames = (route: string): string => {
 			return '/management/category/edit/:id';
 		case RouteNames.NOTES:
 			return '/notes';
+		case RouteNames.CREATE_NOTE:
+			return '/notes/create';
 		default:
 			return '/';
 	}

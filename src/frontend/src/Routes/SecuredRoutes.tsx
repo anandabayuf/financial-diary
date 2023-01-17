@@ -5,11 +5,12 @@ import RouteNames from '../Constants/RouteNames';
 import DashboardPage from '../Pages/Dashboard';
 import ManagementCategoryPage from '../Pages/Management/Category/CategoryList';
 import ManagementWalletPage from '../Pages/Management/Wallet/WalletList/index';
-import NotesPage from '../Pages/Notes/index';
+import NotesPage from '../Pages/Notes/NotesList/index';
 import CreateWalletPage from '../Pages/Management/Wallet/CreateWallet/index';
 import EditWalletPage from '../Pages/Management/Wallet/EditWallet/index';
 import CreateCategoryPage from '../Pages/Management/Category/CreateCategory/index';
 import EditCategoryPage from '../Pages/Management/Category/EditCategory/index';
+import CreateNotePage from '../Pages/Notes/CreateNote/index';
 
 const ProtectedRoute = () => {
 	const isLoggedIn = useAuth();
@@ -60,6 +61,10 @@ const SecuredRoutes: RouteObject[] = [
 			{
 				path: getRouteNames(RouteNames.NOTES),
 				element: <NotesPage />,
+			},
+			{
+				path: getRouteNames(RouteNames.CREATE_NOTE),
+				element: <CreateNotePage />,
 			},
 		],
 	},

@@ -6,10 +6,10 @@ import { useAppSelector } from '../../../../Hooks/useRedux';
 import { useNavigate } from 'react-router-dom';
 import { getRouteNames } from '../../../../Utils/RouteUtils';
 import RouteNames from '../../../../Constants/RouteNames';
-import { message } from 'antd';
 import withCreateCategory from '../../../../Components/Management/Category/CategoryForm/withCreateCategory';
 import CategoryForm from '../../../../Components/Management/Category/CategoryForm/index';
 import { createUserCategory } from '../../../../Api/Category';
+import AppMessage from '../../../../Components/General/AppMessage/index';
 
 const CreateForm = withCreateCategory(CategoryForm);
 
@@ -17,16 +17,13 @@ const CreateCategoryPage: React.FC = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const token = useAppSelector((state) => state.user.accessToken);
 	const navigate = useNavigate();
-	const [messageApi, contextHolder] = message.useMessage();
 
 	const handleCreateCategory = async (values: any) => {
 		setIsLoading(true);
 
 		const response = await createUserCategory(token, values);
-		// console.log(response);
 		setIsLoading(false);
 		if (response.request.status === 201) {
-			// messageApi.success(response.data.message);
 			navigate(getRouteNames(RouteNames.MANAGEMENT_CATEGORY), {
 				replace: true,
 				state: {
@@ -34,13 +31,12 @@ const CreateCategoryPage: React.FC = () => {
 				},
 			});
 		} else {
-			messageApi.error(response.data.message);
+			AppMessage({ content: response.data.message, type: 'error' });
 		}
 	};
 
 	return (
 		<MainLayout>
-			{contextHolder}
 			<AppBreadcrumb className='mb-1' />
 			<div className='mb-5'>
 				<AppTitle

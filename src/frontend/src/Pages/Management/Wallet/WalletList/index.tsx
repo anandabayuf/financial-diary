@@ -5,20 +5,20 @@ import { getAllUserWallet } from '../../../../Api/Wallets';
 import { useAppSelector } from '../../../../Hooks/useRedux';
 import AppButton from '../../../../Components/General/AppButton';
 import { BsPlusLg } from 'react-icons/bs';
-import { Space, message } from 'antd';
+import { Space } from 'antd';
 import AppTable from '../../../../Components/General/AppTable/index';
-import WalletColumns from './WalletColumns';
+import WalletColumns from '../../../../Components/Management/Wallets/WalletColumn';
 import AppEmpty from '../../../../Components/General/AppEmpty/index';
 import AppLoader from '../../../../Components/General/AppLoader';
 import AppBreadcrumb from '../../../../Components/General/AppBreadcrumb';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getRouteNames } from '../../../../Utils/RouteUtils';
 import RouteNames from '../../../../Constants/RouteNames';
+import AppMessage from '../../../../Components/General/AppMessage/index';
 
 const ManagementWalletPage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
 	const navigate = useNavigate();
-	const [messageApi, contextHolder] = message.useMessage();
 	const location = useLocation();
 
 	const [wallets, setWallets] = useState<any[]>([]);
@@ -28,7 +28,6 @@ const ManagementWalletPage: React.FC = () => {
 		const getWallets = async () => {
 			setIsLoading(true);
 			const res = await getAllUserWallet(token);
-			// console.log(res);
 			if (res.request.status === 200) {
 				const resWallets = [...res.data.data];
 				setWallets(
@@ -52,7 +51,10 @@ const ManagementWalletPage: React.FC = () => {
 	useEffect(() => {
 		const stateReceiveAction = () => {
 			if (location.state) {
-				messageApi.success(location.state.message);
+				AppMessage({
+					content: location.state.message,
+					type: 'success',
+				});
 				window.history.replaceState({}, document.title);
 			}
 		};
@@ -62,7 +64,6 @@ const ManagementWalletPage: React.FC = () => {
 
 	return (
 		<MainLayout>
-			{contextHolder}
 			<AppBreadcrumb />
 			<div className='flex justify-between items-center mb-5'>
 				<AppTitle
@@ -86,7 +87,7 @@ const ManagementWalletPage: React.FC = () => {
 			) : wallets.length > 0 ? (
 				<AppTable
 					dataSource={wallets}
-					columns={WalletColumns(navigate)}
+					columns={WalletColumns({ navigate: navigate })}
 				/>
 			) : (
 				<AppEmpty />

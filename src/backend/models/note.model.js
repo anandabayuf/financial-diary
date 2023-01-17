@@ -18,7 +18,7 @@ exports.create = (data) => {
 							}
 						});
 					} else {
-						reject("Note with the month is already availble");
+						reject("Note with the month is already available");
 					}
 				}
 			}

@@ -1,0 +1,76 @@
+@import '../../../../Styles/Library.scss';
+
+body {
+    .ant-picker-panel {
+        font-family: 'Comfortaa', cursive !important;
+        font-weight: 400 !important;
+    }
+}
+
+body.dark {
+    .ant-picker-month-panel, .ant-picker-year-panel, .ant-picker-decade-panel {
+        background-color: $dark-container;
+
+        .ant-picker-header {
+            .ant-picker-header-super-prev-btn, .ant-picker-header-super-next-btn{
+                color: $dark-text;
+            }
+
+            .ant-picker-header-view {
+                color: $dark-text;
+
+                :hover {
+                    color: $dark-half-text
+                }
+            }
+        }
+
+        .ant-picker-body {
+            .ant-picker-cell {
+                color: $dark-half-text
+            }
+
+            .ant-picker-cell-in-view{
+                color: $dark-text;
+            }
+
+            .ant-picker-cell-selected .ant-picker-cell-inner{
+                background-color: $dark-button;
+            }
+        }
+    }
+}
+
+body.light {
+    .ant-picker-month-panel, .ant-picker-year-panel, .ant-picker-decade-panel {
+        background-color: $light-container;
+
+        .ant-picker-header {
+            .ant-picker-header-super-prev-btn, .ant-picker-header-super-next-btn{
+                color: $light-text;
+            }
+
+            .ant-picker-header-view {
+                color: $light-text;
+
+                :hover {
+                    color: $light-half-text
+                }
+            }
+        }
+
+        .ant-picker-body {
+            .ant-picker-cell {
+                color: $light-half-text
+            }
+
+            .ant-picker-cell-in-view{
+                color: $light-text;
+            }
+
+            .ant-picker-cell-selected .ant-picker-cell-inner{
+                background-color: $light-button;
+            }
+        }
+    }
+}

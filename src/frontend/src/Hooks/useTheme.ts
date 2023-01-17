@@ -12,9 +12,11 @@ const useTheme = () => {
 			if (theme === ThemeModeNames.DARK) {
 				setColorTheme(Dark);
 				document.body.style.backgroundColor = Dark.bg;
+				document.body.className = 'dark';
 			} else {
 				setColorTheme(Light);
 				document.body.style.backgroundColor = Light.bg;
+				document.body.className = 'light';
 			}
 		};
 

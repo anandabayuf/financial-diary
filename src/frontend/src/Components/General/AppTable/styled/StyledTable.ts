@@ -117,6 +117,13 @@ const StyledTable = styled(Table)<StyledTableProps>`
 		color: ${(props) => props.tabletheme?.text} !important;
 		font-family: 'Comfortaa', cursive !important;
 		font-weight: 400 !important;
+
+		input {
+			background-color: ${(props) =>
+				props.tabletheme?.container} !important;
+			color: ${(props) => props.tabletheme?.text} !important;
+			border: none !important;
+		}
 	}
 `;
 
