@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { getAllUserWalletNote } from '../../../../Api/Wallet-Note';
 import AppMessage from '../../../General/AppMessage/index';
 import { useAppSelector } from '../../../../Hooks/useRedux';
-import { useNavigate } from 'react-router-dom';
 import { DataViewTypeNames } from '../../../../Constants/DataViewTypeNames';
 import DetailNoteGrid from '../DetailNoteGrid/index';
 
@@ -16,7 +15,7 @@ const withWalletNoteTab = (
 	}) => {
 		const token = useAppSelector((state) => state.user.accessToken);
 
-		const navigate = useNavigate();
+		// const navigate = useNavigate();
 		// const location = useLocation();
 
 		const [dataViewType, setDataViewType] = useState<DataViewTypeNames>(
@@ -35,7 +34,6 @@ const withWalletNoteTab = (
 				setIsLoading(true);
 
 				const res = await getAllUserWalletNote(token, noteId);
-				console.log(res);
 				if (res.request.status === 200) {
 					setWalletNote(
 						res.data.data.map((el: any, index: number) => {

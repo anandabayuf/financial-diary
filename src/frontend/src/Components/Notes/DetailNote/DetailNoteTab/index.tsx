@@ -1,7 +1,5 @@
-import { useState } from 'react';
 import { BsPlusLg } from 'react-icons/bs';
 import { Space } from 'antd';
-import { useNavigate } from 'react-router-dom';
 import { DataViewTypeNames } from '../../../../Constants/DataViewTypeNames';
 import AppLoader from '../../../General/AppLoader/index';
 import AppTable from '../../../General/AppTable/index';

@@ -1,11 +1,11 @@
 import AppTitle from '../../../Components/General/AppTitle';
 import MainLayout from '../../../Layouts/MainLayout';
 import { useState, useEffect } from 'react';
-import { getUserNoteById, getUserNoteByDate } from '../../../Api/Notes';
+import { getUserNoteByDate } from '../../../Api/Notes';
 import AppEmpty from '../../../Components/General/AppEmpty/index';
 import AppLoader from '../../../Components/General/AppLoader';
 import AppBreadcrumb from '../../../Components/General/AppBreadcrumb';
-import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../Hooks/useRedux';
 import AppMessage from '../../../Components/General/AppMessage/index';
 import AppTabs from '../../../Components/General/AppTabs/index';
@@ -17,7 +17,7 @@ import {
 
 const DetailNotePage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 	const location = useLocation();
 	const params = useParams();
 
@@ -33,7 +33,6 @@ const DetailNotePage: React.FC = () => {
 				token,
 				`${params.year}-${params.month}`
 			);
-			console.log(res);
 			if (res.request.status === 200) {
 				setNote(res.data.data[0]);
 			} else {

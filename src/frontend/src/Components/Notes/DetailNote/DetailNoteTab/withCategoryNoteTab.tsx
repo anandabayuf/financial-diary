@@ -2,7 +2,6 @@ import { DetailNoteTabProps } from './interfaces/interfaces';
 import { useState, useEffect } from 'react';
 import AppMessage from '../../../General/AppMessage/index';
 import { useAppSelector } from '../../../../Hooks/useRedux';
-import { useNavigate } from 'react-router-dom';
 import { DataViewTypeNames } from '../../../../Constants/DataViewTypeNames';
 import { getAllUserCategoryNote } from '../../../../Api/Category-Note';
 import DetailNoteGrid from '../DetailNoteGrid/index';
@@ -16,7 +15,7 @@ const withCategoryNoteTab = (
 	}) => {
 		const token = useAppSelector((state) => state.user.accessToken);
 
-		const navigate = useNavigate();
+		// const navigate = useNavigate();
 		// const location = useLocation();
 
 		const [dataViewType, setDataViewType] = useState<DataViewTypeNames>(
@@ -35,7 +34,6 @@ const withCategoryNoteTab = (
 				setIsLoading(true);
 
 				const res = await getAllUserCategoryNote(token, noteId);
-				console.log(res);
 				if (res.request.status === 200) {
 					setCategoryNote(
 						res.data.data.map((el: any, index: number) => {
