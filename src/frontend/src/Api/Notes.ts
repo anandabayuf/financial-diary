@@ -31,3 +31,37 @@ export const createUserNote = async (
 		return err;
 	}
 };
+
+export const getUserNoteById = async (
+	token?: string,
+	id?: string
+): Promise<any> => {
+	try {
+		const response = await instance({
+			url: `/note/${id}`,
+			method: 'GET',
+			headers: { Authorization: `Bearer ${token}` },
+		});
+
+		return response;
+	} catch (err) {
+		return err;
+	}
+};
+
+export const getUserNoteByDate = async (
+	token?: string,
+	dateString?: string
+): Promise<any> => {
+	try {
+		const response = await instance({
+			url: `/note?date=${dateString}`,
+			method: 'GET',
+			headers: { Authorization: `Bearer ${token}` },
+		});
+
+		return response;
+	} catch (err) {
+		return err;
+	}
+};

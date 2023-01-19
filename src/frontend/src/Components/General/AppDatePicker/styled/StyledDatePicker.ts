@@ -5,6 +5,7 @@ import { StyledDatePickerProps } from '../interfaces/interfaces';
 const StyledDatePicker = styled(DatePicker)<StyledDatePickerProps>`
 	background-color: ${(props) => props.theme.container} !important;
 	border-color: ${(props) => props.theme.container};
+	width: 100% !important;
 
 	:hover {
 		border-color: ${(props) => props.theme.text};

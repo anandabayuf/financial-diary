@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import AppCard from '../../../General/AppCard/index';
+import AppCard from '../../../../General/AppCard';
 
 const StyledNoteGridCard = styled(AppCard)`
 	width: 200px;

@@ -1,9 +1,14 @@
 import { ColumnsType } from 'antd/es/table';
-import AppButton from '../../General/AppButton';
-import AppText from '../../General/AppText';
+import AppButton from '../../../General/AppButton';
+import AppText from '../../../General/AppText';
 import { NoteColumnsProps } from './interfaces/interfaces';
+import {
+	getFullYearFromDate,
+	getLongMonthFromDate,
+	getTwoDigitMonthStringFromDate,
+} from '../../../../Utils/DateUtils';
 
-const NoteColumns: ({
+const NotesColumns: ({
 	navigate,
 	showYear,
 }: NoteColumnsProps) => ColumnsType<any> = ({ navigate, showYear }) => {
@@ -19,14 +24,7 @@ const NoteColumns: ({
 					dataIndex: 'date',
 					key: 'date',
 					render: (_: any, record: any) => (
-						<AppText
-							text={new Date(record.date).toLocaleString(
-								'en-us',
-								{
-									year: 'numeric',
-								}
-							)}
-						/>
+						<AppText text={getFullYearFromDate(record.date)} />
 					),
 				},
 				{
@@ -39,14 +37,7 @@ const NoteColumns: ({
 					dataIndex: 'date',
 					key: 'date',
 					render: (_, record) => (
-						<AppText
-							text={new Date(record.date).toLocaleString(
-								'en-us',
-								{
-									month: 'long',
-								}
-							)}
-						/>
+						<AppText text={getLongMonthFromDate(record.date)} />
 					),
 				},
 				{
@@ -64,9 +55,13 @@ const NoteColumns: ({
 								type='text'
 								onClick={() =>
 									navigate &&
-									navigate(`/notes/${record._id}`, {
-										state: record,
-									})
+									navigate(
+										`/notes/${getFullYearFromDate(
+											record.date
+										)}/${getTwoDigitMonthStringFromDate(
+											record.date
+										)}`
+									)
 								}
 							>
 								View
@@ -86,14 +81,7 @@ const NoteColumns: ({
 					dataIndex: 'date',
 					key: 'date',
 					render: (_, record) => (
-						<AppText
-							text={new Date(record.date).toLocaleString(
-								'en-us',
-								{
-									month: 'long',
-								}
-							)}
-						/>
+						<AppText text={getLongMonthFromDate(record.date)} />
 					),
 				},
 				{
@@ -111,9 +99,13 @@ const NoteColumns: ({
 								type='text'
 								onClick={() =>
 									navigate &&
-									navigate(`/notes/${record._id}`, {
-										state: record,
-									})
+									navigate(
+										`/notes/${getFullYearFromDate(
+											record.date
+										)}/${getTwoDigitMonthStringFromDate(
+											record.date
+										)}`
+									)
 								}
 							>
 								View
@@ -124,4 +116,4 @@ const NoteColumns: ({
 		  ];
 };
 
-export default NoteColumns;
+export default NotesColumns;

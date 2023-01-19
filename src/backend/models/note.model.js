@@ -29,11 +29,11 @@ exports.create = (data) => {
 exports.getAll = (query, userId) => {
 	let { limit = 5, page = 1, ...search } = query;
 	const key = Object.keys(search);
-	const value = search[key];
+	const value = new Date(search[key]);
 
 	return new Promise((resolve, reject) => {
 		schema.NoteSchema.find(
-			{ [key]: { $regex: `^${value}`, $options: "i" }, userId: userId },
+			{ [key]: value, userId: userId },
 			async (err, result) => {
 				if (err) {
 					reject(err);

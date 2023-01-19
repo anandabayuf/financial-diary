@@ -11,6 +11,7 @@ import EditWalletPage from '../Pages/Management/Wallet/EditWallet/index';
 import CreateCategoryPage from '../Pages/Management/Category/CreateCategory/index';
 import EditCategoryPage from '../Pages/Management/Category/EditCategory/index';
 import CreateNotePage from '../Pages/Notes/CreateNote/index';
+import DetailNotePage from '../Pages/Notes/DetailNote/index';
 
 const ProtectedRoute = () => {
 	const isLoggedIn = useAuth();
@@ -59,12 +60,20 @@ const SecuredRoutes: RouteObject[] = [
 				element: <EditCategoryPage />,
 			},
 			{
+				path: '/notes/*',
+				element: <Navigate to={getRouteNames(RouteNames.NOTES)} />,
+			},
+			{
 				path: getRouteNames(RouteNames.NOTES),
 				element: <NotesPage />,
 			},
 			{
 				path: getRouteNames(RouteNames.CREATE_NOTE),
 				element: <CreateNotePage />,
+			},
+			{
+				path: getRouteNames(RouteNames.DETAIL_NOTE),
+				element: <DetailNotePage />,
 			},
 		],
 	},

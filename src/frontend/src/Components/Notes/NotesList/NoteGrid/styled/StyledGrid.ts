@@ -6,6 +6,7 @@ const StyledGrid = styled.div`
 	gap: 1rem /* 16px */;
 
 	@media screen and (max-width: 320px) {
+		width: 100%;
 		grid-template-columns: repeat(1, minmax(0, 1fr));
 	}
 

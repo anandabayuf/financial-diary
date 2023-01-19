@@ -1,10 +1,10 @@
 import { Form } from 'antd';
 import { NoteFormProps } from './interfaces/interfaces';
 import { useNavigate } from 'react-router-dom';
-import AppFormItem from '../../General/AppFormItem/index';
-import AppLoader from '../../General/AppLoader/index';
-import AppButton from '../../General/AppButton/index';
-import AppDatePicker from '../../General/AppDatePicker/index';
+import AppFormItem from '../../../General/AppFormItem';
+import AppLoader from '../../../General/AppLoader';
+import AppButton from '../../../General/AppButton';
+import AppDatePicker from '../../../General/AppDatePicker';
 
 const NoteForm: React.FC<NoteFormProps> = ({
 	handleSubmit,

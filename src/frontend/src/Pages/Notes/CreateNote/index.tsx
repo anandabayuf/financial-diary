@@ -5,7 +5,7 @@ import AppBreadcrumb from '../../../Components/General/AppBreadcrumb';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../Hooks/useRedux';
 import { DatePickerProps } from 'antd';
-import NoteForm from '../../../Components/Notes/NoteForm/index';
+import NoteForm from '../../../Components/Notes/CreateNote/NoteForm';
 import { createUserNote } from '../../../Api/Notes';
 import { getRouteNames } from '../../../Utils/RouteUtils';
 import RouteNames from '../../../Constants/RouteNames';

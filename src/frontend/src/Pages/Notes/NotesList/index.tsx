@@ -6,7 +6,7 @@ import AppButton from '../../../Components/General/AppButton';
 import { BsPlusLg } from 'react-icons/bs';
 import { Space } from 'antd';
 import AppTable from '../../../Components/General/AppTable/index';
-import NotesColumn from '../../../Components/Notes/NoteColumn';
+import NotesColumns from '../../../Components/Notes/NotesList/NoteColumn';
 import AppEmpty from '../../../Components/General/AppEmpty/index';
 import AppLoader from '../../../Components/General/AppLoader';
 import AppBreadcrumb from '../../../Components/General/AppBreadcrumb';
@@ -16,10 +16,10 @@ import RouteNames from '../../../Constants/RouteNames';
 import { useAppSelector } from '../../../Hooks/useRedux';
 import AppSegmented from '../../../Components/General/AppSegmented';
 import AppSelect from '../../../Components/General/AppSelect';
-import NotesOptionYear from '../../../Components/Notes/NoteOptionYear';
+import NotesOptionYear from '../../../Components/Notes/NotesList/NoteOptionYear';
 import AppText from '../../../Components/General/AppText/index';
 import { DataViewTypeNames } from '../../../Constants/DataViewTypeNames';
-import NotesGrid from '../../../Components/Notes/NoteGrid';
+import NotesGrid from '../../../Components/Notes/NotesList/NoteGrid';
 import AppMessage from '../../../Components/General/AppMessage/index';
 
 const NotesListPage: React.FC = () => {
@@ -142,40 +142,42 @@ const NotesListPage: React.FC = () => {
 					</Space>
 				</AppButton>
 			</div>
-			<div className='flex justify-end items-center mb-3 gap-x-3'>
-				<AppText
-					text='Show:'
-					className='text-sm'
-				/>
-				<AppSelect
-					placeholder='Select year to show'
-					value={selectedYear}
-					options={NotesOptionYear({ years: optionYear })}
-					loading={isLoading}
-					handleChange={handleChangeYear}
-				/>
-				<AppSegmented
-					value={dataViewType}
-					handleChange={handleChangeDataViewType}
-				/>
-			</div>
 			{isLoading ? (
 				<AppLoader />
 			) : walletsList.length > 0 ? (
-				dataViewType === DataViewTypeNames.LIST ? (
-					<AppTable
-						dataSource={walletsList}
-						columns={NotesColumn({
-							navigate,
-							showYear: selectedYear,
-						})}
-					/>
-				) : (
-					<NotesGrid
-						data={walletsList}
-						showYear={selectedYear}
-					/>
-				)
+				<>
+					<div className='flex justify-end items-center mb-3 gap-x-3'>
+						<AppText
+							text='Show:'
+							className='text-sm'
+						/>
+						<AppSelect
+							placeholder='Select year to show'
+							value={selectedYear}
+							options={NotesOptionYear({ years: optionYear })}
+							loading={isLoading}
+							handleChange={handleChangeYear}
+						/>
+						<AppSegmented
+							value={dataViewType}
+							handleChange={handleChangeDataViewType}
+						/>
+					</div>
+					{dataViewType === DataViewTypeNames.LIST ? (
+						<AppTable
+							dataSource={walletsList}
+							columns={NotesColumns({
+								navigate,
+								showYear: selectedYear,
+							})}
+						/>
+					) : (
+						<NotesGrid
+							data={walletsList}
+							showYear={selectedYear}
+						/>
+					)}
+				</>
 			) : (
 				<AppEmpty />
 			)}

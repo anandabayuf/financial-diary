@@ -6,10 +6,10 @@ const StyledCard = styled(Card)<StyledCardProps>`
 	background-color: ${(props) => props.backgroundcolor};
 
 	@media screen and (max-width: 425px) {
-		display: ${(props) => !props.ismobileshowcard && 'contents'};
+		display: ${(props) => props.ismobileshowcard === 'false' && 'contents'};
 
 		.ant-card-body {
-			padding: ${(props) => props.ismobileshowcard && '16px'};
+			padding: ${(props) => props.ismobileshowcard === 'true' && '16px'};
 		}
 	}
 `;

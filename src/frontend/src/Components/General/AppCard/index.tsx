@@ -4,7 +4,7 @@ import StyledCard from './styled/StyledCard';
 
 const AppCard: React.FC<AppCardProps> = ({
 	children,
-	isMobileShowCard = false,
+	isMobileShowCard = 'false',
 	...rest
 }) => {
 	const theme = useTheme();
