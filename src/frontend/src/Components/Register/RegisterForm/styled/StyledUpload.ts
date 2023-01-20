@@ -8,6 +8,14 @@ const StyledUpload = styled(Upload)<StyledUploadProps>`
 		justify-content: center !important;
 	}
 
+	.ant-upload-select,
+	.ant-upload-list-item-container {
+		width: ${(props) =>
+			props.widthupload && `${props.widthupload}px`} !important;
+		height: ${(props) =>
+			props.widthupload && `${props.widthupload}px`} !important;
+	}
+
 	.ant-upload.ant-upload-select {
 		margin-inline-end: 0px !important;
 		margin: 0px !important;

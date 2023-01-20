@@ -11,6 +11,7 @@ enum RouteNames {
 	NOTES = 'NOTES',
 	CREATE_NOTE = 'CREATE_NOTE',
 	DETAIL_NOTE = 'DETAIL_NOTE',
+	MY_PROFILE = 'MY_PROFILE',
 }
 
 export default RouteNames;
