@@ -13,7 +13,6 @@ import React from 'react';
 import ProfileMenuItems from './ProfileMenuItems';
 import { useAppDispatch, useAppSelector } from '../../../Hooks/useRedux';
 import { setUserLoggedOut } from '../../../Store/User/UserSlice';
-import { useNavigate } from 'react-router-dom';
 import ThemeModeNames from '../../../Constants/ThemeModeNames';
 import { setDarkMode, setLightMode } from '../../../Store/Theme/ThemeSlice';
 
@@ -25,15 +24,16 @@ const HeaderLayout: React.FC<HeaderLayoutProps> = ({
 	const themeMode = useAppSelector((state) => state.theme);
 	const [isOpen, setIsOpen] = useState(false);
 	const dispatch = useAppDispatch();
-	const navigate = useNavigate();
 
 	const handleClickProfileMenu = (e: any) => {
 		if (e.key === 'logout') {
 			dispatch(setUserLoggedOut());
 		} else if (e.key === 'theme-switcher') {
-		} else {
-			navigate(e.key);
 		}
+		// else {
+		// 	navigate(e.key);
+		// }
+		setIsOpen(false);
 	};
 
 	const handleChangeTheme = (e: any) => {
