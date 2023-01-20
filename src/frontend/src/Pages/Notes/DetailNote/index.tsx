@@ -5,11 +5,13 @@ import { getUserNoteByDate } from '../../../Api/Notes';
 import AppEmpty from '../../../Components/General/AppEmpty/index';
 import AppLoader from '../../../Components/General/AppLoader';
 import AppBreadcrumb from '../../../Components/General/AppBreadcrumb';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../Hooks/useRedux';
 import AppMessage from '../../../Components/General/AppMessage/index';
 import AppTabs from '../../../Components/General/AppTabs/index';
 import DetailNoteTabs from '../../../Components/Notes/DetailNote/DetailNoteTabs/index';
+import { getRouteNames } from '../../../Utils/RouteUtils';
+import RouteNames from '../../../Constants/RouteNames';
 import {
 	getFullYearFromDate,
 	getLongMonthFromDate,
@@ -17,7 +19,7 @@ import {
 
 const DetailNotePage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
-	// const navigate = useNavigate();
+	const navigate = useNavigate();
 	const location = useLocation();
 	const params = useParams();
 
@@ -34,7 +36,14 @@ const DetailNotePage: React.FC = () => {
 				`${params.year}-${params.month}`
 			);
 			if (res.request.status === 200) {
-				setNote(res.data.data[0]);
+				const data = res.data.data;
+				if (data.length === 0) {
+					navigate(getRouteNames(RouteNames.NOTES), {
+						replace: true,
+					});
+				} else {
+					setNote(data[0]);
+				}
 			} else {
 				const response = JSON.parse(res.request.response);
 

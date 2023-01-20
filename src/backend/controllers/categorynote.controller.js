@@ -19,6 +19,26 @@ router.get("/note/:noteId", async (req, res) => {
 	}
 });
 
+router.get("/available/note/:noteId", async (req, res) => {
+	try {
+		res.status(200).json({
+			status: 200,
+			message: "Successfully get available category note",
+			data: await categoryNoteModel.getAllAvailableByNoteId(
+				req.query,
+				req.params.noteId,
+				req.user.id
+			),
+		});
+	} catch (err) {
+		res.status(404).json({
+			status: 404,
+			message: "Failed to get available category note",
+			detail: err,
+		});
+	}
+});
+
 router.get("/:id", async (req, res) => {
 	try {
 		res.status(200).json({
@@ -38,13 +58,19 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
 	let data = req.body;
 
-	data.total = 0;
+	let payload = data.categoryIds.map((id) => {
+		return {
+			categoryId: id,
+			noteId: data.noteId,
+			total: 0,
+		};
+	});
 
 	try {
 		res.status(201).json({
 			status: 201,
 			message: "Successfully create category note",
-			data: await categoryNoteModel.create(data),
+			data: await categoryNoteModel.create(payload),
 		});
 	} catch (err) {
 		res.status(404).json({

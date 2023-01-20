@@ -4,7 +4,10 @@ import { getAllUserWalletNote } from '../../../../Api/Wallet-Note';
 import AppMessage from '../../../General/AppMessage/index';
 import { useAppSelector } from '../../../../Hooks/useRedux';
 import { DataViewTypeNames } from '../../../../Constants/DataViewTypeNames';
-import DetailNoteGrid from '../DetailNoteGrid/index';
+import AppModal from '../../../General/AppModal';
+import withWalletNoteForm from '../DetailNoteForm/withWalletNoteForm';
+import DetailNoteForm from '../DetailNoteForm/index';
+import AppTitle from '../../../General/AppTitle';
 
 const withWalletNoteTab = (
 	Component: React.ComponentType<DetailNoteTabProps>
@@ -22,12 +25,12 @@ const withWalletNoteTab = (
 			DataViewTypeNames.LIST
 		);
 
-		const handleChangeDataViewType = (values: any) => {
-			setDataViewType(values);
-		};
-
 		const [walletNote, setWalletNote] = useState<any[]>([]);
+		const [walletNoteList, setWalletNoteList] = useState<any[]>([]);
+
 		const [isLoading, setIsLoading] = useState<boolean>(false);
+		const [isSearching, setIsSearching] = useState<boolean>(false);
+		const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
 		useEffect(() => {
 			const getWalletNote = async () => {
@@ -35,14 +38,14 @@ const withWalletNoteTab = (
 
 				const res = await getAllUserWalletNote(token, noteId);
 				if (res.request.status === 200) {
-					setWalletNote(
-						res.data.data.map((el: any, index: number) => {
-							return {
-								...el,
-								key: index,
-							};
-						})
-					);
+					const data = res.data.data.map((el: any, index: number) => {
+						return {
+							...el,
+							key: index,
+						};
+					});
+					setWalletNote(data);
+					setWalletNoteList(data);
 				} else {
 					const response = JSON.parse(res.request.response);
 
@@ -52,29 +55,77 @@ const withWalletNoteTab = (
 				setIsLoading(false);
 			};
 
-			getWalletNote(); // eslint-disable-next-line
-		}, []);
+			if (!isModalOpen) {
+				getWalletNote();
+			}
+		}, [isModalOpen]);
 
-		const handleClickAdd = () => {};
+		const handleChangeDataViewType = (values: any) => {
+			setDataViewType(values);
+		};
+
+		const handleClickAdd = () => setIsModalOpen(true);
 
 		const handleClickView = () => {};
+
+		const handleChangeSearch = (e: any) => {
+			if (e.target.value === '') {
+				setWalletNoteList(walletNote);
+			}
+		};
+
+		const handleSearch = (value: string) => {
+			if (value) {
+				const searchQuery = value.trim();
+
+				if (searchQuery !== '' && searchQuery !== ' ') {
+					setIsSearching(true);
+					const regex = new RegExp(`${searchQuery}`, 'gi');
+					setWalletNoteList(
+						walletNote.filter((walletNote) =>
+							walletNote.wallet.name.match(regex)
+						)
+					);
+					setIsSearching(false);
+				}
+			}
+		};
+
+		const handleCancelAdd = () => setIsModalOpen(false);
+
+		const WalletNoteForm = withWalletNoteForm(DetailNoteForm);
+
+		const ModalAdd = (
+			<AppModal
+				title={
+					<AppTitle
+						title='Add Wallet to The Note'
+						level={4}
+					/>
+				}
+				open={isModalOpen}
+			>
+				<WalletNoteForm
+					noteId={noteId}
+					handleCancel={handleCancelAdd}
+				/>
+			</AppModal>
+		);
 
 		return (
 			<Component
 				isWallet
 				data={walletNote}
+				dataList={walletNoteList}
 				isLoading={isLoading}
+				isSearching={isSearching}
 				dataViewType={dataViewType}
+				modalAdd={ModalAdd}
 				handleClickAdd={handleClickAdd}
 				handleClickView={handleClickView}
 				handleChangeDataViewType={handleChangeDataViewType}
-				detailNoteGrid={
-					<DetailNoteGrid
-						isWallet
-						data={walletNote}
-						handleView={handleClickView}
-					/>
-				}
+				handleChangeSearch={handleChangeSearch}
+				handleSearch={handleSearch}
 				{...rest}
 			/>
 		);

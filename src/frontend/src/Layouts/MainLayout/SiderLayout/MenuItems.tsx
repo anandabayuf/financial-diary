@@ -1,5 +1,5 @@
 import AppText from '../../../Components/General/AppText/index';
-import { MdDashboard } from 'react-icons/md';
+import { MdDashboard, MdOutlineManageAccounts } from 'react-icons/md';
 import { GiNotebook } from 'react-icons/gi';
 import { IoWalletOutline } from 'react-icons/io5';
 import { BsCreditCard2Front } from 'react-icons/bs';
@@ -22,7 +22,7 @@ const MenuItems: () => MenuProps['items'] = () => {
 		{
 			key: 'management',
 			label: <AppText text='Management' />,
-			icon: <MdDashboard />,
+			icon: <MdOutlineManageAccounts />,
 			children: [
 				{
 					key: 'wallets',

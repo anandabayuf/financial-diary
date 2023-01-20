@@ -15,6 +15,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { getRouteNames } from '../../../../Utils/RouteUtils';
 import RouteNames from '../../../../Constants/RouteNames';
 import AppMessage from '../../../../Components/General/AppMessage/index';
+import AppSearchInput from '../../../../Components/General/AppSearchInput';
 
 const ManagementWalletPage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
@@ -22,20 +23,25 @@ const ManagementWalletPage: React.FC = () => {
 	const location = useLocation();
 
 	const [wallets, setWallets] = useState<any[]>([]);
+	const [walletsList, setWalletsList] = useState<any[]>([]);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
+
+	const [isSearching, setIsSearching] = useState<boolean>(false);
 
 	useEffect(() => {
 		const getWallets = async () => {
 			setIsLoading(true);
 			const res = await getAllUserWallet(token);
 			if (res.request.status === 200) {
-				const resWallets = [...res.data.data];
-				setWallets(
-					resWallets.map((wallet: any) => {
-						wallet['key'] = wallet._id;
-						return wallet;
-					})
-				);
+				let resWallets = [...res.data.data];
+
+				resWallets = resWallets.map((wallet: any) => {
+					wallet['key'] = wallet._id;
+					return wallet;
+				});
+
+				setWallets(resWallets);
+				setWalletsList(resWallets);
 			}
 
 			setIsLoading(false);
@@ -62,6 +68,27 @@ const ManagementWalletPage: React.FC = () => {
 		stateReceiveAction(); // eslint-disable-next-line
 	}, [location.state]);
 
+	const handleChangeSearch = (e: any) => {
+		if (e.target.value === '') {
+			setWalletsList(wallets);
+		}
+	};
+
+	const handleSearch = (value: string) => {
+		if (value) {
+			const searchQuery = value.trim();
+
+			if (searchQuery !== '' && searchQuery !== ' ') {
+				setIsSearching(true);
+				const regex = new RegExp(`${searchQuery}`, 'gi');
+				setWalletsList(
+					wallets.filter((wallet) => wallet.name.match(regex))
+				);
+				setIsSearching(false);
+			}
+		}
+	};
+
 	return (
 		<MainLayout>
 			<AppBreadcrumb />
@@ -85,10 +112,20 @@ const ManagementWalletPage: React.FC = () => {
 			{isLoading ? (
 				<AppLoader />
 			) : wallets.length > 0 ? (
-				<AppTable
-					dataSource={wallets}
-					columns={WalletColumns({ navigate: navigate })}
-				/>
+				<>
+					<div className='flex justify-start mb-3'>
+						<AppSearchInput
+							placeholder='Search Wallet Name'
+							onSearch={handleSearch}
+							onChange={handleChangeSearch}
+							loading={isSearching}
+						/>
+					</div>
+					<AppTable
+						dataSource={walletsList}
+						columns={WalletColumns({ navigate: navigate })}
+					/>
+				</>
 			) : (
 				<AppEmpty />
 			)}

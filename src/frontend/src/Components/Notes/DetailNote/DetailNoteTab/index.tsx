@@ -10,16 +10,22 @@ import AppButton from '../../../General/AppButton/index';
 import AppTitle from '../../../General/AppTitle/index';
 import { DetailNoteTabProps } from './interfaces/interfaces';
 import DetailNoteColumns from '../DetailNoteColumns/index';
+import AppSearchInput from '../../../General/AppSearchInput';
+import DetailNoteGrid from '../DetailNoteGrid/index';
 
 const DetailNoteTab: React.FC<DetailNoteTabProps> = ({
 	data,
+	dataList,
 	isWallet,
 	isLoading,
+	isSearching,
 	dataViewType,
-	detailNoteGrid,
+	modalAdd,
 	handleClickAdd,
 	handleClickView,
 	handleChangeDataViewType,
+	handleChangeSearch,
+	handleSearch,
 }) => {
 	return (
 		<>
@@ -49,32 +55,51 @@ const DetailNoteTab: React.FC<DetailNoteTabProps> = ({
 				data &&
 				(data.length > 0 ? (
 					<>
-						<div className='flex justify-end items-center mb-3 gap-x-3'>
-							<AppText
-								text='Show:'
-								className='text-sm'
+						<div className='flex justify-between items-center mb-3 gap-x-3'>
+							<AppSearchInput
+								placeholder={
+									isWallet
+										? 'Search Wallet Name...'
+										: 'Search Category Name...'
+								}
+								onSearch={handleSearch}
+								onChange={handleChangeSearch}
+								loading={isSearching}
 							/>
-							<AppSegmented
-								value={dataViewType}
-								handleChange={handleChangeDataViewType}
-							/>
+							<div className='flex items-center gap-x-3'>
+								<div className='max-sm:hidden'>
+									<AppText
+										text='Show:'
+										className='text-sm'
+									/>
+								</div>
+								<AppSegmented
+									value={dataViewType}
+									handleChange={handleChangeDataViewType}
+								/>
+							</div>
 						</div>
 						{dataViewType === DataViewTypeNames.LIST ? (
 							<AppTable
-								dataSource={data}
+								dataSource={dataList}
 								columns={DetailNoteColumns({
 									isWallet: isWallet,
 									handleView: handleClickView,
 								})}
 							/>
 						) : (
-							detailNoteGrid
+							<DetailNoteGrid
+								isWallet={isWallet}
+								data={dataList}
+								handleView={handleClickView}
+							/>
 						)}
 					</>
 				) : (
 					<AppEmpty />
 				))
 			)}
+			{modalAdd}
 		</>
 	);
 };

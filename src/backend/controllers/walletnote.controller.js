@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-const walletNodeModel = require("../models/waletnote.model");
+const walletNoteModel = require("../models/waletnote.model");
 
 router.get("/note/:noteId", async (req, res) => {
 	try {
 		res.status(200).json({
 			status: 200,
 			message: "Successfully get wallet note",
-			data: await walletNodeModel.getAll(req.query, req.params.noteId),
+			data: await walletNoteModel.getAll(req.query, req.params.noteId),
 		});
 	} catch (err) {
 		res.status(404).json({
@@ -19,12 +19,32 @@ router.get("/note/:noteId", async (req, res) => {
 	}
 });
 
+router.get("/available/note/:noteId", async (req, res) => {
+	try {
+		res.status(200).json({
+			status: 200,
+			message: "Successfully get available wallet note",
+			data: await walletNoteModel.getAllAvailableByNoteId(
+				req.query,
+				req.params.noteId,
+				req.user.id
+			),
+		});
+	} catch (err) {
+		res.status(404).json({
+			status: 404,
+			message: "Failed to get available wallet note",
+			detail: err,
+		});
+	}
+});
+
 router.get("/:id", async (req, res) => {
 	try {
 		res.status(200).json({
 			status: 200,
 			message: "Successfully get wallet note data",
-			data: await walletNodeModel.getById(req.params.id),
+			data: await walletNoteModel.getById(req.params.id),
 		});
 	} catch (err) {
 		res.status(404).json({
@@ -38,13 +58,21 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
 	let data = req.body;
 
-	data.balance = 0;
+	let payload = data.walletIds.map((id) => {
+		return {
+			walletId: id,
+			noteId: data.noteId,
+			balance: 0,
+		};
+	});
+
+	// data.balance = 0;
 
 	try {
 		res.status(201).json({
 			status: 201,
 			message: "Successfully create wallet note",
-			data: await walletNodeModel.create(data),
+			data: await walletNoteModel.create(payload),
 		});
 	} catch (err) {
 		res.status(404).json({
@@ -60,7 +88,7 @@ router.put("/:id", async (req, res) => {
 		res.status(201).json({
 			status: 201,
 			message: "Successfully edit wallet note data",
-			data: await walletNodeModel.edit(req.params.id, req.body),
+			data: await walletNoteModel.edit(req.params.id, req.body),
 		});
 	} catch (err) {
 		res.status(404).json({

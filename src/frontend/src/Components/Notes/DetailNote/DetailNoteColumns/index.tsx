@@ -14,6 +14,13 @@ const DetailNoteColumns: DetailNoteColumnsType = ({ isWallet, handleView }) => {
 			),
 			dataIndex: isWallet ? 'wallet.name' : 'category.name',
 			key: 'name',
+			sorter: (a, b) => {
+				if (isWallet) {
+					return a.wallet.name < b.wallet.name ? -1 : 1;
+				} else {
+					return a.category.name < b.category.name ? -1 : 1;
+				}
+			},
 			render: (_, record) => (
 				<AppText
 					text={isWallet ? record.wallet.name : record.category.name}
@@ -29,6 +36,13 @@ const DetailNoteColumns: DetailNoteColumnsType = ({ isWallet, handleView }) => {
 			),
 			dataIndex: isWallet ? 'balance' : 'total',
 			key: isWallet ? 'balance' : 'total',
+			sorter: (a, b) => {
+				if (isWallet) {
+					return a.balance - b.balance;
+				} else {
+					return a.total - b.total;
+				}
+			},
 			render: (_, record) => (
 				<AppText
 					text={formatIDR(isWallet ? record.balance : record.total)}

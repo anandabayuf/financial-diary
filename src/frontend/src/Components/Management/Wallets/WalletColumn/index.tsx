@@ -16,6 +16,7 @@ const WalletColumns: ({ navigate }: WalletColumnProps) => ColumnsType<any> = ({
 			),
 			dataIndex: 'name',
 			key: 'name',
+			sorter: (a, b) => (a.name < b.name ? -1 : 1),
 			render: (_, record) => <AppText text={record.name} />,
 		},
 		{

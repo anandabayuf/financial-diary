@@ -27,8 +27,8 @@ const NotesListPage: React.FC = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	const [wallets, setWallets] = useState<any[]>([]);
-	const [walletsList, setWalletsList] = useState<any[]>([]);
+	const [notes, setNotes] = useState<any[]>([]);
+	const [notesList, setNotesList] = useState<any[]>([]);
 	const [optionYear, setOptionYear] = useState<number[]>([]);
 	const [selectedYear, setSelectedYear] = useState<number | string>('');
 
@@ -60,13 +60,13 @@ const NotesListPage: React.FC = () => {
 
 				setOptionYear(years);
 				setSelectedYear('all-year');
-				setWallets(
+				setNotes(
 					resNotes.map((note: any) => {
 						note['key'] = note._id;
 						return note;
 					})
 				);
-				setWalletsList(
+				setNotesList(
 					resNotes.map((note: any) => {
 						note['key'] = note._id;
 						return note;
@@ -96,15 +96,15 @@ const NotesListPage: React.FC = () => {
 		setSelectedYear(value);
 
 		if (value === 'all-year') {
-			setWalletsList(wallets);
+			setNotesList(notes);
 		} else {
-			let newWalletLists = [...wallets];
+			let newWalletLists = [...notes];
 
 			newWalletLists = newWalletLists.filter(
 				(el) => new Date(el.date).getFullYear() === value
 			);
 
-			setWalletsList(newWalletLists);
+			setNotesList(newWalletLists);
 		}
 	};
 
@@ -144,7 +144,7 @@ const NotesListPage: React.FC = () => {
 			</div>
 			{isLoading ? (
 				<AppLoader />
-			) : walletsList.length > 0 ? (
+			) : notesList.length > 0 ? (
 				<>
 					<div className='flex justify-end items-center mb-3 gap-x-3'>
 						<AppText
@@ -165,7 +165,7 @@ const NotesListPage: React.FC = () => {
 					</div>
 					{dataViewType === DataViewTypeNames.LIST ? (
 						<AppTable
-							dataSource={walletsList}
+							dataSource={notesList}
 							columns={NotesColumns({
 								navigate,
 								showYear: selectedYear,
@@ -173,7 +173,7 @@ const NotesListPage: React.FC = () => {
 						/>
 					) : (
 						<NotesGrid
-							data={walletsList}
+							data={notesList}
 							showYear={selectedYear}
 						/>
 					)}

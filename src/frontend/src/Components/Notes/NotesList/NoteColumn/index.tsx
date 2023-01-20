@@ -36,6 +36,8 @@ const NotesColumns: ({
 					),
 					dataIndex: 'date',
 					key: 'date',
+					sorter: (a, b) =>
+						new Date(a.date).getTime() - new Date(b.date).getTime(),
 					render: (_, record) => (
 						<AppText text={getLongMonthFromDate(record.date)} />
 					),
@@ -80,6 +82,8 @@ const NotesColumns: ({
 					),
 					dataIndex: 'date',
 					key: 'date',
+					sorter: (a, b) =>
+						new Date(a.date).getTime() - new Date(b.date).getTime(),
 					render: (_, record) => (
 						<AppText text={getLongMonthFromDate(record.date)} />
 					),

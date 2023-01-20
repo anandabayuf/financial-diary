@@ -8,6 +8,9 @@ import StyledGrid from '../../NotesList/NoteGrid/styled/StyledGrid';
 import { IoWalletOutline } from 'react-icons/io5';
 import { BsCreditCard2Front } from 'react-icons/bs';
 import { formatIDR } from '../../../../Utils/CurrencyUtils';
+import AppEmpty from '../../../General/AppEmpty';
+import { Tooltip } from 'antd';
+import AppTooltip from '../../../General/AppTooltip/index';
 
 const DetailNoteGrid: React.FC<DetailNoteGridProps> = ({
 	isWallet,
@@ -18,57 +21,81 @@ const DetailNoteGrid: React.FC<DetailNoteGridProps> = ({
 
 	return (
 		<div className='flex justify-center'>
-			<StyledGrid>
-				{data?.map((el, index) => {
-					return (
-						<StyledDetailNoteGridCard
-							key={index}
-							isMobileShowCard='true'
-							className={`rounded-2xl shadow-2xl`}
-						>
-							<div className='flex justify-between items-center mb-5'>
-								{isWallet ? (
-									<IoWalletOutline
-										color={theme?.text}
-										size={32}
-									/>
-								) : (
-									<BsCreditCard2Front
-										color={theme?.text}
-										size={32}
-									/>
-								)}
-								<div>
-									<AppText
-										text={
-											isWallet
-												? el.wallet.name
-												: el.category.name
-										}
-										className='flex justify-end'
-									/>
-									<div className='flex justify-end'>
-										<AppTitle
+			{data?.length! > 0 ? (
+				<StyledGrid>
+					{data?.map((el, index) => {
+						return (
+							<StyledDetailNoteGridCard
+								key={index}
+								isMobileShowCard='true'
+								className={`rounded-2xl shadow-2xl`}
+							>
+								<div className='flex justify-between items-center mb-5'>
+									{isWallet ? (
+										<IoWalletOutline
+											color={theme?.text}
+											size={32}
+										/>
+									) : (
+										<BsCreditCard2Front
+											color={theme?.text}
+											size={32}
+										/>
+									)}
+									<div>
+										<AppTooltip
+											title={
+												isWallet
+													? el.wallet.name
+													: el.category.name
+											}
+										>
+											<div className='flex justify-end max-w-[100px] max-[320px]:max-w-[220px]'>
+												<AppText
+													text={
+														isWallet
+															? el.wallet.name
+															: el.category.name
+													}
+													className='truncate ...'
+												/>
+											</div>
+										</AppTooltip>
+										<AppTooltip
 											title={formatIDR(
 												isWallet ? el.balance : el.total
 											)}
-											level={5}
-										/>
+										>
+											<div className='flex justify-end max-w-[100px] max-[320px]:max-w-[220px]'>
+												<AppTitle
+													title={formatIDR(
+														isWallet
+															? el.balance
+															: el.total
+													)}
+													level={5}
+													className='truncate ...'
+												/>
+											</div>
+										</AppTooltip>
+										<div className='flex justify-end'></div>
 									</div>
 								</div>
-							</div>
-							<div className='flex justify-end'>
-								<AppButton
-									type='text'
-									onClick={handleView}
-								>
-									View
-								</AppButton>
-							</div>
-						</StyledDetailNoteGridCard>
-					);
-				})}
-			</StyledGrid>
+								<div className='flex justify-end'>
+									<AppButton
+										type='text'
+										onClick={handleView}
+									>
+										View
+									</AppButton>
+								</div>
+							</StyledDetailNoteGridCard>
+						);
+					})}
+				</StyledGrid>
+			) : (
+				<AppEmpty />
+			)}
 		</div>
 	);
 };

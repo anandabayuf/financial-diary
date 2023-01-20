@@ -4,7 +4,10 @@ import AppMessage from '../../../General/AppMessage/index';
 import { useAppSelector } from '../../../../Hooks/useRedux';
 import { DataViewTypeNames } from '../../../../Constants/DataViewTypeNames';
 import { getAllUserCategoryNote } from '../../../../Api/Category-Note';
-import DetailNoteGrid from '../DetailNoteGrid/index';
+import withCategoryNoteForm from '../DetailNoteForm/withCategoryNoteForm';
+import DetailNoteForm from '../DetailNoteForm/index';
+import AppModal from '../../../General/AppModal/index';
+import AppTitle from '../../../General/AppTitle/index';
 
 const withCategoryNoteTab = (
 	Component: React.ComponentType<DetailNoteTabProps>
@@ -22,12 +25,12 @@ const withCategoryNoteTab = (
 			DataViewTypeNames.LIST
 		);
 
-		const handleChangeDataViewType = (values: any) => {
-			setDataViewType(values);
-		};
-
 		const [categoryNote, setCategoryNote] = useState<any[]>([]);
+		const [categoryNoteList, setCategoryNoteList] = useState<any[]>([]);
+
 		const [isLoading, setIsLoading] = useState<boolean>(false);
+		const [isSearching, setIsSearching] = useState<boolean>(false);
+		const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
 		useEffect(() => {
 			const getCategoryNote = async () => {
@@ -35,14 +38,14 @@ const withCategoryNoteTab = (
 
 				const res = await getAllUserCategoryNote(token, noteId);
 				if (res.request.status === 200) {
-					setCategoryNote(
-						res.data.data.map((el: any, index: number) => {
-							return {
-								...el,
-								key: index,
-							};
-						})
-					);
+					const data = res.data.data.map((el: any, index: number) => {
+						return {
+							...el,
+							key: index,
+						};
+					});
+					setCategoryNote(data);
+					setCategoryNoteList(data);
 				} else {
 					const response = JSON.parse(res.request.response);
 
@@ -52,29 +55,77 @@ const withCategoryNoteTab = (
 				setIsLoading(false);
 			};
 
-			getCategoryNote(); // eslint-disable-next-line
-		}, []);
+			if (!isModalOpen) {
+				getCategoryNote(); // eslint-disable-next-line
+			}
+		}, [isModalOpen]);
 
-		const handleClickAdd = () => {};
+		const handleChangeDataViewType = (values: any) => {
+			setDataViewType(values);
+		};
+
+		const handleClickAdd = () => setIsModalOpen(true);
 
 		const handleClickView = () => {};
+
+		const handleChangeSearch = (e: any) => {
+			if (e.target.value === '') {
+				setCategoryNoteList(categoryNote);
+			}
+		};
+
+		const handleSearch = (value: string) => {
+			if (value) {
+				const searchQuery = value.trim();
+
+				if (searchQuery !== '' && searchQuery !== ' ') {
+					setIsSearching(true);
+					const regex = new RegExp(`${searchQuery}`, 'gi');
+					setCategoryNoteList(
+						categoryNote.filter((categoryNote) =>
+							categoryNote.category.name.match(regex)
+						)
+					);
+					setIsSearching(false);
+				}
+			}
+		};
+
+		const handleCancelAdd = () => setIsModalOpen(false);
+
+		const CategoryNoteForm = withCategoryNoteForm(DetailNoteForm);
+
+		const ModalAdd = (
+			<AppModal
+				title={
+					<AppTitle
+						title='Add Category to The Note'
+						level={4}
+					/>
+				}
+				open={isModalOpen}
+			>
+				<CategoryNoteForm
+					noteId={noteId}
+					handleCancel={handleCancelAdd}
+				/>
+			</AppModal>
+		);
 
 		return (
 			<Component
 				isWallet={false}
 				data={categoryNote}
+				dataList={categoryNoteList}
 				isLoading={isLoading}
+				isSearching={isSearching}
 				dataViewType={dataViewType}
+				modalAdd={ModalAdd}
 				handleClickAdd={handleClickAdd}
 				handleClickView={handleClickView}
 				handleChangeDataViewType={handleChangeDataViewType}
-				detailNoteGrid={
-					<DetailNoteGrid
-						isWallet={false}
-						data={categoryNote}
-						handleView={handleClickView}
-					/>
-				}
+				handleChangeSearch={handleChangeSearch}
+				handleSearch={handleSearch}
 				{...rest}
 			/>
 		);
