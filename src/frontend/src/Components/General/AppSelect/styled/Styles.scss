@@ -1,0 +1,36 @@
+@import "../../../../Styles/Library.scss";
+
+body {
+    .ant-select-item-option {
+        font-family: 'Comfortaa', cursive !important;
+        font-weight: 400 !important;
+    }
+}
+
+body.dark {
+    .ant-select-dropdown{
+        background-color: $dark-container;
+
+        .ant-select-item-option {
+            color: $dark-text;
+        }
+
+        .ant-select-item-option-active, .ant-select-item-option-selected {
+            background-color: $dark-button;
+        }
+    }
+}
+
+body.light {
+    .ant-select-dropdown{
+        background-color: $light-container;
+
+        .ant-select-item-option {
+            color: $light-text;
+        }
+
+        .ant-select-item-option-active, .ant-select-item-option-selected {
+            background-color: $light-button;
+        }
+    }
+}

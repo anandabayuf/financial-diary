@@ -9,6 +9,8 @@ enum RouteNames {
 	CREATE_CATEGORY = 'CREATE_CATEGORY',
 	EDIT_CATEGORY = 'EDIT_CATEGORY',
 	NOTES = 'NOTES',
+	CREATE_NOTE = 'CREATE_NOTE',
+	DETAIL_NOTE = 'DETAIL_NOTE',
 }
 
 export default RouteNames;

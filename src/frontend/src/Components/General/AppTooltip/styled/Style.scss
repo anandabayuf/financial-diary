@@ -1,0 +1,31 @@
+@import "../../../../Styles/Library.scss";
+
+body {
+    .ant-tooltip-inner {
+        font-family: 'Comfortaa', cursive !important;
+	    font-weight: 400 !important;
+        font-size: 12px !important;
+    }
+}
+
+body.dark {
+    .ant-tooltip-inner {
+        color: $dark-text;
+        background-color: $dark-button;
+    }
+
+    .ant-tooltip {
+        --antd-arrow-background-color: #3F72AF;
+    }
+}
+
+body.light {
+    .ant-tooltip-inner {
+        color: $light-text;
+        background-color: $light-button;
+    }
+
+    .ant-tooltip {
+        --antd-arrow-background-color: #91c3ff;
+    }
+}

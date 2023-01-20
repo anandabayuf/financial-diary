@@ -1,8 +1,11 @@
 import { ColumnsType } from 'antd/es/table';
-import AppButton from '../../../../Components/General/AppButton';
-import AppText from '../../../../Components/General/AppText';
+import AppButton from '../../../General/AppButton';
+import AppText from '../../../General/AppText';
+import { CategoryColumnsProps } from './interfaces/interfaces';
 
-const WalletColumns: (navigate?: any) => ColumnsType<any> = (navigate) => {
+const CategoryColumns: ({
+	navigate,
+}: CategoryColumnsProps) => ColumnsType<any> = ({ navigate }) => {
 	return [
 		{
 			title: (
@@ -13,6 +16,7 @@ const WalletColumns: (navigate?: any) => ColumnsType<any> = (navigate) => {
 			),
 			dataIndex: 'name',
 			key: 'name',
+			sorter: (a, b) => (a.name < b.name ? -1 : 1),
 			render: (_, record) => <AppText text={record.name} />,
 		},
 		{
@@ -29,9 +33,13 @@ const WalletColumns: (navigate?: any) => ColumnsType<any> = (navigate) => {
 					<AppButton
 						type='text'
 						onClick={() =>
-							navigate(`/management/wallets/edit/${record._id}`, {
-								state: record,
-							})
+							navigate &&
+							navigate(
+								`/management/category/edit/${record._id}`,
+								{
+									state: record,
+								}
+							)
 						}
 					>
 						Edit
@@ -42,4 +50,4 @@ const WalletColumns: (navigate?: any) => ColumnsType<any> = (navigate) => {
 	];
 };
 
-export default WalletColumns;
+export default CategoryColumns;

@@ -1,4 +1,4 @@
-import { message, Modal } from 'antd';
+import { Modal } from 'antd';
 import AppCard from '../../Components/General/AppCard';
 import FrontLayout from '../../Layouts/FrontLayout';
 import AppButton from '../../Components/General/AppButton';
@@ -11,6 +11,7 @@ import { useState } from 'react';
 import { getBase64 } from '../../Utils/ImageUtils';
 import { register } from '../../Api/Auth';
 import StyledTitle from './styled/StyledTitle';
+import AppMessage from '../../Components/General/AppMessage/index';
 
 const RegisterPage: React.FC = () => {
 	const [loading, setLoading] = useState(false);
@@ -21,31 +22,28 @@ const RegisterPage: React.FC = () => {
 	});
 	const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-	const [messageApi, contextHolder] = message.useMessage();
 	const navigate = useNavigate();
 
 	const handleRegister = async (values: any) => {
 		setLoading(true);
 		const { picture, passwordconfirm, ...data } = values;
-		// console.log(data);
-		// console.log(picture);
 
 		const payload = new FormData();
 		if (picture && picture.fileList.length !== 0) {
-			console.log(picture.fileList[0]);
 			payload.append('picture', picture.fileList[0].originFileObj);
 		}
 		payload.append('data', JSON.stringify(data));
 
 		const res = await register(payload);
-		console.log(res);
+
 		if (res.request.status === 404) {
-			messageApi.error(
-				res.response.data.message + ', username already taken.'
-			);
+			AppMessage({
+				content: `${res.response.data.message}, username already taken.`,
+				type: 'error',
+			});
 			setLoading(false);
 		} else if (res.request.status === 201) {
-			messageApi.success(res.data.message);
+			AppMessage({ content: res.data.message, type: 'success' });
 			setTimeout(() => {
 				navigate('/login', { replace: true });
 				setLoading(false);
@@ -53,9 +51,7 @@ const RegisterPage: React.FC = () => {
 		}
 	};
 
-	const handleRegisterFailed = (errorInfo: string) => {
-		console.log(errorInfo);
-	};
+	const handleRegisterFailed = (errorInfo: string) => {};
 
 	const handleClickLogin = () => {
 		navigate('/login');
@@ -98,11 +94,17 @@ const RegisterPage: React.FC = () => {
 		const isJpgOrPng =
 			file.type === 'image/jpeg' || file.type === 'image/png';
 		if (!isJpgOrPng) {
-			message.error('You can only upload JPG/PNG file!');
+			AppMessage({
+				content: 'You can only upload JPG/PNG file!',
+				type: 'error',
+			});
 		}
 		const isLt2M = file.size / 1024 / 1024 < 2;
 		if (!isLt2M) {
-			message.error('Image must smaller than 2MB!');
+			AppMessage({
+				content: 'Image must smaller than 2MB!',
+				type: 'error',
+			});
 		}
 
 		if (isJpgOrPng && isLt2M) {
@@ -114,7 +116,6 @@ const RegisterPage: React.FC = () => {
 
 	return (
 		<FrontLayout>
-			{contextHolder}
 			<AppCard>
 				<StyledTitle
 					level={3}

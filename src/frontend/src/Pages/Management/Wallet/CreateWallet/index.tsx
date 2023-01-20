@@ -9,7 +9,7 @@ import { useAppSelector } from '../../../../Hooks/useRedux';
 import { useNavigate } from 'react-router-dom';
 import { getRouteNames } from '../../../../Utils/RouteUtils';
 import RouteNames from '../../../../Constants/RouteNames';
-import { message } from 'antd';
+import AppMessage from '../../../../Components/General/AppMessage/index';
 
 const CreateForm = withCreateWallet(WalletForm);
 
@@ -17,16 +17,13 @@ const CreateWalletPage: React.FC = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const token = useAppSelector((state) => state.user.accessToken);
 	const navigate = useNavigate();
-	const [messageApi, contextHolder] = message.useMessage();
 
 	const handleCreateWallet = async (values: any) => {
 		setIsLoading(true);
 
 		const response = await createUserWallet(token, values);
-		// console.log(response);
 		setIsLoading(false);
 		if (response.request.status === 201) {
-			// messageApi.success(response.data.message);
 			navigate(getRouteNames(RouteNames.MANAGEMENT_WALLETS), {
 				replace: true,
 				state: {
@@ -34,13 +31,12 @@ const CreateWalletPage: React.FC = () => {
 				},
 			});
 		} else {
-			messageApi.error(response.data.message);
+			AppMessage({ content: response.data.message, type: 'error' });
 		}
 	};
 
 	return (
 		<MainLayout>
-			{contextHolder}
 			<AppBreadcrumb className='mb-1' />
 			<div className='mb-5'>
 				<AppTitle

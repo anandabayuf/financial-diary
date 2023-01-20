@@ -1,0 +1,31 @@
+@import '../../../../Styles/Library.scss';
+
+body {
+    .ant-input-password.ant-input-affix-wrapper-status-error:hover {
+        border-color: #ff4d4f !important;
+    }
+
+    .ant-input-password.ant-input-affix-wrapper-focused.ant-input-affix-wrapper-status-error{
+        border-color: #ff4d4f !important;
+    }
+}
+
+body.dark{
+    .ant-input-password.ant-input-affix-wrapper:hover {
+		border-color: $dark-text !important;
+	}
+    
+    .ant-input-password.ant-input-affix-wrapper-focused{
+        border-color: $dark-text !important;
+    }
+}
+
+body.light{
+    .ant-input-password.ant-input-affix-wrapper:hover {
+		border-color: $light-text !important;
+	}
+    
+    .ant-input-password.ant-input-affix-wrapper-focused{
+        border-color: $light-text !important;
+    }
+}

@@ -6,10 +6,10 @@ import { useAppSelector } from '../../../../Hooks/useRedux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getRouteNames } from '../../../../Utils/RouteUtils';
 import RouteNames from '../../../../Constants/RouteNames';
-import { message } from 'antd';
 import withEditCategory from '../../../../Components/Management/Category/CategoryForm/withEditCategory';
 import CategoryForm from '../../../../Components/Management/Category/CategoryForm/index';
 import { editUserCategory } from '../../../../Api/Category';
+import AppMessage from '../../../../Components/General/AppMessage/index';
 
 const EditForm = withEditCategory(CategoryForm);
 
@@ -17,19 +17,15 @@ const EditCategoryPage: React.FC = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const token = useAppSelector((state) => state.user.accessToken);
 	const navigate = useNavigate();
-	const [messageApi, contextHolder] = message.useMessage();
 	const location = useLocation();
 	const category = location.state;
 
 	const handleEditCategory = async (values: any) => {
-		// console.log(values);
 		setIsLoading(true);
 
 		const response = await editUserCategory(token, category._id, values);
-		// console.log(response);
 		setIsLoading(false);
 		if (response.request.status === 201) {
-			// messageApi.success(response.data.message);
 			navigate(getRouteNames(RouteNames.MANAGEMENT_CATEGORY), {
 				replace: true,
 				state: {
@@ -37,13 +33,12 @@ const EditCategoryPage: React.FC = () => {
 				},
 			});
 		} else {
-			messageApi.error(response.data.message);
+			AppMessage({ content: response.data.message, type: 'error' });
 		}
 	};
 
 	return (
 		<MainLayout>
-			{contextHolder}
 			<AppBreadcrumb className='mb-1' />
 			<div className='mb-5'>
 				<AppTitle
