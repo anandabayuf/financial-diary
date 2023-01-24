@@ -19,7 +19,7 @@ router.get("/note/:noteId", async (req, res) => {
 	}
 });
 
-router.get("/available/note/:noteId", async (req, res) => {
+router.get("/note/:noteId/available", async (req, res) => {
 	try {
 		res.status(200).json({
 			status: 200,
@@ -63,6 +63,40 @@ router.post("/", async (req, res) => {
 			categoryId: id,
 			noteId: data.noteId,
 			total: 0,
+			estimated: {
+				total: 0,
+				remains: 0,
+			},
+		};
+	});
+
+	try {
+		res.status(201).json({
+			status: 201,
+			message: "Successfully create category note",
+			data: await categoryNoteModel.create(payload),
+		});
+	} catch (err) {
+		res.status(404).json({
+			status: 404,
+			message: "Failed to create category note",
+			detail: err,
+		});
+	}
+});
+
+router.post("/estimated", async (req, res) => {
+	let data = req.body;
+
+	let payload = data.map((el) => {
+		return {
+			categoryId: el.categoryId,
+			noteId: el.noteId,
+			total: 0,
+			estimated: {
+				total: el.estimated.total,
+				remains: el.estimated.total,
+			},
 		};
 	});
 
@@ -92,6 +126,28 @@ router.put("/:id", async (req, res) => {
 		res.status(404).json({
 			status: 404,
 			message: "Failed to edit category note data",
+			detail: err,
+		});
+	}
+});
+
+router.put("/:id/estimated", async (req, res) => {
+	let data = req.body;
+
+	try {
+		res.status(201).json({
+			status: 201,
+			message: "Successfully edit category note estimated total data",
+			data: await categoryNoteModel.editEstimatedTotal(
+				req.params.id,
+				data.noteId,
+				data.estimated.total
+			),
+		});
+	} catch (err) {
+		res.status(404).json({
+			status: 404,
+			message: "Failed to edit category note estimated total data",
 			detail: err,
 		});
 	}

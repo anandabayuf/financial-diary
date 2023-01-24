@@ -40,6 +40,10 @@ router.post("/", async (req, res) => {
 
 	data.userId = req.user.id;
 	data.date = new Date(data.date);
+	data.estimated = {
+		balance: 0,
+		remains: 0,
+	};
 
 	try {
 		res.status(201).json({
