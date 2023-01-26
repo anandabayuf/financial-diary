@@ -1,5 +1,5 @@
 export interface DetailNoteGridProps {
 	isWallet?: boolean;
 	data?: any[];
-	handleView?: () => void;
+	handleView?: (record: any) => void;
 }

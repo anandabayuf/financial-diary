@@ -1,0 +1,21 @@
+@import "../../../../Styles/Library.scss";
+
+body.dark {
+    .ant-tabs-dropdown-menu {
+        background-color: $dark-container;
+
+        .ant-tabs-dropdown-menu-item svg {
+            color: $dark-text;
+        }
+    }
+}
+
+body.light {
+    .ant-tabs-dropdown-menu {
+        background-color: $light-container;
+    }
+
+    .ant-tabs-dropdown-menu-item svg {
+        color: $light-text;
+    }
+}

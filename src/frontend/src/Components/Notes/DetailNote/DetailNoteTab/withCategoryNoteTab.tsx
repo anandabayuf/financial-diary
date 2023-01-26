@@ -56,8 +56,8 @@ const withCategoryNoteTab = (
 			};
 
 			if (!isModalOpen) {
-				getCategoryNote(); // eslint-disable-next-line
-			}
+				getCategoryNote();
+			} // eslint-disable-next-line
 		}, [isModalOpen]);
 
 		const handleChangeDataViewType = (values: any) => {
@@ -66,7 +66,7 @@ const withCategoryNoteTab = (
 
 		const handleClickAdd = () => setIsModalOpen(true);
 
-		const handleClickView = () => {};
+		const handleClickView = (record: any) => {};
 
 		const handleChangeSearch = (e: any) => {
 			if (e.target.value === '') {
@@ -114,7 +114,7 @@ const withCategoryNoteTab = (
 
 		return (
 			<Component
-				isWallet={false}
+				isCategory
 				data={categoryNote}
 				dataList={categoryNoteList}
 				isLoading={isLoading}

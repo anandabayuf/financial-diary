@@ -3,13 +3,13 @@ import { useState, useEffect } from 'react';
 import { getAllUserWalletNote } from '../../../../Api/Wallet-Note';
 import AppMessage from '../../../General/AppMessage/index';
 import { useAppSelector } from '../../../../Hooks/useRedux';
-import { DataViewTypeNames } from '../../../../Constants/DataViewTypeNames';
 import AppModal from '../../../General/AppModal';
-import withWalletNoteForm from '../DetailNoteForm/withWalletNoteForm';
 import DetailNoteForm from '../DetailNoteForm/index';
 import AppTitle from '../../../General/AppTitle';
+import { getAllUserCategoryNote } from '../../../../Api/Category-Note';
+import withEstimationNoteForm from '../DetailNoteForm/withEstimationNoteForm';
 
-const withWalletNoteTab = (
+const withEstimationNoteTab = (
 	Component: React.ComponentType<DetailNoteTabProps>
 ) => {
 	const NewComponent: React.FC<DetailNoteTabProps> = ({
@@ -21,33 +21,57 @@ const withWalletNoteTab = (
 		// const navigate = useNavigate();
 		// const location = useLocation();
 
-		const [dataViewType, setDataViewType] = useState<DataViewTypeNames>(
-			DataViewTypeNames.LIST
-		);
-
-		const [walletNote, setWalletNote] = useState<any[]>([]);
-		const [walletNoteList, setWalletNoteList] = useState<any[]>([]);
+		const [estimations, setEstimations] = useState<any[]>([]);
+		const [estimationsList, setEstimationsList] = useState<any[]>([]);
 
 		const [isLoading, setIsLoading] = useState<boolean>(false);
 		const [isSearching, setIsSearching] = useState<boolean>(false);
 		const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
 		useEffect(() => {
-			const getWalletNote = async () => {
+			const getWalletAndCategory = async () => {
 				setIsLoading(true);
 
-				const res = await getAllUserWalletNote(token, noteId);
-				if (res.request.status === 200) {
-					const data = res.data.data.map((el: any, index: number) => {
-						return {
-							...el,
-							key: index,
-						};
-					});
-					setWalletNote(data);
-					setWalletNoteList(data);
+				const resWalletNote = await getAllUserWalletNote(token, noteId);
+				if (resWalletNote.request.status === 200) {
+					const walletNote = await resWalletNote.data.data;
+
+					const resCatNote = await getAllUserCategoryNote(
+						token,
+						noteId
+					);
+
+					if (resCatNote.request.status === 200) {
+						const catNote = await resCatNote.data.data;
+						const data = [...walletNote, ...catNote].map(
+							(el, index) => {
+								return {
+									...el,
+									key: index,
+									name: el.wallet
+										? el.wallet.name
+										: el.category.name,
+									debit: el.wallet && el.estimated.balance,
+									credit: el.category && el.estimated.total,
+								};
+							}
+						);
+						// console.log(data);
+
+						setEstimations(data);
+						setEstimationsList(data);
+					} else {
+						const response = JSON.parse(
+							resCatNote.request.response
+						);
+
+						AppMessage({
+							content: response.message,
+							type: 'error',
+						});
+					}
 				} else {
-					const response = JSON.parse(res.request.response);
+					const response = JSON.parse(resWalletNote.request.response);
 
 					AppMessage({ content: response.message, type: 'error' });
 				}
@@ -56,21 +80,19 @@ const withWalletNoteTab = (
 			};
 
 			if (!isModalOpen) {
-				getWalletNote();
+				getWalletAndCategory();
 			} //eslint-disable-next-line
 		}, [isModalOpen]);
 
-		const handleChangeDataViewType = (values: any) => {
-			setDataViewType(values);
-		};
-
 		const handleClickAdd = () => setIsModalOpen(true);
 
-		const handleClickView = (record: any) => {};
+		const handleClickEdit = (record: any) => {
+			console.log(record);
+		};
 
 		const handleChangeSearch = (e: any) => {
 			if (e.target.value === '') {
-				setWalletNoteList(walletNote);
+				setEstimationsList(estimations);
 			}
 		};
 
@@ -81,10 +103,8 @@ const withWalletNoteTab = (
 				if (searchQuery !== '' && searchQuery !== ' ') {
 					setIsSearching(true);
 					const regex = new RegExp(`${searchQuery}`, 'gi');
-					setWalletNoteList(
-						walletNote.filter((walletNote) =>
-							walletNote.wallet.name.match(regex)
-						)
+					setEstimationsList(
+						estimations.filter((el) => el.name.match(regex))
 					);
 					setIsSearching(false);
 				}
@@ -93,19 +113,19 @@ const withWalletNoteTab = (
 
 		const handleCancelAdd = () => setIsModalOpen(false);
 
-		const WalletNoteForm = withWalletNoteForm(DetailNoteForm);
+		const EstimationNoteForm = withEstimationNoteForm(DetailNoteForm);
 
 		const ModalAdd = (
 			<AppModal
 				title={
 					<AppTitle
-						title='Add Wallet to The Note'
+						title='Add Wallet or Category to The Note'
 						level={4}
 					/>
 				}
 				open={isModalOpen}
 			>
-				<WalletNoteForm
+				<EstimationNoteForm
 					noteId={noteId}
 					handleCancel={handleCancelAdd}
 				/>
@@ -114,16 +134,14 @@ const withWalletNoteTab = (
 
 		return (
 			<Component
-				isWallet
-				data={walletNote}
-				dataList={walletNoteList}
+				isEstimation
+				data={estimations}
+				dataList={estimationsList}
 				isLoading={isLoading}
 				isSearching={isSearching}
-				dataViewType={dataViewType}
 				modalAdd={ModalAdd}
 				handleClickAdd={handleClickAdd}
-				handleClickView={handleClickView}
-				handleChangeDataViewType={handleChangeDataViewType}
+				handleClickEdit={handleClickEdit}
 				handleChangeSearch={handleChangeSearch}
 				handleSearch={handleSearch}
 				{...rest}
@@ -134,4 +152,4 @@ const withWalletNoteTab = (
 	return NewComponent;
 };
 
-export default withWalletNoteTab;
+export default withEstimationNoteTab;

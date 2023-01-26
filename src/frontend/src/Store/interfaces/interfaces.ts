@@ -8,3 +8,9 @@ export interface UserState {
 	accessToken?: string;
 	data?: any;
 }
+
+export interface NotesState {
+	notes?: any[];
+	walletNotes?: any[];
+	categoryNotes?: any[];
+}

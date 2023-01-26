@@ -156,7 +156,8 @@ const NotesListPage: React.FC = () => {
 							value={selectedYear}
 							options={NotesOptionYear({ years: optionYear })}
 							loading={isLoading}
-							handleChange={handleChangeYear}
+							onChange={handleChangeYear}
+							className='w-[100px]'
 						/>
 						<AppSegmented
 							value={dataViewType}

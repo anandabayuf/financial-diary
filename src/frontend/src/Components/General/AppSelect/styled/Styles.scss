@@ -8,6 +8,12 @@ body {
 }
 
 body.dark {
+    .ant-select-status-error{
+        .ant-select-selector {
+            border-color: #ff4d4f !important;
+        }
+    }
+
     .ant-select-dropdown{
         background-color: $dark-container;
 

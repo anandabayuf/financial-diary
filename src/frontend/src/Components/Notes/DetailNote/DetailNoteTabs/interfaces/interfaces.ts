@@ -2,10 +2,17 @@ import { TabsProps } from 'antd/es/tabs';
 
 export interface DetailNoteTabsProps {
 	noteId?: string;
-	categoryId?: string;
+	walletNote?: any;
+	categoryNote?: any;
+	isLoading?: {
+		walletNote?: boolean;
+		categoryNote?: boolean;
+	};
 }
 
 export type DetailNoteTabsType = ({
 	noteId,
-	categoryId,
+	categoryNote,
+	walletNote,
+	isLoading,
 }: DetailNoteTabsProps) => TabsProps['items'];
