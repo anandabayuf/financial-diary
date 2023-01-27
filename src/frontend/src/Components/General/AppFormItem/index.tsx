@@ -7,7 +7,7 @@ const AppFormItem: React.FC<AppFormItemProps> = ({ children, ...rest }) => {
 
 	return (
 		<StyledFormItem
-			textcolor={theme?.text}
+			formitemtheme={theme}
 			requiredMark={'optional'}
 			{...rest}
 		>

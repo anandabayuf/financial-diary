@@ -85,7 +85,11 @@ const DetailNotePage: React.FC = () => {
 							level={5}
 						/>
 					</div>
-					<AppTabs items={DetailNoteTabs({ noteId: note._id })} />
+					<AppTabs
+						items={DetailNoteTabs({
+							noteId: note._id,
+						})}
+					/>
 				</>
 			) : (
 				<AppEmpty />

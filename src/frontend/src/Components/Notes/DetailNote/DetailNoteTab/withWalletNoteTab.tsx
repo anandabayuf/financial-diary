@@ -57,7 +57,7 @@ const withWalletNoteTab = (
 
 			if (!isModalOpen) {
 				getWalletNote();
-			}
+			} //eslint-disable-next-line
 		}, [isModalOpen]);
 
 		const handleChangeDataViewType = (values: any) => {
@@ -66,7 +66,7 @@ const withWalletNoteTab = (
 
 		const handleClickAdd = () => setIsModalOpen(true);
 
-		const handleClickView = () => {};
+		const handleClickView = (record: any) => {};
 
 		const handleChangeSearch = (e: any) => {
 			if (e.target.value === '') {

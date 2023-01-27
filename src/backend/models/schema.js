@@ -68,6 +68,16 @@ exports.NoteSchema = mongoose.model("Note", {
 		type: Date,
 		required: true,
 	},
+	estimated: {
+		balance: {
+			type: Number,
+			required: true,
+		},
+		remains: {
+			type: Number,
+			required: true,
+		},
+	},
 });
 
 exports.NoteItemSchema = mongoose.model("NoteItem", {
@@ -114,6 +124,16 @@ exports.CategoryNoteSchema = mongoose.model("CategoryNote", {
 		type: Number,
 		required: true,
 	},
+	estimated: {
+		total: {
+			type: Number,
+			required: true,
+		},
+		remains: {
+			type: Number,
+			required: true,
+		},
+	},
 });
 
 exports.WalletNoteSchema = mongoose.model("WalletNote", {
@@ -128,6 +148,12 @@ exports.WalletNoteSchema = mongoose.model("WalletNote", {
 	balance: {
 		type: Number,
 		required: true,
+	},
+	estimated: {
+		balance: {
+			type: Number,
+			required: true,
+		},
 	},
 });
 

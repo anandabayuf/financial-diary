@@ -7,19 +7,20 @@ const AppSelect: React.FC<AppSelectProps> = ({
 	value,
 	placeholder,
 	loading,
-	handleChange,
+	onChange,
+	...rest
 }) => {
 	const theme = useTheme();
 
 	return (
 		<StyledSelect
-			theme={theme}
+			themeselect={theme}
 			options={options}
 			value={value}
 			placeholder={placeholder}
 			loading={loading}
-			onChange={handleChange}
-			className='w-[100px]'
+			onChange={onChange}
+			{...rest}
 		/>
 	);
 };

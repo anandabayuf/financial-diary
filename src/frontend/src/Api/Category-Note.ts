@@ -23,7 +23,7 @@ export const getAvailableUserCategory = async (
 ): Promise<any> => {
 	try {
 		const response = await instance({
-			url: `/category-note/available/note/${noteId}`,
+			url: `/category-note/note/${noteId}/available`,
 			method: 'GET',
 			headers: { Authorization: `Bearer ${token}` },
 		});
@@ -42,6 +42,43 @@ export const addCategoryToTheNote = async (
 		const response = await instance({
 			url: `/category-note`,
 			method: 'POST',
+			headers: { Authorization: `Bearer ${token}` },
+			data: data,
+		});
+
+		return response;
+	} catch (err) {
+		return err;
+	}
+};
+
+export const addCategoryNoteEstimated = async (
+	token?: string,
+	data?: any
+): Promise<any> => {
+	try {
+		const response = await instance({
+			url: `/category-note/estimated`,
+			method: 'POST',
+			headers: { Authorization: `Bearer ${token}` },
+			data: data,
+		});
+
+		return response;
+	} catch (err) {
+		return err;
+	}
+};
+
+export const editCategoryNoteEstimated = async (
+	token?: string,
+	id?: string,
+	data?: any
+): Promise<any> => {
+	try {
+		const response = await instance({
+			url: `/category-note/${id}/estimated`,
+			method: 'PUT',
 			headers: { Authorization: `Bearer ${token}` },
 			data: data,
 		});
