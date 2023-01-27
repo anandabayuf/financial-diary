@@ -4,7 +4,7 @@ import { StyledFormItemProps } from '../interfaces/interfaces';
 
 const StyledFormItem = styled(Form.Item)<StyledFormItemProps>`
 	.ant-form-item-label label {
-		color: ${(props) => props.textcolor} !important;
+		color: ${(props) => props.formitemtheme?.text} !important;
 		font-family: 'Comfortaa', cursive !important;
 		font-weight: 400 !important;
 	}
@@ -21,6 +21,12 @@ const StyledFormItem = styled(Form.Item)<StyledFormItemProps>`
 
 	.ant-form-item-optional {
 		display: none !important;
+	}
+
+	.ant-form-item-extra {
+		color: ${(props) => props.formitemtheme?.halfText} !important;
+		font-family: 'Comfortaa', cursive !important;
+		font-weight: 400 !important;
 	}
 `;
 

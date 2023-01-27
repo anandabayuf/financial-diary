@@ -1,4 +1,3 @@
-import { DetailNoteFormProps } from './interfaces/interfaces';
 import { useEffect, useState } from 'react';
 import { getAvailableUserWallet } from '../../../../Api/Wallet-Note';
 import { useAppSelector } from '../../../../Hooks/useRedux';
@@ -8,11 +7,12 @@ import {
 	addCategoryNoteEstimated,
 } from '../../../../Api/Category-Note';
 import { addWalletNoteEstimated } from '../../../../Api/Wallet-Note';
+import { EstimationNoteFormProps } from './interfaces/interfaces';
 
-const withEstimationNoteForm = (
-	Component: React.ComponentType<DetailNoteFormProps>
+const withAddEstimationNoteForm = (
+	Component: React.ComponentType<EstimationNoteFormProps>
 ) => {
-	const NewComponent: React.FC<DetailNoteFormProps> = ({
+	const NewComponent: React.FC<EstimationNoteFormProps> = ({
 		noteId,
 		handleCancel,
 		...rest
@@ -131,7 +131,7 @@ const withEstimationNoteForm = (
 
 		return (
 			<Component
-				isEstimation
+				isAdd
 				handleSubmit={handleSubmit}
 				walletData={availableWallet}
 				categoryData={availableCategory}
@@ -146,4 +146,4 @@ const withEstimationNoteForm = (
 	return NewComponent;
 };
 
-export default withEstimationNoteForm;
+export default withAddEstimationNoteForm;

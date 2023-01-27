@@ -4,10 +4,11 @@ import { getAllUserWalletNote } from '../../../../Api/Wallet-Note';
 import AppMessage from '../../../General/AppMessage/index';
 import { useAppSelector } from '../../../../Hooks/useRedux';
 import AppModal from '../../../General/AppModal';
-import DetailNoteForm from '../DetailNoteForm/index';
 import AppTitle from '../../../General/AppTitle';
 import { getAllUserCategoryNote } from '../../../../Api/Category-Note';
-import withEstimationNoteForm from '../DetailNoteForm/withEstimationNoteForm';
+import withAddEstimationNoteForm from '../EstimationNoteForm/withAddEstimationNoteForm';
+import EstimationNoteForm from '../EstimationNoteForm/index';
+import withEditEstimationNoteForm from '../EstimationNoteForm/withEditEstimationNoteForm';
 
 const withEstimationNoteTab = (
 	Component: React.ComponentType<DetailNoteTabProps>
@@ -26,7 +27,12 @@ const withEstimationNoteTab = (
 
 		const [isLoading, setIsLoading] = useState<boolean>(false);
 		const [isSearching, setIsSearching] = useState<boolean>(false);
-		const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+		const [isModalOpen, setIsModalOpen] = useState({
+			modalAdd: false,
+			modalEdit: false,
+		});
+
+		const [recordEdit, setRecordEdit] = useState<any>();
 
 		useEffect(() => {
 			const getWalletAndCategory = async () => {
@@ -79,15 +85,24 @@ const withEstimationNoteTab = (
 				setIsLoading(false);
 			};
 
-			if (!isModalOpen) {
+			if (!isModalOpen.modalAdd && !isModalOpen.modalEdit) {
 				getWalletAndCategory();
 			} //eslint-disable-next-line
 		}, [isModalOpen]);
 
-		const handleClickAdd = () => setIsModalOpen(true);
+		const handleClickAdd = () =>
+			setIsModalOpen({
+				...isModalOpen,
+				modalAdd: true,
+			});
 
 		const handleClickEdit = (record: any) => {
-			console.log(record);
+			// console.log(record);
+			setRecordEdit(record);
+			setIsModalOpen({
+				...isModalOpen,
+				modalEdit: true,
+			});
 		};
 
 		const handleChangeSearch = (e: any) => {
@@ -111,25 +126,62 @@ const withEstimationNoteTab = (
 			}
 		};
 
-		const handleCancelAdd = () => setIsModalOpen(false);
+		const handleCancelAdd = () =>
+			setIsModalOpen({
+				...isModalOpen,
+				modalAdd: false,
+			});
 
-		const EstimationNoteForm = withEstimationNoteForm(DetailNoteForm);
+		const handleCancelEdit = () =>
+			setIsModalOpen({
+				...isModalOpen,
+				modalEdit: false,
+			});
+
+		const AddEstimationNoteForm =
+			withAddEstimationNoteForm(EstimationNoteForm);
+
+		const EditEstimationNoteForm =
+			withEditEstimationNoteForm(EstimationNoteForm);
 
 		const ModalAdd = (
-			<AppModal
-				title={
-					<AppTitle
-						title='Add Wallet or Category to The Note'
-						level={4}
+			<>
+				<AppModal
+					title={
+						<AppTitle
+							title='Add Wallet or Category to The Note'
+							level={4}
+						/>
+					}
+					open={isModalOpen.modalAdd}
+				>
+					<AddEstimationNoteForm
+						noteId={noteId}
+						handleCancel={handleCancelAdd}
 					/>
-				}
-				open={isModalOpen}
-			>
-				<EstimationNoteForm
-					noteId={noteId}
-					handleCancel={handleCancelAdd}
-				/>
-			</AppModal>
+				</AppModal>
+				{recordEdit && (
+					<AppModal
+						title={
+							<AppTitle
+								title={
+									recordEdit.estimated.balance
+										? 'Edit Wallet Estimation'
+										: 'Edit Category Estimation'
+								}
+								level={4}
+							/>
+						}
+						open={isModalOpen.modalEdit}
+					>
+						<EditEstimationNoteForm
+							noteId={noteId}
+							data={recordEdit}
+							handleCancel={handleCancelEdit}
+						/>
+					</AppModal>
+				)}
+			</>
 		);
 
 		return (

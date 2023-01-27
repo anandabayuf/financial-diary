@@ -83,7 +83,6 @@ exports.getAll = (query, noteId) => {
 
 exports.getById = (id) => {
 	return new Promise((resolve, reject) => {
-		console.log(id);
 		schema.WalletNoteSchema.findById(id, async (err, result) => {
 			if (err) {
 				reject(err);

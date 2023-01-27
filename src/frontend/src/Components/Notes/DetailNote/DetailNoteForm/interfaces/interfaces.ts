@@ -4,7 +4,6 @@ export interface DetailNoteFormProps {
 	categoryData?: any[];
 	isWallet?: boolean;
 	isCategory?: boolean;
-	isEstimation?: boolean;
 	isLoading?: boolean;
 	isFetching?: boolean;
 	handleSubmit?: (values: any) => void;
