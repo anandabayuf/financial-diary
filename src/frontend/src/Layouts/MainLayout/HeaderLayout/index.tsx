@@ -28,12 +28,9 @@ const HeaderLayout: React.FC<HeaderLayoutProps> = ({
 	const handleClickProfileMenu = (e: any) => {
 		if (e.key === 'logout') {
 			dispatch(setUserLoggedOut());
-		} else if (e.key === 'theme-switcher') {
+		} else if (e.key !== 'theme-switcher') {
+			setIsOpen(false);
 		}
-		// else {
-		// 	navigate(e.key);
-		// }
-		setIsOpen(false);
 	};
 
 	const handleChangeTheme = (e: any) => {

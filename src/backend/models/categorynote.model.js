@@ -164,7 +164,7 @@ exports.addTotal = (id, total) => {
 					total: categoryNote.total + total,
 					estimated: {
 						...categoryNote.estimated,
-						remains: categoryNote.remains - total,
+						remains: categoryNote.estimated.remains - total,
 					},
 				};
 

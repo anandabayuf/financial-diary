@@ -69,7 +69,7 @@ const withAddEstimationNoteForm = (
 							},
 						};
 					});
-					console.log(walletsPayload);
+					// console.log(walletsPayload);
 					const res = await addWalletNoteEstimated(
 						token,
 						walletsPayload
@@ -103,7 +103,7 @@ const withAddEstimationNoteForm = (
 							};
 						}
 					);
-					console.log(categoriesPayload);
+					// console.log(categoriesPayload);
 					const res = await addCategoryNoteEstimated(
 						token,
 						categoriesPayload

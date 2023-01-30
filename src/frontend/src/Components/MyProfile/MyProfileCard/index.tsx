@@ -1,7 +1,7 @@
 import AppCard from '../../General/AppCard';
 import { MyProfileCardProps } from './interfaces/interfaces';
 import AppLoader from '../../General/AppLoader/index';
-import { Avatar, Image } from 'antd';
+import { Avatar } from 'antd';
 import { AiOutlineUser } from 'react-icons/ai';
 import AppText from '../../General/AppText';
 import AppTitle from '../../General/AppTitle/index';

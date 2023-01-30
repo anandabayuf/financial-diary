@@ -60,6 +60,7 @@ router.post("/", async (req, res) => {
 
 	let payload = data.categoryIds.map((id) => {
 		return {
+			userId: req.user.id,
 			categoryId: id,
 			noteId: data.noteId,
 			total: 0,
@@ -90,6 +91,7 @@ router.post("/estimated", async (req, res) => {
 
 	let payload = data.map((el) => {
 		return {
+			userId: req.user.id,
 			categoryId: el.categoryId,
 			noteId: el.noteId,
 			total: 0,
