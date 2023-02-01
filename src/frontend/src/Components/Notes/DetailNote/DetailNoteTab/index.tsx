@@ -115,7 +115,6 @@ const DetailNoteTab: React.FC<DetailNoteTabProps> = ({
 									handleView: handleClickView,
 									handleEdit: handleClickEdit,
 								})}
-								showPagination={!isEstimation}
 							/>
 						) : (
 							<DetailNoteGrid

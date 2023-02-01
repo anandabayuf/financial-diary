@@ -29,6 +29,8 @@ exports.isCanAdd = (note, data) => {
 	return isCanAdd;
 };
 
+//debit !== 0 && credit == 0
+//walletId !== undefined && categoryId == undefined
 exports.incomeTransaction = (walletNoteId, income) => {
 	return new Promise((resolve, reject) => {
 		walletNoteModel
@@ -38,9 +40,13 @@ exports.incomeTransaction = (walletNoteId, income) => {
 	});
 };
 
+//debit !== 0 && credit !== 0
+//debit di walletId1 && credit di walletId0
+//walletId0 !== undefined && walletId1 !== undefined
+//bikin 2 array note item
 exports.withdrawOrTransferTransaction = (
-	walletNoteId,
-	walletNoteId2,
+	walletNoteId, //pengirim
+	walletNoteId2, //penerima
 	addition
 ) => {
 	return new Promise((resolve, reject) => {
@@ -56,6 +62,9 @@ exports.withdrawOrTransferTransaction = (
 	});
 };
 
+//debit == 0 && credit !== 0
+//credit di wallet dan di category
+//wallet id !== undefined && category id !== undefined
 exports.spendTransaction = (walletNoteId, categoryNoteId, total) => {
 	return new Promise((resolve, reject) => {
 		walletNoteModel
@@ -70,6 +79,9 @@ exports.spendTransaction = (walletNoteId, categoryNoteId, total) => {
 	});
 };
 
+//debit === 0 && credit !== 0
+//credit di wallet saja
+//walletId !== undefined
 exports.spendOnlyInWalletTransaction = (walletNoteId, total) => {
 	return new Promise((resolve, reject) => {
 		walletNoteModel
@@ -91,68 +103,93 @@ exports.create = (noteId, data) => {
 					let payload = data;
 					switch (ITEM_TYPE[payload.type]) {
 						case "INCOME":
-							this.incomeTransaction(
-								payload.walletNoteId,
-								payload.debit
-							)
-								.then(async (result) => {
-									payload["credit"] = 0;
-									const savingData =
-										await new schema.NoteItemSchema(
-											payload
-										).save();
+							if (payload.debit < 0) {
+								reject(
+									"Income amount must be zero or positive number"
+								);
+							} else {
+								this.incomeTransaction(
+									payload.walletNoteId,
+									payload.debit
+								)
+									.then(async (result) => {
+										payload["credit"] = 0;
+										const savingData =
+											await new schema.NoteItemSchema(
+												payload
+											).save();
 
-									resolve(savingData);
-								})
-								.catch((err) => reject(err));
+										resolve(savingData);
+									})
+									.catch((err) => reject(err));
+							}
 							break;
 						case "WITHDRAW_OR_TRANSFER":
-							this.withdrawOrTransferTransaction(
-								payload.walletNoteId,
-								payload.walletNoteId2,
-								payload.debit
-							)
-								.then(async (result) => {
-									const savingData =
-										await new schema.NoteItemSchema(
-											payload
-										).save();
-
-									resolve(savingData);
-								})
-								.catch((err) => reject(err));
+							if (payload.debit < 0) {
+								reject(
+									"Transfer amount must be zero or positive number"
+								);
+							} else {
+								this.withdrawOrTransferTransaction(
+									payload.walletNoteId, //pengirim
+									payload.walletNoteId2, //penerima
+									payload.debit
+								)
+									.then(async (result) => {
+										const savingData =
+											await new schema.NoteItemSchema(
+												payload
+											).save();
+										resolve(savingData);
+									})
+									.catch((err) => reject(err));
+							}
 							break;
 						case "SPEND":
-							this.spendTransaction(
-								payload.walletNoteId,
-								payload.categoryNoteId,
-								payload.debit
-							)
-								.then(async (result) => {
-									const savingData =
-										await new schema.NoteItemSchema(
-											payload
-										).save();
+							if (payload.credit < 0) {
+								reject(
+									"Total amount must be zero or positive number"
+								);
+							} else {
+								this.spendTransaction(
+									payload.walletNoteId,
+									payload.categoryNoteId,
+									payload.credit
+								)
+									.then(async (result) => {
+										payload["debit"] = 0;
+										const savingData =
+											await new schema.NoteItemSchema(
+												payload
+											).save();
 
-									resolve(savingData);
-								})
-								.catch((err) => reject(err));
+										resolve(savingData);
+									})
+									.catch((err) => reject(err));
+							}
 							break;
 						case "SPEND_ONLY_IN_WALLET":
-							this.spendOnlyInWalletTransaction(
-								payload.walletNoteId,
-								payload.credit
-							)
-								.then(async (result) => {
-									payload["debit"] = 0;
-									const savingData =
-										await new schema.NoteItemSchema(
-											payload
-										).save();
+							if (payload.credit < 0) {
+								reject(
+									"Total amount must be zero or positive number"
+								);
+							} else {
+								this.spendOnlyInWalletTransaction(
+									payload.walletNoteId,
+									payload.credit
+								)
+									.then(async (result) => {
+										payload["debit"] = 0;
+										const savingData =
+											await new schema.NoteItemSchema(
+												payload
+											).save();
 
-									resolve(savingData);
-								})
-								.catch((err) => reject(err));
+										resolve(savingData);
+									})
+									.catch((err) => reject(err));
+							}
+
 							break;
 						default:
 							reject("Cannot add item. Invalid type item");
@@ -176,10 +213,28 @@ exports.getAll = (query, noteId, userId) => {
 	let { limit = 5, page = 1, ...search } = query;
 	const key = Object.keys(search);
 	const value = search[key];
+	const queryFunc = () => {
+		if (search.walletNoteId !== undefined) {
+			return {
+				$or: [
+					{
+						[key]: value,
+					},
+					{
+						["walletNoteId2"]: value,
+					},
+				],
+			};
+		} else {
+			return {
+				[key]: value,
+			};
+		}
+	};
 
 	return new Promise((resolve, reject) => {
 		schema.NoteItemSchema.find(
-			{ [key]: value, noteId: noteId, userId: userId },
+			{ ...queryFunc(), noteId: noteId, userId: userId },
 			async (err, result) => {
 				if (err) {
 					reject(err);
@@ -232,56 +287,88 @@ exports.editFunction = (id, data) => {
 						) {
 							switch (ITEM_TYPE[noteItem.type]) {
 								case "INCOME":
-									this.incomeTransaction(
-										noteItem.walletNoteId,
-										-noteItem.debit + data.debit
-									)
-										.then((income) => {
-											this.edit(id, data)
-												.then((res) => resolve(res))
-												.catch((err) => reject(err));
-										})
-										.catch((err) => reject(err));
+									if (data.debit < 0) {
+										reject(
+											"Income amount must be zero or positive number"
+										);
+									} else {
+										this.incomeTransaction(
+											noteItem.walletNoteId,
+											-noteItem.debit + data.debit
+										)
+											.then((income) => {
+												this.edit(id, data)
+													.then((res) => resolve(res))
+													.catch((err) =>
+														reject(err)
+													);
+											})
+											.catch((err) => reject(err));
+									}
 									break;
 								case "WITHDRAW_OR_TRANSFER":
-									this.withdrawOrTransferTransaction(
-										noteItem.walletNoteId,
-										noteItem.walletNoteId2,
-										-noteItem.debit + data.debit
-									)
-										.then((wott) => {
-											this.edit(id, data)
-												.then((res) => resolve(res))
-												.catch((err) => reject(err));
-										})
-										.catch((err) => reject(err));
+									if (data.debit < 0 || data.credit < 0) {
+										reject(
+											"Transfer amount must be zero or positive number"
+										);
+									} else {
+										this.withdrawOrTransferTransaction(
+											noteItem.walletNoteId,
+											noteItem.walletNoteId2,
+											-noteItem.debit + data.debit
+										)
+											.then((wott) => {
+												this.edit(id, data)
+													.then((res) => resolve(res))
+													.catch((err) =>
+														reject(err)
+													);
+											})
+											.catch((err) => reject(err));
+									}
+
 									break;
 								case "SPEND":
-									this.spendTransaction(
-										noteItem.walletNoteId,
-										noteItem.categoryNoteId,
-										-noteItem.debit + data.debit
-									)
-										.then((spend) => {
-											this.edit(id, data)
-												.then((res) => resolve(res))
-												.catch((err) => reject(err));
-										})
-										.catch((err) => reject(err));
+									if (data.credit < 0) {
+										reject(
+											"Total amount must be zero or positive number"
+										);
+									} else {
+										this.spendTransaction(
+											noteItem.walletNoteId,
+											noteItem.categoryNoteId,
+											-noteItem.debit + data.credit
+										)
+											.then((spend) => {
+												this.edit(id, data)
+													.then((res) => resolve(res))
+													.catch((err) =>
+														reject(err)
+													);
+											})
+											.catch((err) => reject(err));
+									}
+
 									break;
 								case "SPEND_ONLY_IN_WALLET":
-									this.spendOnlyInWalletTransaction(
-										noteItem.walletNoteId,
-										-noteItem.credit + data.credit
-									)
-										.then((soiw) => {
-											this.edit(id, data)
-												.then((res) => resolve(res))
-												.catch((err) => reject(err));
-										})
-										.catch((err) => reject(err));
-									break;
-								default:
+									if (data.credit < 0) {
+										reject(
+											"Total amount must be zero or positive number"
+										);
+									} else {
+										this.spendOnlyInWalletTransaction(
+											noteItem.walletNoteId,
+											-noteItem.credit + data.credit
+										)
+											.then((soiw) => {
+												this.edit(id, data)
+													.then((res) => resolve(res))
+													.catch((err) =>
+														reject(err)
+													);
+											})
+											.catch((err) => reject(err));
+									}
 									break;
 							}
 						} else {
@@ -348,7 +435,7 @@ exports.deleteFunction = (id) => {
 						this.spendTransaction(
 							noteItem.walletNoteId,
 							noteItem.categoryNoteId,
-							-noteItem.debit
+							-noteItem.credit
 						)
 							.then((spend) => {
 								this.delete(id)

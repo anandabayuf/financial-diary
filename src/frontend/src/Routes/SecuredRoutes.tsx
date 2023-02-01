@@ -13,6 +13,7 @@ import EditCategoryPage from '../Pages/Management/Category/EditCategory/index';
 import CreateNotePage from '../Pages/Notes/CreateNote/index';
 import DetailNotePage from '../Pages/Notes/DetailNote/index';
 import MyProfilePage from '../Pages/MyProfile';
+import NoteItemsPage from '../Pages/NoteItems/index';
 
 const ProtectedRoute = () => {
 	const isLoggedIn = useAuth();
@@ -75,6 +76,10 @@ const SecuredRoutes: RouteObject[] = [
 			{
 				path: getRouteNames(RouteNames.DETAIL_NOTE),
 				element: <DetailNotePage />,
+			},
+			{
+				path: getRouteNames(RouteNames.NOTE_ITEMS),
+				element: <NoteItemsPage />,
 			},
 			{
 				path: getRouteNames(RouteNames.MY_PROFILE),

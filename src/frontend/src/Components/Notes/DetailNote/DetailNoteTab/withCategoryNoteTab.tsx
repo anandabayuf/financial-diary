@@ -1,13 +1,18 @@
 import { DetailNoteTabProps } from './interfaces/interfaces';
 import { useState, useEffect } from 'react';
 import AppMessage from '../../../General/AppMessage/index';
-import { useAppSelector } from '../../../../Hooks/useRedux';
-import { DataViewTypeNames } from '../../../../Constants/DataViewTypeNames';
+import { useAppSelector, useAppDispatch } from '../../../../Hooks/useRedux';
 import { getAllUserCategoryNote } from '../../../../Api/Category-Note';
 import withCategoryNoteForm from '../DetailNoteForm/withCategoryNoteForm';
 import DetailNoteForm from '../DetailNoteForm/index';
 import AppModal from '../../../General/AppModal/index';
 import AppTitle from '../../../General/AppTitle/index';
+import {
+	setDataViewTypeCategoryNote,
+	setSelectedCategoryNote,
+} from '../../../../Store/Note/NoteSlice';
+import { useNavigate } from 'react-router-dom';
+import { toURLFormat } from '../../../../Utils/UrlUtils';
 
 const withCategoryNoteTab = (
 	Component: React.ComponentType<DetailNoteTabProps>
@@ -17,12 +22,13 @@ const withCategoryNoteTab = (
 		...rest
 	}) => {
 		const token = useAppSelector((state) => state.user.accessToken);
+		const dispatch = useAppDispatch();
 
-		// const navigate = useNavigate();
+		const navigate = useNavigate();
 		// const location = useLocation();
 
-		const [dataViewType, setDataViewType] = useState<DataViewTypeNames>(
-			DataViewTypeNames.LIST
+		const dataViewType = useAppSelector(
+			(state) => state.note.dataViewType?.category
 		);
 
 		const [categoryNote, setCategoryNote] = useState<any[]>([]);
@@ -60,13 +66,26 @@ const withCategoryNoteTab = (
 			} // eslint-disable-next-line
 		}, [isModalOpen]);
 
-		const handleChangeDataViewType = (values: any) => {
-			setDataViewType(values);
-		};
+		const handleChangeDataViewType = (values: any) =>
+			dispatch(
+				setDataViewTypeCategoryNote({
+					dataViewType: { category: values },
+				})
+			);
 
 		const handleClickAdd = () => setIsModalOpen(true);
 
-		const handleClickView = (record: any) => {};
+		const handleClickView = (record: any) => {
+			dispatch(
+				setSelectedCategoryNote({
+					selectedCategoryNote: {
+						id: record._id,
+						name: record.category.name,
+					},
+				})
+			);
+			navigate(`${toURLFormat(record.category.name)}`);
+		};
 
 		const handleChangeSearch = (e: any) => {
 			if (e.target.value === '') {

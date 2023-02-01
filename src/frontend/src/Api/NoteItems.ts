@@ -1,12 +1,12 @@
 import instance from './index';
 
-export const getAllUserCategoryNote = async (
+export const getAllUserNoteItemsByNoteId = async (
 	token?: string,
 	noteId?: string
 ): Promise<any> => {
 	try {
 		const response = await instance({
-			url: `/category-note/note/${noteId}`,
+			url: `/note-item/note/${noteId}`,
 			method: 'GET',
 			headers: { Authorization: `Bearer ${token}` },
 		});
@@ -17,13 +17,14 @@ export const getAllUserCategoryNote = async (
 	}
 };
 
-export const getAvailableUserCategory = async (
+export const getAllUserWalletNoteItemsByNoteId = async (
 	token?: string,
-	noteId?: string
+	noteId?: string,
+	walletNoteId?: string
 ): Promise<any> => {
 	try {
 		const response = await instance({
-			url: `/category-note/note/${noteId}/available`,
+			url: `/note-item/note/${noteId}?walletNoteId=${walletNoteId}`,
 			method: 'GET',
 			headers: { Authorization: `Bearer ${token}` },
 		});
@@ -34,13 +35,50 @@ export const getAvailableUserCategory = async (
 	}
 };
 
-export const getUserCategoryNote = async (
+export const getAllUserCategoryNoteItemsByNoteId = async (
+	token?: string,
+	noteId?: string,
+	categoryNoteId?: string
+): Promise<any> => {
+	try {
+		const response = await instance({
+			url: `/note-item/note/${noteId}?categoryNoteId=${categoryNoteId}`,
+			method: 'GET',
+			headers: { Authorization: `Bearer ${token}` },
+		});
+
+		return response;
+	} catch (err) {
+		return err;
+	}
+};
+
+export const createUserNoteItemByNoteId = async (
+	token?: string,
+	noteId?: string,
+	data?: any
+): Promise<any> => {
+	try {
+		const response = await instance({
+			url: `/note-item/note/${noteId}`,
+			method: 'POST',
+			headers: { Authorization: `Bearer ${token}` },
+			data: data,
+		});
+
+		return response;
+	} catch (err) {
+		return err;
+	}
+};
+
+export const getUserNoteItemById = async (
 	token?: string,
 	id?: string
 ): Promise<any> => {
 	try {
 		const response = await instance({
-			url: `/category-note/${id}`,
+			url: `/note-item/${id}`,
 			method: 'GET',
 			headers: { Authorization: `Bearer ${token}` },
 		});
@@ -51,53 +89,34 @@ export const getUserCategoryNote = async (
 	}
 };
 
-export const addCategoryToTheNote = async (
-	token?: string,
-	data?: any
-): Promise<any> => {
-	try {
-		const response = await instance({
-			url: `/category-note`,
-			method: 'POST',
-			headers: { Authorization: `Bearer ${token}` },
-			data: data,
-		});
-
-		return response;
-	} catch (err) {
-		return err;
-	}
-};
-
-export const addCategoryNoteEstimated = async (
-	token?: string,
-	data?: any
-): Promise<any> => {
-	try {
-		const response = await instance({
-			url: `/category-note/estimated`,
-			method: 'POST',
-			headers: { Authorization: `Bearer ${token}` },
-			data: data,
-		});
-
-		return response;
-	} catch (err) {
-		return err;
-	}
-};
-
-export const editCategoryNoteEstimated = async (
+export const editUserNoteItem = async (
 	token?: string,
 	id?: string,
 	data?: any
 ): Promise<any> => {
 	try {
 		const response = await instance({
-			url: `/category-note/${id}/estimated`,
+			url: `/note-item/${id}`,
 			method: 'PUT',
 			headers: { Authorization: `Bearer ${token}` },
 			data: data,
+		});
+
+		return response;
+	} catch (err) {
+		return err;
+	}
+};
+
+export const deleteUserNoteItem = async (
+	token?: string,
+	id?: string
+): Promise<any> => {
+	try {
+		const response = await instance({
+			url: `/note-item/${id}`,
+			method: 'DELETE',
+			headers: { Authorization: `Bearer ${token}` },
 		});
 
 		return response;

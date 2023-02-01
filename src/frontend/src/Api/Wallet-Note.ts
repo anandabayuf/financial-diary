@@ -34,6 +34,23 @@ export const getAvailableUserWallet = async (
 	}
 };
 
+export const getUserWalletNoteById = async (
+	token?: string,
+	id?: string
+): Promise<any> => {
+	try {
+		const response = await instance({
+			url: `/wallet-note/${id}`,
+			method: 'GET',
+			headers: { Authorization: `Bearer ${token}` },
+		});
+
+		return response;
+	} catch (err) {
+		return err;
+	}
+};
+
 export const addWalletToTheNote = async (
 	token?: string,
 	data?: any

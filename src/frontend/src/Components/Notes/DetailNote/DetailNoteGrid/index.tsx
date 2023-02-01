@@ -9,7 +9,6 @@ import { IoWalletOutline } from 'react-icons/io5';
 import { BsCreditCard2Front } from 'react-icons/bs';
 import { formatIDR } from '../../../../Utils/CurrencyUtils';
 import AppEmpty from '../../../General/AppEmpty';
-import { Tooltip } from 'antd';
 import AppTooltip from '../../../General/AppTooltip/index';
 
 const DetailNoteGrid: React.FC<DetailNoteGridProps> = ({
@@ -84,7 +83,9 @@ const DetailNoteGrid: React.FC<DetailNoteGridProps> = ({
 								<div className='flex justify-end'>
 									<AppButton
 										type='text'
-										onClick={handleView}
+										onClick={() =>
+											handleView && handleView(el)
+										}
 									>
 										View
 									</AppButton>

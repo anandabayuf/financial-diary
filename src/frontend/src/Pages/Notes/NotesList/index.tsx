@@ -13,7 +13,7 @@ import AppBreadcrumb from '../../../Components/General/AppBreadcrumb';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getRouteNames } from '../../../Utils/RouteUtils';
 import RouteNames from '../../../Constants/RouteNames';
-import { useAppSelector } from '../../../Hooks/useRedux';
+import { useAppSelector, useAppDispatch } from '../../../Hooks/useRedux';
 import AppSegmented from '../../../Components/General/AppSegmented';
 import AppSelect from '../../../Components/General/AppSelect';
 import NotesOptionYear from '../../../Components/Notes/NotesList/NoteOptionYear';
@@ -21,11 +21,20 @@ import AppText from '../../../Components/General/AppText/index';
 import { DataViewTypeNames } from '../../../Constants/DataViewTypeNames';
 import NotesGrid from '../../../Components/Notes/NotesList/NoteGrid';
 import AppMessage from '../../../Components/General/AppMessage/index';
+import {
+	getFullYearFromDate,
+	getTwoDigitMonthStringFromDate,
+} from '../../../Utils/DateUtils';
+import {
+	setActiveKeyNoteTab,
+	setSelectedNote,
+} from '../../../Store/Note/NoteSlice';
 
 const NotesListPage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
 	const navigate = useNavigate();
 	const location = useLocation();
+	const dispatch = useAppDispatch();
 
 	const [notes, setNotes] = useState<any[]>([]);
 	const [notesList, setNotesList] = useState<any[]>([]);
@@ -108,6 +117,26 @@ const NotesListPage: React.FC = () => {
 		}
 	};
 
+	const handleView = (record?: any) => {
+		dispatch(
+			setSelectedNote({
+				selectedNote: {
+					id: record._id,
+					month: getTwoDigitMonthStringFromDate(record.date),
+					year: getFullYearFromDate(record.date).toString(),
+				},
+			})
+		);
+		dispatch(
+			setActiveKeyNoteTab({ activeKeyNoteTab: 'estimation-note-tab' })
+		);
+		navigate(
+			`/notes/${getFullYearFromDate(
+				record.date
+			)}/${getTwoDigitMonthStringFromDate(record.date)}`
+		);
+	};
+
 	useEffect(() => {
 		const stateReceiveAction = () => {
 			if (location.state) {
@@ -168,7 +197,7 @@ const NotesListPage: React.FC = () => {
 						<AppTable
 							dataSource={notesList}
 							columns={NotesColumns({
-								navigate,
+								handleView,
 								showYear: selectedYear,
 							})}
 						/>
@@ -176,6 +205,7 @@ const NotesListPage: React.FC = () => {
 						<NotesGrid
 							data={notesList}
 							showYear={selectedYear}
+							handleView={handleView}
 						/>
 					)}
 				</>

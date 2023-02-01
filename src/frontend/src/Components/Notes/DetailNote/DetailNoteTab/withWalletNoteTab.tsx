@@ -2,12 +2,17 @@ import { DetailNoteTabProps } from './interfaces/interfaces';
 import { useState, useEffect } from 'react';
 import { getAllUserWalletNote } from '../../../../Api/Wallet-Note';
 import AppMessage from '../../../General/AppMessage/index';
-import { useAppSelector } from '../../../../Hooks/useRedux';
-import { DataViewTypeNames } from '../../../../Constants/DataViewTypeNames';
+import { useAppSelector, useAppDispatch } from '../../../../Hooks/useRedux';
 import AppModal from '../../../General/AppModal';
 import withWalletNoteForm from '../DetailNoteForm/withWalletNoteForm';
 import DetailNoteForm from '../DetailNoteForm/index';
 import AppTitle from '../../../General/AppTitle';
+import { toURLFormat } from '../../../../Utils/UrlUtils';
+import {
+	setDataViewTypeWalletNote,
+	setSelectedWalletNote,
+} from '../../../../Store/Note/NoteSlice';
+import { useNavigate } from 'react-router-dom';
 
 const withWalletNoteTab = (
 	Component: React.ComponentType<DetailNoteTabProps>
@@ -17,12 +22,12 @@ const withWalletNoteTab = (
 		...rest
 	}) => {
 		const token = useAppSelector((state) => state.user.accessToken);
-
-		// const navigate = useNavigate();
+		const dispatch = useAppDispatch();
+		const navigate = useNavigate();
 		// const location = useLocation();
 
-		const [dataViewType, setDataViewType] = useState<DataViewTypeNames>(
-			DataViewTypeNames.LIST
+		const dataViewType = useAppSelector(
+			(state) => state.note.dataViewType?.wallet
 		);
 
 		const [walletNote, setWalletNote] = useState<any[]>([]);
@@ -60,13 +65,24 @@ const withWalletNoteTab = (
 			} //eslint-disable-next-line
 		}, [isModalOpen]);
 
-		const handleChangeDataViewType = (values: any) => {
-			setDataViewType(values);
-		};
+		const handleChangeDataViewType = (values: any) =>
+			dispatch(
+				setDataViewTypeWalletNote({ dataViewType: { wallet: values } })
+			);
 
 		const handleClickAdd = () => setIsModalOpen(true);
 
-		const handleClickView = (record: any) => {};
+		const handleClickView = (record: any) => {
+			dispatch(
+				setSelectedWalletNote({
+					selectedWalletNote: {
+						id: record._id,
+						name: record.wallet.name,
+					},
+				})
+			);
+			navigate(`${toURLFormat(record.wallet.name)}`);
+		};
 
 		const handleChangeSearch = (e: any) => {
 			if (e.target.value === '') {
