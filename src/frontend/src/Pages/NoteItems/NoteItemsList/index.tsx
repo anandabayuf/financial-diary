@@ -1,27 +1,29 @@
-import MainLayout from '../../Layouts/MainLayout';
-import { useAppSelector } from '../../Hooks/useRedux';
+import MainLayout from '../../../Layouts/MainLayout';
+import { useAppSelector } from '../../../Hooks/useRedux';
 import { useEffect, useState } from 'react';
 import {
 	getAllUserCategoryNoteItemsByNoteId,
 	getAllUserWalletNoteItemsByNoteId,
-} from '../../Api/NoteItems';
-import AppMessage from '../../Components/General/AppMessage/index';
-import AppEmpty from '../../Components/General/AppEmpty/index';
-import AppTable from '../../Components/General/AppTable/index';
-import AppText from '../../Components/General/AppText/index';
-import AppLoader from '../../Components/General/AppLoader/index';
-import AppBreadcrumb from '../../Components/General/AppBreadcrumb/index';
-import AppTitle from '../../Components/General/AppTitle/index';
-import AppButton from '../../Components/General/AppButton/index';
+} from '../../../Api/NoteItems';
+import AppMessage from '../../../Components/General/AppMessage/index';
+import AppEmpty from '../../../Components/General/AppEmpty/index';
+import AppTable from '../../../Components/General/AppTable/index';
+import AppText from '../../../Components/General/AppText/index';
+import AppLoader from '../../../Components/General/AppLoader/index';
+import AppBreadcrumb from '../../../Components/General/AppBreadcrumb/index';
+import AppTitle from '../../../Components/General/AppTitle/index';
+import AppButton from '../../../Components/General/AppButton/index';
 import { BsPlusLg } from 'react-icons/bs';
 import { Space } from 'antd';
-import NoteItemColumns from '../../Components/NoteItems/NoteItemsColumn/index';
+import NoteItemColumns from '../../../Components/NoteItems/NoteItemsColumn/index';
 import { useParams, useNavigate } from 'react-router-dom';
-import { toURLFormat } from '../../Utils/UrlUtils';
-import AppSearchInput from '../../Components/General/AppSearchInput';
-import { getUserWalletNoteById } from '../../Api/Wallet-Note';
-import { getUserCategoryNote } from '../../Api/Category-Note';
-import { formatIDR } from '../../Utils/CurrencyUtils';
+import { toURLFormat } from '../../../Utils/UrlUtils';
+import AppSearchInput from '../../../Components/General/AppSearchInput';
+import { getUserWalletNoteById } from '../../../Api/Wallet-Note';
+import { getUserCategoryNoteById } from '../../../Api/Category-Note';
+import { formatIDR } from '../../../Utils/CurrencyUtils';
+import NoteItemsDeleteModal from '../../../Components/NoteItems/NoteItemsDeleteModal';
+import { deleteUserNoteItem } from '../../../Api/NoteItems';
 
 const NoteItemsPage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
@@ -36,6 +38,9 @@ const NoteItemsPage: React.FC = () => {
 	const [data, setData] = useState<any[]>([]);
 	const [dataList, setDataList] = useState<any[]>([]);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
+	const [deletedData, setDeletedData] = useState<any>();
+	const [isDeleting, setIsDeleting] = useState(false);
 
 	useEffect(() => {
 		const navigateIfLocationIsNotMatch = () => {
@@ -98,7 +103,7 @@ const NoteItemsPage: React.FC = () => {
 			}
 
 			if (selectedNote?.id !== '' && selectedCategoryNote?.id !== '') {
-				let res = await getUserCategoryNote(
+				let res = await getUserCategoryNoteById(
 					token,
 					selectedCategoryNote?.id
 				);
@@ -133,10 +138,40 @@ const NoteItemsPage: React.FC = () => {
 			setIsLoading(false);
 		};
 
-		getNoteItems(); // eslint-disable-next-line
-	}, [selectedNote?.id, selectedWalletNote?.id, selectedCategoryNote?.id]);
+		if (!isModalDeleteOpen) {
+			getNoteItems();
+		} // eslint-disable-next-line
+	}, [
+		selectedNote?.id,
+		selectedWalletNote?.id,
+		selectedCategoryNote?.id,
+		isModalDeleteOpen,
+	]);
 
-	const handleClickCreate = () => {};
+	const handleClickCreate = () => navigate('create');
+
+	const handleClickEdit = (values?: any) =>
+		navigate('edit', { state: values });
+
+	const handleClickDelete = (values?: any) => {
+		setDeletedData(values);
+		setIsModalDeleteOpen(true);
+	};
+
+	const handleCancelDelete = () => setIsModalDeleteOpen(false);
+
+	const handleDelete = async () => {
+		setIsDeleting(true);
+		const res = await deleteUserNoteItem(token, deletedData._id);
+		console.log(res);
+		if (res.request.status === 200) {
+			AppMessage({ content: res.data.message, type: 'success' });
+		} else {
+			AppMessage({ content: '', type: 'error' });
+		}
+		handleCancelDelete();
+		setIsDeleting(false);
+	};
 
 	const handleChangeSearch = (e: any) => {
 		if (e.target.value === '') {
@@ -223,11 +258,23 @@ const NoteItemsPage: React.FC = () => {
 							walletNoteId: selectedWalletNote?.id,
 							isCategory: selectedCategoryNote?.id !== '',
 							isWallet: selectedWalletNote?.id !== '',
+							handleEdit: handleClickEdit,
+							handleDelete: handleClickDelete,
 						})}
 					/>
 				</>
 			) : (
 				<AppEmpty />
+			)}
+			{isModalDeleteOpen && deletedData && (
+				<NoteItemsDeleteModal
+					deletedData={deletedData}
+					handleCancelDelete={handleCancelDelete}
+					isCategory={selectedCategoryNote?.id !== ''}
+					isLoading={isDeleting}
+					isModalDeleteOpen={isModalDeleteOpen}
+					handleDelete={handleDelete}
+				/>
 			)}
 		</MainLayout>
 	);

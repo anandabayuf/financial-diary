@@ -9,6 +9,10 @@ const StyledSelect = styled(Select<any>)<StyledSelectProps>`
 		font-family: 'Comfortaa', cursive !important;
 		font-weight: 400 !important;
 		color: ${(props) => props.themeselect?.text} !important;
+		.ant-select-selection-item {
+			color: ${(props) =>
+				props.disabled && props.themeselect?.halfText} !important;
+		}
 
 		:hover {
 			border-color: ${(props) => props.themeselect?.text} !important;
@@ -20,7 +24,10 @@ const StyledSelect = styled(Select<any>)<StyledSelectProps>`
 	}
 
 	.ant-select-arrow {
-		color: ${(props) => props.themeselect?.text} !important;
+		color: ${(props) =>
+			props.disabled
+				? props.themeselect?.halfText
+				: props.themeselect?.text} !important;
 	}
 
 	.ant-select-clear {

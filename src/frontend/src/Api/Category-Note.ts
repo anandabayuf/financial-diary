@@ -34,7 +34,7 @@ export const getAvailableUserCategory = async (
 	}
 };
 
-export const getUserCategoryNote = async (
+export const getUserCategoryNoteById = async (
 	token?: string,
 	id?: string
 ): Promise<any> => {

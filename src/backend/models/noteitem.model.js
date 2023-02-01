@@ -337,7 +337,7 @@ exports.editFunction = (id, data) => {
 										this.spendTransaction(
 											noteItem.walletNoteId,
 											noteItem.categoryNoteId,
-											-noteItem.debit + data.credit
+											-noteItem.credit + data.credit
 										)
 											.then((spend) => {
 												this.edit(id, data)

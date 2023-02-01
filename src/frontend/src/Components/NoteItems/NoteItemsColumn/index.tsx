@@ -4,7 +4,7 @@ import AppText from '../../General/AppText';
 import { NoteItemColumnsType } from './interfaces/interfaces';
 import { formatIDR } from '../../../Utils/CurrencyUtils';
 import { ColumnsType } from 'antd/es/table';
-import { useAppSelector } from '../../../Hooks/useRedux';
+import { ITEM_TYPE } from '../../../Constants/Constants';
 
 const NoteItemColumns: NoteItemColumnsType = ({
 	walletNoteId,
@@ -29,7 +29,8 @@ const NoteItemColumns: NoteItemColumnsType = ({
 						render: (_, record) => (
 							<AppText
 								text={formatIDR(
-									record.type === 1
+									ITEM_TYPE[record.type] ===
+										'Transfer or Withdraw'
 										? walletNoteId === record.walletNoteId
 											? 0
 											: record.debit
@@ -83,10 +84,10 @@ const NoteItemColumns: NoteItemColumnsType = ({
 			render: (_, record) => (
 				<AppText
 					text={formatIDR(
-						record.type === 1
-							? walletNoteId === record.walletNoteId
-								? record.credit
-								: 0
+						ITEM_TYPE[record.type] === 'Transfer or Withdraw'
+							? walletNoteId === record.walletNoteId2
+								? 0
+								: record.credit
 							: record.credit
 					)}
 				/>
