@@ -6,6 +6,7 @@ import { useState } from 'react';
 
 const AppTable: React.FC<AppTableProps> = ({
 	showPagination = true,
+	pagination,
 	...rest
 }) => {
 	const theme = useTheme();
@@ -32,6 +33,7 @@ const AppTable: React.FC<AppTableProps> = ({
 									text={`${range[0]}-${range[1]} of ${total} items`}
 								/>
 							),
+							...pagination,
 					  }
 					: false
 			}

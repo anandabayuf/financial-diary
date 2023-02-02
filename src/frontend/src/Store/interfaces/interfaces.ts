@@ -24,9 +24,25 @@ export interface NoteState {
 		id?: string;
 		name?: string;
 	};
+	showYear?: number | string;
 	activeKeyNoteTab?: string;
 	dataViewType?: {
 		wallet?: DataViewTypeNames;
 		category?: DataViewTypeNames;
+		note?: DataViewTypeNames;
+	};
+	paginationSize?: {
+		note?: number;
+		estimation?: number;
+		wallet?: number;
+		category?: number;
+		items?: number;
+	};
+}
+
+export interface ManagementState {
+	paginationSize?: {
+		wallet?: number;
+		category?: number;
 	};
 }

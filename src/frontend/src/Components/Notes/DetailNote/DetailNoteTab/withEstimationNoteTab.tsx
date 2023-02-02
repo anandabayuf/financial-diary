@@ -2,13 +2,15 @@ import { DetailNoteTabProps } from './interfaces/interfaces';
 import { useState, useEffect } from 'react';
 import { getAllUserWalletNote } from '../../../../Api/Wallet-Note';
 import AppMessage from '../../../General/AppMessage/index';
-import { useAppSelector } from '../../../../Hooks/useRedux';
+import { useAppSelector, useAppDispatch } from '../../../../Hooks/useRedux';
 import AppModal from '../../../General/AppModal';
 import AppTitle from '../../../General/AppTitle';
 import { getAllUserCategoryNote } from '../../../../Api/Category-Note';
 import withAddEstimationNoteForm from '../EstimationNoteForm/withAddEstimationNoteForm';
 import EstimationNoteForm from '../EstimationNoteForm/index';
 import withEditEstimationNoteForm from '../EstimationNoteForm/withEditEstimationNoteForm';
+import { setNotePaginationSize } from '../../../../Store/Note/NoteSlice';
+import { TableProps } from 'antd';
 
 const withEstimationNoteTab = (
 	Component: React.ComponentType<DetailNoteTabProps>
@@ -18,9 +20,12 @@ const withEstimationNoteTab = (
 		...rest
 	}) => {
 		const token = useAppSelector((state) => state.user.accessToken);
-
+		const dispatch = useAppDispatch();
 		// const navigate = useNavigate();
 		// const location = useLocation();
+		const pageSize = useAppSelector(
+			(state) => state.note.paginationSize?.estimation
+		);
 
 		const [estimations, setEstimations] = useState<any[]>([]);
 		const [estimationsList, setEstimationsList] = useState<any[]>([]);
@@ -184,6 +189,17 @@ const withEstimationNoteTab = (
 			</>
 		);
 
+		const pagination: TableProps<any>['pagination'] = {
+			pageSize: pageSize,
+			onShowSizeChange(current, size) {
+				dispatch(
+					setNotePaginationSize({
+						paginationSize: { estimation: size },
+					})
+				);
+			},
+		};
+
 		return (
 			<Component
 				isEstimation
@@ -192,6 +208,7 @@ const withEstimationNoteTab = (
 				isLoading={isLoading}
 				isSearching={isSearching}
 				modalAdd={ModalAdd}
+				pagination={pagination}
 				handleClickAdd={handleClickAdd}
 				handleClickEdit={handleClickEdit}
 				handleChangeSearch={handleChangeSearch}

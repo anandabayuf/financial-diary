@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { getAllUserNotes } from '../../../Api/Notes';
 import AppButton from '../../../Components/General/AppButton';
 import { BsPlusLg } from 'react-icons/bs';
-import { Space } from 'antd';
+import { Space, TableProps } from 'antd';
 import AppTable from '../../../Components/General/AppTable/index';
 import NotesColumns from '../../../Components/Notes/NotesList/NoteColumn';
 import AppEmpty from '../../../Components/General/AppEmpty/index';
@@ -27,6 +27,9 @@ import {
 } from '../../../Utils/DateUtils';
 import {
 	setActiveKeyNoteTab,
+	setNoteDataViewType,
+	setNotePaginationSize,
+	setNoteShowYear,
 	setSelectedNote,
 } from '../../../Store/Note/NoteSlice';
 
@@ -39,13 +42,14 @@ const NotesListPage: React.FC = () => {
 	const [notes, setNotes] = useState<any[]>([]);
 	const [notesList, setNotesList] = useState<any[]>([]);
 	const [optionYear, setOptionYear] = useState<number[]>([]);
-	const [selectedYear, setSelectedYear] = useState<number | string>('');
+	const selectedYear = useAppSelector((state) => state.note.showYear);
 
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
-	const [dataViewType, setDataViewType] = useState<DataViewTypeNames>(
-		DataViewTypeNames.LIST
+	const dataViewType = useAppSelector(
+		(state) => state.note.dataViewType?.note
 	);
+	const pageSize = useAppSelector((state) => state.note.paginationSize?.note);
 
 	useEffect(() => {
 		const getNotes = async () => {
@@ -68,7 +72,8 @@ const NotesListPage: React.FC = () => {
 				});
 
 				setOptionYear(years);
-				setSelectedYear('all-year');
+				// setSelectedYear('all-year');
+				dispatch(setNoteShowYear({ showYear: 'all-year' }));
 				setNotes(
 					resNotes.map((note: any) => {
 						note['key'] = note._id;
@@ -97,12 +102,12 @@ const NotesListPage: React.FC = () => {
 		navigate(getRouteNames(RouteNames.CREATE_NOTE));
 	};
 
-	const handleChangeDataViewType = (values: any) => {
-		setDataViewType(values);
-	};
+	const handleChangeDataViewType = (values: any) =>
+		dispatch(setNoteDataViewType({ dataViewType: { note: values } }));
 
 	const handleChangeYear = (value: any) => {
-		setSelectedYear(value);
+		// setSelectedYear(value);
+		dispatch(setNoteShowYear({ showYear: value }));
 
 		if (value === 'all-year') {
 			setNotesList(notes);
@@ -150,6 +155,17 @@ const NotesListPage: React.FC = () => {
 
 		stateReceiveAction(); // eslint-disable-next-line
 	}, [location.state]);
+
+	const pagination: TableProps<any>['pagination'] = {
+		pageSize: pageSize,
+		onShowSizeChange(current, size) {
+			dispatch(
+				setNotePaginationSize({
+					paginationSize: { note: size },
+				})
+			);
+		},
+	};
 
 	return (
 		<MainLayout>
@@ -200,6 +216,7 @@ const NotesListPage: React.FC = () => {
 								handleView,
 								showYear: selectedYear,
 							})}
+							pagination={pagination}
 						/>
 					) : (
 						<NotesGrid

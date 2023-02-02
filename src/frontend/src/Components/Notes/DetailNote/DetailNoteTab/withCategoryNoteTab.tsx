@@ -8,11 +8,13 @@ import DetailNoteForm from '../DetailNoteForm/index';
 import AppModal from '../../../General/AppModal/index';
 import AppTitle from '../../../General/AppTitle/index';
 import {
-	setDataViewTypeCategoryNote,
+	setNoteDataViewType,
+	setNotePaginationSize,
 	setSelectedCategoryNote,
 } from '../../../../Store/Note/NoteSlice';
 import { useNavigate } from 'react-router-dom';
 import { toURLFormat } from '../../../../Utils/UrlUtils';
+import { TableProps } from 'antd';
 
 const withCategoryNoteTab = (
 	Component: React.ComponentType<DetailNoteTabProps>
@@ -29,6 +31,9 @@ const withCategoryNoteTab = (
 
 		const dataViewType = useAppSelector(
 			(state) => state.note.dataViewType?.category
+		);
+		const pageSize = useAppSelector(
+			(state) => state.note.paginationSize?.category
 		);
 
 		const [categoryNote, setCategoryNote] = useState<any[]>([]);
@@ -68,7 +73,7 @@ const withCategoryNoteTab = (
 
 		const handleChangeDataViewType = (values: any) =>
 			dispatch(
-				setDataViewTypeCategoryNote({
+				setNoteDataViewType({
 					dataViewType: { category: values },
 				})
 			);
@@ -131,6 +136,17 @@ const withCategoryNoteTab = (
 			</AppModal>
 		);
 
+		const pagination: TableProps<any>['pagination'] = {
+			pageSize: pageSize,
+			onShowSizeChange(current, size) {
+				dispatch(
+					setNotePaginationSize({
+						paginationSize: { category: size },
+					})
+				);
+			},
+		};
+
 		return (
 			<Component
 				isCategory
@@ -140,6 +156,7 @@ const withCategoryNoteTab = (
 				isSearching={isSearching}
 				dataViewType={dataViewType}
 				modalAdd={ModalAdd}
+				pagination={pagination}
 				handleClickAdd={handleClickAdd}
 				handleClickView={handleClickView}
 				handleChangeDataViewType={handleChangeDataViewType}

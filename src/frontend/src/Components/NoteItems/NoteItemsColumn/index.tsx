@@ -5,6 +5,7 @@ import { NoteItemColumnsType } from './interfaces/interfaces';
 import { formatIDR } from '../../../Utils/CurrencyUtils';
 import { ColumnsType } from 'antd/es/table';
 import { ITEM_TYPE } from '../../../Constants/Constants';
+import dayjs from 'dayjs';
 
 const NoteItemColumns: NoteItemColumnsType = ({
 	walletNoteId,
@@ -55,7 +56,7 @@ const NoteItemColumns: NoteItemColumnsType = ({
 			sorter: (a, b) =>
 				new Date(a.date).getTime() - new Date(b.date).getTime(),
 			render: (_, record) => (
-				<AppText text={new Date(record.date).toLocaleDateString()} />
+				<AppText text={dayjs(record.date).format('YYYY-MM-DD')} />
 			),
 		},
 		{

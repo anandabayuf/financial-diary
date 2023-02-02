@@ -16,10 +16,19 @@ const initialState: NoteState = {
 		id: '',
 		name: '',
 	},
+	showYear: 'all-year',
 	activeKeyNoteTab: 'estimation-note-tab',
 	dataViewType: {
 		category: DataViewTypeNames.LIST,
 		wallet: DataViewTypeNames.LIST,
+		note: DataViewTypeNames.LIST,
+	},
+	paginationSize: {
+		category: 5,
+		estimation: 5,
+		items: 5,
+		note: 5,
+		wallet: 5,
 	},
 };
 
@@ -33,42 +42,9 @@ const NoteSlice = createSlice({
 		) => {
 			return {
 				...state,
-				selectedNote: action.payload.selectedNote,
-			};
-		},
-		setSelectedNoteId: (
-			state: NoteState,
-			action: PayloadAction<NoteState>
-		) => {
-			return {
-				...state,
 				selectedNote: {
 					...state.selectedNote,
-					id: action.payload.selectedNote?.id,
-				},
-			};
-		},
-		setSelectedNoteYear: (
-			state: NoteState,
-			action: PayloadAction<NoteState>
-		) => {
-			return {
-				...state,
-				selectedNote: {
-					...state.selectedNote,
-					year: action.payload.selectedNote?.year,
-				},
-			};
-		},
-		setSelectedNoteMonth: (
-			state: NoteState,
-			action: PayloadAction<NoteState>
-		) => {
-			return {
-				...state,
-				selectedNote: {
-					...state.selectedNote,
-					month: action.payload.selectedNote?.month,
+					...action.payload.selectedNote,
 				},
 			};
 		},
@@ -78,38 +54,9 @@ const NoteSlice = createSlice({
 		) => {
 			return {
 				...state,
-				selectedCategoryNote: action.payload.selectedCategoryNote,
-				selectedWalletNote: {
-					id: '',
-					name: '',
-				},
-			};
-		},
-		setSelectedCategoryNoteId: (
-			state: NoteState,
-			action: PayloadAction<NoteState>
-		) => {
-			return {
-				...state,
 				selectedCategoryNote: {
 					...state.selectedCategoryNote,
-					id: action.payload.selectedCategoryNote?.id,
-				},
-				selectedWalletNote: {
-					id: '',
-					name: '',
-				},
-			};
-		},
-		setSelectedCategoryNoteName: (
-			state: NoteState,
-			action: PayloadAction<NoteState>
-		) => {
-			return {
-				...state,
-				selectedCategoryNote: {
-					...state.selectedCategoryNote,
-					name: action.payload.selectedCategoryNote?.name,
+					...action.payload.selectedCategoryNote,
 				},
 				selectedWalletNote: {
 					id: '',
@@ -123,38 +70,9 @@ const NoteSlice = createSlice({
 		) => {
 			return {
 				...state,
-				selectedWalletNote: action.payload.selectedWalletNote,
-				selectedCategoryNote: {
-					id: '',
-					name: '',
-				},
-			};
-		},
-		setSelectedWalletNoteId: (
-			state: NoteState,
-			action: PayloadAction<NoteState>
-		) => {
-			return {
-				...state,
 				selectedWalletNote: {
 					...state.selectedWalletNote,
-					id: action.payload.selectedWalletNote?.id,
-				},
-				selectedCategoryNote: {
-					id: '',
-					name: '',
-				},
-			};
-		},
-		setSelectedWalletNoteName: (
-			state: NoteState,
-			action: PayloadAction<NoteState>
-		) => {
-			return {
-				...state,
-				selectedWalletNote: {
-					...state.selectedWalletNote,
-					name: action.payload.selectedWalletNote?.name,
+					...action.payload.selectedWalletNote,
 				},
 				selectedCategoryNote: {
 					id: '',
@@ -171,7 +89,7 @@ const NoteSlice = createSlice({
 				activeKeyNoteTab: action.payload.activeKeyNoteTab,
 			};
 		},
-		setDataViewTypeWalletNote: (
+		setNoteDataViewType: (
 			state: NoteState,
 			action: PayloadAction<NoteState>
 		) => {
@@ -179,19 +97,28 @@ const NoteSlice = createSlice({
 				...state,
 				dataViewType: {
 					...state.dataViewType,
-					wallet: action.payload.dataViewType?.wallet,
+					...action.payload.dataViewType,
 				},
 			};
 		},
-		setDataViewTypeCategoryNote: (
+		setNoteShowYear: (
 			state: NoteState,
 			action: PayloadAction<NoteState>
 		) => {
 			return {
 				...state,
-				dataViewType: {
-					...state.dataViewType,
-					category: action.payload.dataViewType?.category,
+				showYear: action.payload.showYear,
+			};
+		},
+		setNotePaginationSize: (
+			state: NoteState,
+			action: PayloadAction<NoteState>
+		) => {
+			return {
+				...state,
+				paginationSize: {
+					...state.paginationSize,
+					...action.payload.paginationSize,
 				},
 			};
 		},
@@ -200,18 +127,12 @@ const NoteSlice = createSlice({
 
 export const {
 	setSelectedNote,
-	setSelectedNoteId,
-	setSelectedNoteMonth,
-	setSelectedNoteYear,
 	setSelectedCategoryNote,
-	setSelectedCategoryNoteId,
-	setSelectedCategoryNoteName,
 	setSelectedWalletNote,
-	setSelectedWalletNoteId,
-	setSelectedWalletNoteName,
 	setActiveKeyNoteTab,
-	setDataViewTypeWalletNote,
-	setDataViewTypeCategoryNote,
+	setNoteShowYear,
+	setNoteDataViewType,
+	setNotePaginationSize,
 } = NoteSlice.actions;
 
 export default NoteSlice.reducer;

@@ -49,10 +49,12 @@ const CreateNotePage: React.FC = () => {
 	return (
 		<MainLayout>
 			<AppBreadcrumb />
-			<AppTitle
-				title='Create Notes'
-				level={5}
-			/>
+			<div className='mb-5'>
+				<AppTitle
+					title='Create Notes'
+					level={5}
+				/>
+			</div>
 			<NoteForm
 				isLoading={isLoading}
 				handleSubmit={handleSubmit}

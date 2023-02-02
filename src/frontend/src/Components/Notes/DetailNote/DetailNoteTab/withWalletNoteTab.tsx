@@ -9,10 +9,12 @@ import DetailNoteForm from '../DetailNoteForm/index';
 import AppTitle from '../../../General/AppTitle';
 import { toURLFormat } from '../../../../Utils/UrlUtils';
 import {
-	setDataViewTypeWalletNote,
+	setNoteDataViewType,
+	setNotePaginationSize,
 	setSelectedWalletNote,
 } from '../../../../Store/Note/NoteSlice';
 import { useNavigate } from 'react-router-dom';
+import { TableProps } from 'antd';
 
 const withWalletNoteTab = (
 	Component: React.ComponentType<DetailNoteTabProps>
@@ -28,6 +30,9 @@ const withWalletNoteTab = (
 
 		const dataViewType = useAppSelector(
 			(state) => state.note.dataViewType?.wallet
+		);
+		const pageSize = useAppSelector(
+			(state) => state.note.paginationSize?.wallet
 		);
 
 		const [walletNote, setWalletNote] = useState<any[]>([]);
@@ -66,9 +71,7 @@ const withWalletNoteTab = (
 		}, [isModalOpen]);
 
 		const handleChangeDataViewType = (values: any) =>
-			dispatch(
-				setDataViewTypeWalletNote({ dataViewType: { wallet: values } })
-			);
+			dispatch(setNoteDataViewType({ dataViewType: { wallet: values } }));
 
 		const handleClickAdd = () => setIsModalOpen(true);
 
@@ -128,6 +131,17 @@ const withWalletNoteTab = (
 			</AppModal>
 		);
 
+		const pagination: TableProps<any>['pagination'] = {
+			pageSize: pageSize,
+			onShowSizeChange(current, size) {
+				dispatch(
+					setNotePaginationSize({
+						paginationSize: { wallet: size },
+					})
+				);
+			},
+		};
+
 		return (
 			<Component
 				isWallet
@@ -137,6 +151,7 @@ const withWalletNoteTab = (
 				isSearching={isSearching}
 				dataViewType={dataViewType}
 				modalAdd={ModalAdd}
+				pagination={pagination}
 				handleClickAdd={handleClickAdd}
 				handleClickView={handleClickView}
 				handleChangeDataViewType={handleChangeDataViewType}

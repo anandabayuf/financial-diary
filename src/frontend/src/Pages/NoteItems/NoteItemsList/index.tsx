@@ -1,5 +1,5 @@
 import MainLayout from '../../../Layouts/MainLayout';
-import { useAppSelector } from '../../../Hooks/useRedux';
+import { useAppSelector, useAppDispatch } from '../../../Hooks/useRedux';
 import { useEffect, useState } from 'react';
 import {
 	getAllUserCategoryNoteItemsByNoteId,
@@ -14,7 +14,7 @@ import AppBreadcrumb from '../../../Components/General/AppBreadcrumb/index';
 import AppTitle from '../../../Components/General/AppTitle/index';
 import AppButton from '../../../Components/General/AppButton/index';
 import { BsPlusLg } from 'react-icons/bs';
-import { Space } from 'antd';
+import { Space, TableProps } from 'antd';
 import NoteItemColumns from '../../../Components/NoteItems/NoteItemsColumn/index';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toURLFormat } from '../../../Utils/UrlUtils';
@@ -24,14 +24,19 @@ import { getUserCategoryNoteById } from '../../../Api/Category-Note';
 import { formatIDR } from '../../../Utils/CurrencyUtils';
 import NoteItemsDeleteModal from '../../../Components/NoteItems/NoteItemsDeleteModal';
 import { deleteUserNoteItem } from '../../../Api/NoteItems';
+import { setNotePaginationSize } from '../../../Store/Note/NoteSlice';
 
 const NoteItemsPage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
 	const params = useParams();
 	const navigate = useNavigate();
+	const dispatch = useAppDispatch();
 
 	const { selectedNote, selectedCategoryNote, selectedWalletNote } =
 		useAppSelector((state) => state.note);
+	const pageSize = useAppSelector(
+		(state) => state.note.paginationSize?.items
+	);
 
 	const [walletNote, setWalletNote] = useState<any>();
 	const [categoryNote, setCategoryNote] = useState<any>();
@@ -192,6 +197,17 @@ const NoteItemsPage: React.FC = () => {
 		}
 	};
 
+	const pagination: TableProps<any>['pagination'] = {
+		pageSize: pageSize,
+		onShowSizeChange(current, size) {
+			dispatch(
+				setNotePaginationSize({
+					paginationSize: { items: size },
+				})
+			);
+		},
+	};
+
 	return (
 		<MainLayout>
 			<AppBreadcrumb />
@@ -261,6 +277,7 @@ const NoteItemsPage: React.FC = () => {
 							handleEdit: handleClickEdit,
 							handleDelete: handleClickDelete,
 						})}
+						pagination={pagination}
 					/>
 				</>
 			) : (
