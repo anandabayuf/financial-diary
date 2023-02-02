@@ -183,36 +183,27 @@ exports.addTotal = (id, total) => {
 
 exports.editEstimatedTotal = (id, noteId, total) => {
 	return new Promise((resolve, reject) => {
-		noteModel
-			.getById(noteId)
-			.then((note) => {
-				let noteEstimatedBalance = note.estimated.balance;
+		this.getById(id)
+			.then((catNote) => {
+				let currEstimatedTotalCatNote = catNote.estimated.total;
+				let addition = -currEstimatedTotalCatNote + total;
 
-				this.getById(id).then((catNote) => {
-					let currEstimatedTotalCatNote = catNote.estimated.total;
-					noteEstimatedBalance += currEstimatedTotalCatNote;
-					currEstimatedTotalCatNote = total;
-					noteEstimatedBalance -= total;
+				const newCatNote = {
+					...catNote,
+					estimated: {
+						remains: total - catNote.total,
+						total: total,
+					},
+				};
 
-					let newRemains = total - catNote.total;
-
-					const newCatNote = {
-						...catNote,
-						estimated: {
-							remains: newRemains,
-							total: currEstimatedTotalCatNote,
-						},
-					};
-
-					noteModel
-						.setEstimatedBalance(noteId, note, noteEstimatedBalance)
-						.then((result) => {
-							this.edit(id, newCatNote)
-								.then((res) => resolve(res))
-								.catch((err) => reject(err));
-						})
-						.catch((err) => reject(err));
-				});
+				noteModel
+					.addEstimatedBalance(noteId, -addition)
+					.then((result) => {
+						this.edit(id, newCatNote)
+							.then((res) => resolve(res))
+							.catch((err) => reject(err));
+					})
+					.catch((err) => reject(err));
 			})
 			.catch((err) => reject(err));
 	});

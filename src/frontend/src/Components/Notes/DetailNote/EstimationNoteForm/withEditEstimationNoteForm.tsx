@@ -67,7 +67,7 @@ const withEditEstimationNoteForm = (
 					}
 				} else {
 					AppMessage({
-						content: res.data.message,
+						content: res.response.data.message,
 						type: 'error',
 					});
 				}
