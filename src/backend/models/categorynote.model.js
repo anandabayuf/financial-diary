@@ -51,7 +51,12 @@ exports.create = (datas) => {
 						"Cannot add category, there is Category which has been added"
 					);
 				} else {
+					let total = 0;
+					let noteId = "";
 					let savingData = datas.map(async (data) => {
+						noteId = data.noteId;
+						total += data.estimated.total;
+
 						const saveData = await new schema.CategoryNoteSchema(
 							data
 						).save();
@@ -60,7 +65,12 @@ exports.create = (datas) => {
 					});
 
 					Promise.all(savingData)
-						.then((res) => resolve(res))
+						.then((res) => {
+							noteModel
+								.addEstimatedBalance(noteId, -total)
+								.then((add) => resolve(res))
+								.catch((addErr) => reject(addErr));
+						})
 						.catch((err) => reject(err));
 				}
 			})

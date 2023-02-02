@@ -25,16 +25,24 @@ exports.create = (datas) => {
 						"Cannot add wallet, there is Wallet which has been added"
 					);
 				} else {
+					let totalBalance = 0;
+					let noteId = "";
 					let savingData = datas.map(async (data) => {
+						totalBalance += data.estimated.balance;
+						noteId = data.noteId;
 						const saveData = await new schema.WalletNoteSchema(
 							data
 						).save();
 
 						return saveData;
 					});
-
 					Promise.all(savingData)
-						.then((res) => resolve(res))
+						.then((res) => {
+							noteModel
+								.addEstimatedBalance(noteId, totalBalance)
+								.then((add) => resolve(res))
+								.catch((addErr) => reject(addErr));
+						})
 						.catch((err) => reject(err));
 				}
 			})

@@ -57,6 +57,60 @@ exports.getById = (id) => {
 	});
 };
 
+exports.edit = (id, data) => {
+	return new Promise((resolve, reject) => {
+		schema.NoteSchema.findByIdAndUpdate(id, data, (err, result) => {
+			if (err) {
+				reject(err);
+			} else {
+				this.getById(id)
+					.then((res) => resolve(res))
+					.catch((error) => reject(error));
+			}
+		});
+	});
+};
+
+exports.addEstimatedBalance = (id, balance) => {
+	return new Promise((resolve, reject) => {
+		this.getById(id)
+			.then((res) => {
+				const newBalance = res.estimated.balance + balance;
+				const newData = {
+					...res,
+					estimated: {
+						...res.estimated,
+						balance: newBalance,
+					},
+				};
+				this.edit(id, newData)
+					.then((edit) => resolve(edit))
+					.catch((err) => reject(err));
+			})
+			.catch((err) => reject(err));
+	});
+};
+
+exports.addEstimatedRemains = (id, remains) => {
+	return new Promise((resolve, reject) => {
+		this.getById(id)
+			.then((res) => {
+				const newRemains = res.estimated.remains + remains;
+				const newData = {
+					...res,
+					estimated: {
+						...res.estimated,
+						remains: newRemains,
+					},
+				};
+				this.edit(id, newData)
+					.then((edit) => resolve(edit))
+					.catch((err) => reject(err));
+			})
+			.catch((err) => reject(err));
+	});
+};
+
 // exports.edit = (id, data) => {
 // 	return new Promise((resolve, reject) => {
 // 		schema.NoteSchema.findByIdAndUpdate(id, data, (err, result) => {
