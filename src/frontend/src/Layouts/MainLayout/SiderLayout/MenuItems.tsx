@@ -47,11 +47,6 @@ const MenuItems: () => MenuProps['items'] = () => {
 			],
 		},
 		{
-			key: 'estimation',
-			label: <AppText text='Estimation' />,
-			icon: <MdDashboard />,
-		},
-		{
 			key: 'notes',
 			label: (
 				<Link to={getRouteNames(RouteNames.NOTES)}>
@@ -63,11 +58,6 @@ const MenuItems: () => MenuProps['items'] = () => {
 	];
 };
 
-export const rootSubmenuKeys = [
-	'dashboard',
-	'management',
-	'estimation',
-	'notes',
-];
+export const rootSubmenuKeys = ['dashboard', 'management', 'notes'];
 
 export default MenuItems;

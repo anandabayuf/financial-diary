@@ -24,6 +24,7 @@ const DetailNoteTab: React.FC<DetailNoteTabProps> = ({
 	isSearching,
 	dataViewType = DataViewTypeNames.LIST,
 	modalAdd,
+	pagination,
 	handleClickAdd,
 	handleClickView,
 	handleClickEdit,
@@ -115,7 +116,7 @@ const DetailNoteTab: React.FC<DetailNoteTabProps> = ({
 									handleView: handleClickView,
 									handleEdit: handleClickEdit,
 								})}
-								showPagination={!isEstimation}
+								pagination={pagination}
 							/>
 						) : (
 							<DetailNoteGrid

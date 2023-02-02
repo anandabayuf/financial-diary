@@ -38,7 +38,6 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
 					) : (
 						<>
 							<AppButton
-								block
 								type='text'
 								onClick={() => navigate(-1)}
 							>
@@ -46,7 +45,6 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
 							</AppButton>
 							<AppButton
 								htmlType='submit'
-								block
 								type='primary'
 							>
 								{isEdit ? 'Edit Category' : 'Create Category'}

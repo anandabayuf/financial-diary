@@ -60,6 +60,7 @@ router.post("/", async (req, res) => {
 
 	let payload = data.walletIds.map((id) => {
 		return {
+			userId: req.user.id,
 			walletId: id,
 			noteId: data.noteId,
 			balance: 0,
@@ -101,6 +102,7 @@ router.post("/estimated", async (req, res) => {
 
 	let payload = data.map((el) => {
 		return {
+			userId: req.user.id,
 			walletId: el.walletId,
 			noteId: el.noteId,
 			balance: 0,

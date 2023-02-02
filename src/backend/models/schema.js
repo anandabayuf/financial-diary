@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { config } = require("dotenv");
+const { ITEM_TYPE } = require("../constants/enum");
 
 config();
 
@@ -81,20 +82,32 @@ exports.NoteSchema = mongoose.model("Note", {
 });
 
 exports.NoteItemSchema = mongoose.model("NoteItem", {
+	userId: {
+		type: String,
+		required: true,
+	},
 	noteId: {
 		type: String,
 		required: true,
 	},
-	categoryId: {
+	categoryNoteId: {
 		type: String,
-		required: true,
+		// required: true,
 	},
-	walletId: {
+	walletNoteId: {
 		type: String,
-		required: true,
+		// required: true,
+	},
+	walletNoteId2: {
+		type: String,
+		// required: true,
 	},
 	date: {
 		type: Date,
+		required: true,
+	},
+	type: {
+		type: Number,
 		required: true,
 	},
 	description: {
@@ -112,6 +125,10 @@ exports.NoteItemSchema = mongoose.model("NoteItem", {
 });
 
 exports.CategoryNoteSchema = mongoose.model("CategoryNote", {
+	userId: {
+		type: String,
+		required: true,
+	},
 	categoryId: {
 		type: String,
 		required: true,
@@ -137,6 +154,10 @@ exports.CategoryNoteSchema = mongoose.model("CategoryNote", {
 });
 
 exports.WalletNoteSchema = mongoose.model("WalletNote", {
+	userId: {
+		type: String,
+		required: true,
+	},
 	walletId: {
 		type: String,
 		required: true,

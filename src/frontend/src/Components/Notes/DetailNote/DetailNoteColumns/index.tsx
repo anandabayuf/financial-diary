@@ -75,7 +75,7 @@ const DetailNoteColumns: DetailNoteColumnsType = ({
 						return (
 							<AppButton
 								type='text'
-								onClick={handleView}
+								onClick={() => handleView && handleView(record)}
 							>
 								View
 							</AppButton>

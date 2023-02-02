@@ -34,6 +34,23 @@ export const getAvailableUserCategory = async (
 	}
 };
 
+export const getUserCategoryNoteById = async (
+	token?: string,
+	id?: string
+): Promise<any> => {
+	try {
+		const response = await instance({
+			url: `/category-note/${id}`,
+			method: 'GET',
+			headers: { Authorization: `Bearer ${token}` },
+		});
+
+		return response;
+	} catch (err) {
+		return err;
+	}
+};
+
 export const addCategoryToTheNote = async (
 	token?: string,
 	data?: any

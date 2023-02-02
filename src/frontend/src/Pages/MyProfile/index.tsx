@@ -143,7 +143,6 @@ const MyProfilePage: React.FC = () => {
 			userData['picture'] = null;
 		} else if (values.picture.fileList.length === 1) {
 			//if user edited their picture
-			console.log(values.picture.fileList[0].originFileObj);
 			payload.append('picture', values.picture.fileList[0].originFileObj);
 		}
 
@@ -155,6 +154,11 @@ const MyProfilePage: React.FC = () => {
 			AppMessage({ content: res.data.message, type: 'success' });
 			dispatch(updateUserData({ data: res.data.data }));
 			handleClickCancelEdit();
+		} else if (res.request.status === 404) {
+			AppMessage({
+				content: `${res.response.data.message} - ${res.response.data.detail.message}`,
+				type: 'error',
+			});
 		}
 
 		setIsLoading(false);
