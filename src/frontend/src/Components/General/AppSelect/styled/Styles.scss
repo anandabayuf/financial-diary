@@ -5,6 +5,19 @@ body {
         font-family: 'Comfortaa', cursive !important;
         font-weight: 400 !important;
     }
+
+    .ant-select-item-empty {
+        .ant-empty-description {
+            font-family: 'Comfortaa', cursive !important;
+            font-weight: 400 !important;
+        }
+    }
+
+    .ant-select-status-error{
+        .ant-select-selector {
+            border-color: #ff4d4f !important;
+        }
+    }
 }
 
 body.dark {
@@ -17,6 +30,12 @@ body.dark {
 
         .ant-select-item-option-active, .ant-select-item-option-selected {
             background-color: $dark-button;
+        }
+
+        .ant-select-item-empty {
+            .ant-empty-description {
+                color: $dark-text;
+            }
         }
     }
 }
@@ -31,6 +50,12 @@ body.light {
 
         .ant-select-item-option-active, .ant-select-item-option-selected {
             background-color: $light-button;
+        }
+
+        .ant-select-item-empty {
+            .ant-empty-description {
+                color: $light-text;
+            }
         }
     }
 }

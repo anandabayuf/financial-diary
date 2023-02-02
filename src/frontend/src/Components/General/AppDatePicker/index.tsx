@@ -8,6 +8,8 @@ const AppDatePicker: React.FC<AppDatePickerProps> = ({
 	onChange,
 	suffixIcon = <AiOutlineCalendar />,
 	placeholder,
+	value,
+	...rest
 }) => {
 	const theme = useTheme();
 
@@ -18,6 +20,7 @@ const AppDatePicker: React.FC<AppDatePickerProps> = ({
 			onChange={onChange}
 			suffixIcon={suffixIcon}
 			placeholder={placeholder}
+			value={value}
 		/>
 	);
 };

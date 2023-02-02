@@ -64,7 +64,7 @@ const withWalletNoteForm = (
 			<Component
 				isWallet
 				handleSubmit={handleSubmit}
-				data={availableWallet}
+				walletData={availableWallet}
 				isLoading={isLoading}
 				isFetching={isFetching}
 				handleCancel={handleCancel}

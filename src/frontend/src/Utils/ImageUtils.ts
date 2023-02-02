@@ -7,3 +7,21 @@ export const getBase64 = (file: RcFile): Promise<string> =>
 		reader.onload = () => resolve(reader.result as string);
 		reader.onerror = (error) => reject(error);
 	});
+
+export const dataURLtoFile = (dataurl: string, filename: string) => {
+	let arr = dataurl.split(',');
+	let mime = arr[0].match(/:(.*?);/);
+	let type: any;
+	let bstr = atob(arr[1]),
+		n = bstr.length,
+		u8arr = new Uint8Array(n);
+
+	if (mime !== null) {
+		type = mime[1];
+	}
+
+	while (n--) {
+		u8arr[n] = bstr.charCodeAt(n);
+	}
+	return new File([u8arr], filename, { type: type });
+};

@@ -86,7 +86,6 @@ exports.getAll = (query, noteId) => {
 
 exports.getById = (id) => {
 	return new Promise((resolve, reject) => {
-		console.log(id);
 		schema.WalletNoteSchema.findById(id, async (err, result) => {
 			if (err) {
 				reject(err);
@@ -150,6 +149,61 @@ exports.edit = (id, data) => {
 					.catch((e) => reject(e));
 			}
 		}).lean();
+	});
+};
+
+exports.addBalance = (id, balance) => {
+	return new Promise((resolve, reject) => {
+		this.getById(id)
+			.then((walletNote) => {
+				const newBalanceWalletNote = {
+					...walletNote,
+					balance: walletNote.balance + balance,
+				};
+
+				this.edit(id, newBalanceWalletNote)
+					.then((res) => resolve(res))
+					.catch((err) => reject(err));
+			})
+			.catch((err) => reject(err));
+	});
+};
+
+exports.editEstimatedBalance = (id, noteId, balance) => {
+	return new Promise((resolve, reject) => {
+		noteModel
+			.getById(noteId)
+			.then((note) => {
+				let noteEstimatedBalance = note.estimated.balance;
+				this.getById(id)
+					.then((walletNote) => {
+						let currEstimatedBalanceWalletNote =
+							walletNote.estimated.balance;
+						noteEstimatedBalance -= currEstimatedBalanceWalletNote;
+						currEstimatedBalanceWalletNote = balance;
+						noteEstimatedBalance += balance;
+						const newWalletNote = {
+							...walletNote,
+							estimated: {
+								balance: currEstimatedBalanceWalletNote,
+							},
+						};
+						noteModel
+							.setEstimatedBalance(
+								noteId,
+								note,
+								noteEstimatedBalance
+							)
+							.then((result) => {
+								this.edit(id, newWalletNote)
+									.then((res) => resolve(res))
+									.catch((err) => reject(err));
+							})
+							.catch((err) => reject(err));
+					})
+					.catch((err) => reject(err));
+			})
+			.catch((err) => reject(err));
 	});
 };
 

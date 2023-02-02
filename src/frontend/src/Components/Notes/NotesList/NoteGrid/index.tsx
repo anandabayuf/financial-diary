@@ -1,7 +1,6 @@
 import AppButton from '../../../General/AppButton';
 import AppText from '../../../General/AppText';
 import AppTitle from '../../../General/AppTitle';
-import { useNavigate } from 'react-router-dom';
 import { GiNotebook } from 'react-icons/gi';
 import useTheme from '../../../../Hooks/useTheme';
 import { NotesGridProps } from './interfaces/interfaces';
@@ -10,11 +9,13 @@ import StyledGrid from './styled/StyledGrid';
 import {
 	getFullYearFromDate,
 	getLongMonthFromDate,
-	getTwoDigitMonthStringFromDate,
 } from '../../../../Utils/DateUtils';
 
-const NotesGrid: React.FC<NotesGridProps> = ({ data, showYear }) => {
-	const navigate = useNavigate();
+const NotesGrid: React.FC<NotesGridProps> = ({
+	data,
+	showYear,
+	handleView,
+}) => {
 	const theme = useTheme();
 
 	return (
@@ -52,16 +53,7 @@ const NotesGrid: React.FC<NotesGridProps> = ({ data, showYear }) => {
 							<div className='flex justify-end'>
 								<AppButton
 									type='text'
-									onClick={() =>
-										navigate &&
-										navigate(
-											`/notes/${getFullYearFromDate(
-												el.date
-											)}/${getTwoDigitMonthStringFromDate(
-												el.date
-											)}`
-										)
-									}
+									onClick={() => handleView && handleView(el)}
 								>
 									View
 								</AppButton>

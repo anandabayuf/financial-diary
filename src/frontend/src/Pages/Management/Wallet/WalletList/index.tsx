@@ -2,10 +2,10 @@ import AppTitle from '../../../../Components/General/AppTitle';
 import MainLayout from '../../../../Layouts/MainLayout/index';
 import { useState, useEffect } from 'react';
 import { getAllUserWallet } from '../../../../Api/Wallets';
-import { useAppSelector } from '../../../../Hooks/useRedux';
+import { useAppSelector, useAppDispatch } from '../../../../Hooks/useRedux';
 import AppButton from '../../../../Components/General/AppButton';
 import { BsPlusLg } from 'react-icons/bs';
-import { Space } from 'antd';
+import { Space, TableProps } from 'antd';
 import AppTable from '../../../../Components/General/AppTable/index';
 import WalletColumns from '../../../../Components/Management/Wallets/WalletColumn';
 import AppEmpty from '../../../../Components/General/AppEmpty/index';
@@ -16,11 +16,17 @@ import { getRouteNames } from '../../../../Utils/RouteUtils';
 import RouteNames from '../../../../Constants/RouteNames';
 import AppMessage from '../../../../Components/General/AppMessage/index';
 import AppSearchInput from '../../../../Components/General/AppSearchInput';
+import { setManagementPaginationSize } from '../../../../Store/Management/ManagementSlice';
 
 const ManagementWalletPage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
 	const navigate = useNavigate();
 	const location = useLocation();
+	const dispatch = useAppDispatch();
+
+	const pageSize = useAppSelector(
+		(state) => state.management.paginationSize?.wallet
+	);
 
 	const [wallets, setWallets] = useState<any[]>([]);
 	const [walletsList, setWalletsList] = useState<any[]>([]);
@@ -89,6 +95,17 @@ const ManagementWalletPage: React.FC = () => {
 		}
 	};
 
+	const pagination: TableProps<any>['pagination'] = {
+		pageSize: pageSize,
+		onShowSizeChange(current, size) {
+			dispatch(
+				setManagementPaginationSize({
+					paginationSize: { wallet: size },
+				})
+			);
+		},
+	};
+
 	return (
 		<MainLayout>
 			<AppBreadcrumb />
@@ -124,6 +141,7 @@ const ManagementWalletPage: React.FC = () => {
 					<AppTable
 						dataSource={walletsList}
 						columns={WalletColumns({ navigate: navigate })}
+						pagination={pagination}
 					/>
 				</>
 			) : (

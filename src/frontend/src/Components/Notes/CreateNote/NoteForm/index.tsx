@@ -40,7 +40,6 @@ const NoteForm: React.FC<NoteFormProps> = ({
 					) : (
 						<>
 							<AppButton
-								block
 								type='text'
 								onClick={() => navigate(-1)}
 							>
@@ -48,7 +47,6 @@ const NoteForm: React.FC<NoteFormProps> = ({
 							</AppButton>
 							<AppButton
 								htmlType='submit'
-								block
 								type='primary'
 							>
 								Create Note

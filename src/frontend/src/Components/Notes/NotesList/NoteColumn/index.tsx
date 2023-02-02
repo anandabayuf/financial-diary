@@ -5,13 +5,12 @@ import { NoteColumnsProps } from './interfaces/interfaces';
 import {
 	getFullYearFromDate,
 	getLongMonthFromDate,
-	getTwoDigitMonthStringFromDate,
 } from '../../../../Utils/DateUtils';
 
 const NotesColumns: ({
-	navigate,
 	showYear,
-}: NoteColumnsProps) => ColumnsType<any> = ({ navigate, showYear }) => {
+	handleView,
+}: NoteColumnsProps) => ColumnsType<any> = ({ handleView, showYear }) => {
 	return showYear === 'all-year'
 		? [
 				{
@@ -55,16 +54,7 @@ const NotesColumns: ({
 						return (
 							<AppButton
 								type='text'
-								onClick={() =>
-									navigate &&
-									navigate(
-										`/notes/${getFullYearFromDate(
-											record.date
-										)}/${getTwoDigitMonthStringFromDate(
-											record.date
-										)}`
-									)
-								}
+								onClick={() => handleView && handleView(record)}
 							>
 								View
 							</AppButton>
@@ -101,16 +91,7 @@ const NotesColumns: ({
 						return (
 							<AppButton
 								type='text'
-								onClick={() =>
-									navigate &&
-									navigate(
-										`/notes/${getFullYearFromDate(
-											record.date
-										)}/${getTwoDigitMonthStringFromDate(
-											record.date
-										)}`
-									)
-								}
+								onClick={() => handleView && handleView(record)}
 							>
 								View
 							</AppButton>

@@ -7,6 +7,13 @@ const StyledTabs = styled(Tabs)<StyledTabsProps>`
 		border-bottom-color: ${(props) => props.theme.container} !important;
 	}
 
+	.ant-tabs-nav-more {
+		color: ${(props) => props.theme.text} !important;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
 	.ant-tabs-tab {
 		background-color: ${(props) => props.theme.container} !important;
 		border: none !important;

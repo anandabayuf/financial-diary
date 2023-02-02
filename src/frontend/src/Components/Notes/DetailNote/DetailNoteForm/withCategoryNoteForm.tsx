@@ -62,9 +62,9 @@ const withCategoryNoteForm = (
 
 		return (
 			<Component
-				isWallet={false}
+				isCategory
 				handleSubmit={handleSubmit}
-				data={availableCategory}
+				categoryData={availableCategory}
 				isLoading={isLoading}
 				isFetching={isFetching}
 				handleCancel={handleCancel}
