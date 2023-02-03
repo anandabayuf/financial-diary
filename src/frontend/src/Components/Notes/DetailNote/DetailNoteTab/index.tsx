@@ -83,7 +83,7 @@ const DetailNoteTab: React.FC<DetailNoteTabProps> = ({
 							/>
 							{isEstimation ? (
 								<div>
-									<AppText text='Saldo: ' />
+									<AppText text='Balance: ' />
 									<AppText
 										text={formatIDR(
 											data[0].note.estimated.balance || 0

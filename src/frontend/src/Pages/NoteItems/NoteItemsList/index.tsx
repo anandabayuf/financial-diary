@@ -247,7 +247,7 @@ const NoteItemsPage: React.FC = () => {
 								<AppText
 									text={
 										selectedCategoryNote?.id === ''
-											? 'Saldo: '
+											? 'Balance: '
 											: 'Total: '
 									}
 									className='text-sm'
