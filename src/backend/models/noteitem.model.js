@@ -246,13 +246,80 @@ exports.getAll = (query, noteId, userId) => {
 	});
 };
 
+exports.getAllNoteItemsByNoteId = (noteId, userId) => {
+	return new Promise((resolve, reject) => {
+		schema.NoteItemSchema.find(
+			{ noteId: noteId, userId: userId },
+			async (err, result) => {
+				if (err) {
+					reject(err);
+				} else {
+					let mapData = result.map(async (noteItem) => {
+						let { walletNoteId, categoryNoteId, ...rest } =
+							noteItem;
+						if (walletNoteId) {
+							try {
+								let walletNote = await walletNoteModel.getById(
+									walletNoteId
+								);
+								rest["walletNote"] = walletNote;
+							} catch (err) {
+								reject(err);
+							}
+						}
+
+						if (categoryNoteId) {
+							try {
+								let categoryNote =
+									await categoryNoteModel.getById(
+										categoryNoteId
+									);
+								rest["categoryNote"] = categoryNote;
+							} catch (err) {
+								reject(err);
+							}
+						}
+
+						return rest;
+					});
+					Promise.all(mapData)
+						.then((res) => resolve(res))
+						.catch((err) => reject(err));
+				}
+			}
+		).lean();
+	});
+};
+
 exports.getById = (id) => {
 	return new Promise((resolve, reject) => {
-		schema.NoteItemSchema.findById(id, (err, result) => {
+		schema.NoteItemSchema.findById(id, async (err, result) => {
 			if (err) {
 				reject(err);
 			} else {
-				resolve(result);
+				let { walletNoteId, categoryNoteId, ...rest } = result;
+				if (walletNoteId) {
+					try {
+						let walletNote = await walletNoteModel.getById(
+							walletNoteId
+						);
+						rest["walletNote"] = walletNote;
+					} catch (err) {
+						reject(err);
+					}
+				}
+
+				if (categoryNoteId) {
+					try {
+						let categoryNote = await categoryNoteModel.getById(
+							categoryNoteId
+						);
+						rest["categoryNote"] = categoryNote;
+					} catch (err) {
+						reject(err);
+					}
+				}
+				resolve(rest);
 			}
 		}).lean();
 	});
