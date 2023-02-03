@@ -73,7 +73,7 @@ const NotesListPage: React.FC = () => {
 
 				setOptionYear(years);
 				// setSelectedYear('all-year');
-				dispatch(setNoteShowYear({ showYear: 'all-year' }));
+				// dispatch(setNoteShowYear({ showYear: 'all-year' }));
 				setNotes(
 					resNotes.map((note: any) => {
 						note['key'] = note._id;
