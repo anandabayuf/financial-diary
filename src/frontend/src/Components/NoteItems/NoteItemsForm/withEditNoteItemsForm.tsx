@@ -2,14 +2,9 @@ import { NoteItemsFormProps } from './interfaces/interfaces';
 import { useAppSelector } from '../../../Hooks/useRedux';
 import { useState, useEffect } from 'react';
 import AppMessage from '../../General/AppMessage';
-import {
-	createUserNoteItemByNoteId,
-	editUserNoteItem,
-} from '../../../Api/NoteItems';
+import { editUserNoteItem } from '../../../Api/NoteItems';
 import { getAllUserWalletNote } from '../../../Api/Wallet-Note';
 import { getAllUserCategoryNote } from '../../../Api/Category-Note';
-import { ITEM_TYPE } from '../../../Constants/Constants';
-import { DatePickerProps } from 'antd';
 import dayjs from 'dayjs';
 
 const withEditNoteItemsForm = (
@@ -24,9 +19,6 @@ const withEditNoteItemsForm = (
 		...rest
 	}) => {
 		const token = useAppSelector((state) => state.user.accessToken);
-		const { selectedCategoryNote, selectedWalletNote } = useAppSelector(
-			(state) => state.note
-		);
 
 		const [isLoading, setIsLoading] = useState(false);
 		const [isFetching, setIsFetching] = useState(false);

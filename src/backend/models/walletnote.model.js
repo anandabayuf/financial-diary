@@ -25,21 +25,24 @@ exports.create = (datas) => {
 						"Cannot add wallet, there is Wallet which has been added"
 					);
 				} else {
+					let totalBalance = 0;
+					let noteId = "";
 					let savingData = datas.map(async (data) => {
-						await noteModel.addEstimatedBalance(
-							data.noteId,
-							data.estimated.balance
-						);
-
+						totalBalance += data.estimated.balance;
+						noteId = data.noteId;
 						const saveData = await new schema.WalletNoteSchema(
 							data
 						).save();
 
 						return saveData;
 					});
-
 					Promise.all(savingData)
-						.then((res) => resolve(res))
+						.then((res) => {
+							noteModel
+								.addEstimatedBalance(noteId, totalBalance)
+								.then((add) => resolve(res))
+								.catch((addErr) => reject(addErr));
+						})
 						.catch((err) => reject(err));
 				}
 			})
@@ -168,34 +171,22 @@ exports.addBalance = (id, balance) => {
 
 exports.editEstimatedBalance = (id, noteId, balance) => {
 	return new Promise((resolve, reject) => {
-		noteModel
-			.getById(noteId)
-			.then((note) => {
-				let noteEstimatedBalance = note.estimated.balance;
-				this.getById(id)
-					.then((walletNote) => {
-						let currEstimatedBalanceWalletNote =
-							walletNote.estimated.balance;
-						noteEstimatedBalance -= currEstimatedBalanceWalletNote;
-						currEstimatedBalanceWalletNote = balance;
-						noteEstimatedBalance += balance;
-						const newWalletNote = {
-							...walletNote,
-							estimated: {
-								balance: currEstimatedBalanceWalletNote,
-							},
-						};
-						noteModel
-							.setEstimatedBalance(
-								noteId,
-								note,
-								noteEstimatedBalance
-							)
-							.then((result) => {
-								this.edit(id, newWalletNote)
-									.then((res) => resolve(res))
-									.catch((err) => reject(err));
-							})
+		this.getById(id)
+			.then((walletNote) => {
+				let currEstimatedBalanceWalletNote =
+					walletNote.estimated.balance;
+				let addition = -currEstimatedBalanceWalletNote + balance;
+				const newWalletNote = {
+					...walletNote,
+					estimated: {
+						balance: balance,
+					},
+				};
+				noteModel
+					.addEstimatedBalance(noteId, addition)
+					.then((result) => {
+						this.edit(id, newWalletNote)
+							.then((res) => resolve(res))
 							.catch((err) => reject(err));
 					})
 					.catch((err) => reject(err));

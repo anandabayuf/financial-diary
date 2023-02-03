@@ -12,7 +12,7 @@ import AppTooltip from '../../General/AppTooltip';
 import { AiOutlineQuestionCircle } from 'react-icons/ai';
 import useTheme from '../../../Hooks/useTheme';
 import AppDatePicker from '../../General/AppDatePicker/index';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 
 const NoteItemsForm: React.FC<NoteItemsFormProps> = ({
 	isWallet,

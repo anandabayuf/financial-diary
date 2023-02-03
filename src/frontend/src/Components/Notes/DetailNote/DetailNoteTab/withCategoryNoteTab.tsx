@@ -69,7 +69,7 @@ const withCategoryNoteTab = (
 			if (!isModalOpen) {
 				getCategoryNote();
 			} // eslint-disable-next-line
-		}, [isModalOpen]);
+		}, [isModalOpen, noteId, token]);
 
 		const handleChangeDataViewType = (values: any) =>
 			dispatch(

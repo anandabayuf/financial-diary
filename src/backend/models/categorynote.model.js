@@ -24,11 +24,11 @@ exports.create = (datas) => {
 						"Cannot add category, there is Category which has been added"
 					);
 				} else {
+					let total = 0;
+					let noteId = "";
 					let savingData = datas.map(async (data) => {
-						await noteModel.addEstimatedBalance(
-							data.noteId,
-							-data.estimated.total
-						);
+						noteId = data.noteId;
+						total += data.estimated.total;
 
 						const saveData = await new schema.CategoryNoteSchema(
 							data
@@ -38,7 +38,12 @@ exports.create = (datas) => {
 					});
 
 					Promise.all(savingData)
-						.then((res) => resolve(res))
+						.then((res) => {
+							noteModel
+								.addEstimatedBalance(noteId, -total)
+								.then((add) => resolve(res))
+								.catch((addErr) => reject(addErr));
+						})
 						.catch((err) => reject(err));
 				}
 			})
@@ -178,36 +183,27 @@ exports.addTotal = (id, total) => {
 
 exports.editEstimatedTotal = (id, noteId, total) => {
 	return new Promise((resolve, reject) => {
-		noteModel
-			.getById(noteId)
-			.then((note) => {
-				let noteEstimatedBalance = note.estimated.balance;
+		this.getById(id)
+			.then((catNote) => {
+				let currEstimatedTotalCatNote = catNote.estimated.total;
+				let addition = -currEstimatedTotalCatNote + total;
 
-				this.getById(id).then((catNote) => {
-					let currEstimatedTotalCatNote = catNote.estimated.total;
-					noteEstimatedBalance += currEstimatedTotalCatNote;
-					currEstimatedTotalCatNote = total;
-					noteEstimatedBalance -= total;
+				const newCatNote = {
+					...catNote,
+					estimated: {
+						remains: total - catNote.total,
+						total: total,
+					},
+				};
 
-					let newRemains = total - catNote.total;
-
-					const newCatNote = {
-						...catNote,
-						estimated: {
-							remains: newRemains,
-							total: currEstimatedTotalCatNote,
-						},
-					};
-
-					noteModel
-						.setEstimatedBalance(noteId, note, noteEstimatedBalance)
-						.then((result) => {
-							this.edit(id, newCatNote)
-								.then((res) => resolve(res))
-								.catch((err) => reject(err));
-						})
-						.catch((err) => reject(err));
-				});
+				noteModel
+					.addEstimatedBalance(noteId, -addition)
+					.then((result) => {
+						this.edit(id, newCatNote)
+							.then((res) => resolve(res))
+							.catch((err) => reject(err));
+					})
+					.catch((err) => reject(err));
 			})
 			.catch((err) => reject(err));
 	});
