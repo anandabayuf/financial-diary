@@ -67,8 +67,8 @@ const withWalletNoteTab = (
 
 			if (!isModalOpen) {
 				getWalletNote();
-			} //eslint-disable-next-line
-		}, [isModalOpen]);
+			} // eslint-disable-next-line
+		}, [isModalOpen, token, noteId]);
 
 		const handleChangeDataViewType = (values: any) =>
 			dispatch(setNoteDataViewType({ dataViewType: { wallet: values } }));

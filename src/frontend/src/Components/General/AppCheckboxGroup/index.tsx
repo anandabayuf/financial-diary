@@ -1,4 +1,3 @@
-import { Checkbox, Row } from 'antd';
 import { AppCheckboxGroupProps } from './interfaces/interfaces';
 import StyledCheckboxGroup from './styled/StyledCheckboxGroup';
 import useTheme from '../../../Hooks/useTheme';
