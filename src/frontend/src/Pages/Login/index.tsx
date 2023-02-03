@@ -70,6 +70,10 @@ const LoginPage: React.FC = () => {
 		stateReceiveAction(); // eslint-disable-next-line
 	}, [location.state]);
 
+	useEffect(() => {
+		document.title = 'Login - Financial Diary App';
+	}, []);
+
 	return (
 		<FrontLayout>
 			<AppCard>

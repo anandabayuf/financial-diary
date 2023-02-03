@@ -1,7 +1,7 @@
 import MainLayout from '../../../../Layouts/MainLayout';
 import AppBreadcrumb from '../../../../Components/General/AppBreadcrumb/index';
 import AppTitle from '../../../../Components/General/AppTitle/index';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAppSelector } from '../../../../Hooks/useRedux';
 import { useNavigate } from 'react-router-dom';
 import { getRouteNames } from '../../../../Utils/RouteUtils';
@@ -34,6 +34,10 @@ const CreateCategoryPage: React.FC = () => {
 			AppMessage({ content: response.data.message, type: 'error' });
 		}
 	};
+
+	useEffect(() => {
+		document.title = 'Create New Category - Financial Diary App';
+	}, []);
 
 	return (
 		<MainLayout>

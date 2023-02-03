@@ -167,6 +167,10 @@ const NotesListPage: React.FC = () => {
 		},
 	};
 
+	useEffect(() => {
+		document.title = 'Notes - Financial Diary App';
+	}, []);
+
 	return (
 		<MainLayout>
 			<AppBreadcrumb />

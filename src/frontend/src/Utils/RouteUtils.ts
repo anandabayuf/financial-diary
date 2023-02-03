@@ -6,8 +6,8 @@ export const getRouteNames = (route: string): string => {
 			return '/login';
 		case RouteNames.REGISTER:
 			return '/register';
-		case RouteNames.DASHBOARD:
-			return '/dashboard';
+		// case RouteNames.DASHBOARD:
+		// 	return '/dashboard';
 		case RouteNames.MANAGEMENT_WALLETS:
 			return '/management/wallets';
 		case RouteNames.CREATE_WALLETS:
