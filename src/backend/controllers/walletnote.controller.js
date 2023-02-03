@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const walletNoteModel = require("../models/waletnote.model");
+const walletNoteModel = require("../models/walletnote.model");
 
 router.get("/note/:noteId", async (req, res) => {
 	try {
@@ -19,7 +19,7 @@ router.get("/note/:noteId", async (req, res) => {
 	}
 });
 
-router.get("/available/note/:noteId", async (req, res) => {
+router.get("/note/:noteId/available", async (req, res) => {
 	try {
 		res.status(200).json({
 			status: 200,
@@ -60,13 +60,57 @@ router.post("/", async (req, res) => {
 
 	let payload = data.walletIds.map((id) => {
 		return {
+			userId: req.user.id,
 			walletId: id,
 			noteId: data.noteId,
 			balance: 0,
+			estimated: {
+				balance: 0,
+			},
 		};
 	});
 
-	// data.balance = 0;
+	try {
+		res.status(201).json({
+			status: 201,
+			message: "Successfully create wallet note",
+			data: await walletNoteModel.create(payload),
+		});
+	} catch (err) {
+		res.status(404).json({
+			status: 404,
+			message: "Failed to create wallet note",
+			detail: err,
+		});
+	}
+});
+
+router.post("/estimated", async (req, res) => {
+	let data = req.body;
+
+	/*
+    payload {
+        walletId,
+        noteId,
+        balance,
+        estimated: {
+            balance,
+            remains
+        }
+    }
+    */
+
+	let payload = data.map((el) => {
+		return {
+			userId: req.user.id,
+			walletId: el.walletId,
+			noteId: el.noteId,
+			balance: 0,
+			estimated: {
+				balance: el.estimated.balance,
+			},
+		};
+	});
 
 	try {
 		res.status(201).json({
@@ -94,6 +138,28 @@ router.put("/:id", async (req, res) => {
 		res.status(404).json({
 			status: 404,
 			message: "Failed to edit wallet note data",
+			detail: err,
+		});
+	}
+});
+
+router.put("/:id/estimated", async (req, res) => {
+	let data = req.body;
+
+	try {
+		res.status(201).json({
+			status: 201,
+			message: "Successfully edit wallet note estimated balance data",
+			data: await walletNoteModel.editEstimatedBalance(
+				req.params.id,
+				data.noteId,
+				data.estimated.balance
+			),
+		});
+	} catch (err) {
+		res.status(404).json({
+			status: 404,
+			message: "Failed to edit wallet note estimated balance data",
 			detail: err,
 		});
 	}

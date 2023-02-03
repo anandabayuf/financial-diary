@@ -25,9 +25,19 @@ const UserSlice = createSlice({
 		setUserLoggedOut: () => {
 			return { ...initialState };
 		},
+		updateUserData: (
+			state: UserState,
+			action: PayloadAction<UserState>
+		) => {
+			return {
+				...state,
+				data: action.payload.data,
+			};
+		},
 	},
 });
 
-export const { setUserLoggedIn, setUserLoggedOut } = UserSlice.actions;
+export const { setUserLoggedIn, setUserLoggedOut, updateUserData } =
+	UserSlice.actions;
 
 export default UserSlice.reducer;

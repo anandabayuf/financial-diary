@@ -2,7 +2,7 @@ import { Outlet, RouteObject, Navigate } from 'react-router-dom';
 import useAuth from '../Hooks/useAuth';
 import { getRouteNames } from '../Utils/RouteUtils';
 import RouteNames from '../Constants/RouteNames';
-import DashboardPage from '../Pages/Dashboard';
+// import DashboardPage from '../Pages/Dashboard';
 import ManagementCategoryPage from '../Pages/Management/Category/CategoryList';
 import ManagementWalletPage from '../Pages/Management/Wallet/WalletList/index';
 import NotesPage from '../Pages/Notes/NotesList/index';
@@ -12,6 +12,10 @@ import CreateCategoryPage from '../Pages/Management/Category/CreateCategory/inde
 import EditCategoryPage from '../Pages/Management/Category/EditCategory/index';
 import CreateNotePage from '../Pages/Notes/CreateNote/index';
 import DetailNotePage from '../Pages/Notes/DetailNote/index';
+import MyProfilePage from '../Pages/MyProfile';
+import NoteItemsPage from '../Pages/NoteItems/NoteItemsList/index';
+import CreateNoteItemsPage from '../Pages/NoteItems/CreateNoteItems/index';
+import EditNoteItemsPage from '../Pages/NoteItems/EditNoteItems/index';
 
 const ProtectedRoute = () => {
 	const isLoggedIn = useAuth();
@@ -23,10 +27,10 @@ const SecuredRoutes: RouteObject[] = [
 	{
 		element: <ProtectedRoute />,
 		children: [
-			{
-				path: getRouteNames(RouteNames.DASHBOARD),
-				element: <DashboardPage />,
-			},
+			// {
+			// 	path: getRouteNames(RouteNames.DASHBOARD),
+			// 	element: <DashboardPage />,
+			// },
 			{
 				path: '/management/*',
 				element: (
@@ -74,6 +78,22 @@ const SecuredRoutes: RouteObject[] = [
 			{
 				path: getRouteNames(RouteNames.DETAIL_NOTE),
 				element: <DetailNotePage />,
+			},
+			{
+				path: getRouteNames(RouteNames.NOTE_ITEMS),
+				element: <NoteItemsPage />,
+			},
+			{
+				path: getRouteNames(RouteNames.CREATE_NOTE_ITEMS),
+				element: <CreateNoteItemsPage />,
+			},
+			{
+				path: getRouteNames(RouteNames.EDIT_NOTE_ITEMS),
+				element: <EditNoteItemsPage />,
+			},
+			{
+				path: getRouteNames(RouteNames.MY_PROFILE),
+				element: <MyProfilePage />,
 			},
 		],
 	},

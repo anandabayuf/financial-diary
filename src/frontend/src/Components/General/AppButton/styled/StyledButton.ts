@@ -11,7 +11,9 @@ const StyledButton = styled(Button)<StyledButtonProps>`
 	font-family: 'Comfortaa', cursive !important;
 	font-weight: 500 !important;
 	color: ${(props) =>
-		props.type === 'default' || props.type === 'primary'
+		props.danger
+			? '#ff4d4f'
+			: props.type === 'default' || props.type === 'primary'
 			? props.textcolor
 			: props.backgroundcolor} !important;
 

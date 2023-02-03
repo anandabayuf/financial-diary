@@ -25,16 +25,24 @@ exports.create = (datas) => {
 						"Cannot add wallet, there is Wallet which has been added"
 					);
 				} else {
+					let totalBalance = 0;
+					let noteId = "";
 					let savingData = datas.map(async (data) => {
+						totalBalance += data.estimated.balance;
+						noteId = data.noteId;
 						const saveData = await new schema.WalletNoteSchema(
 							data
 						).save();
 
 						return saveData;
 					});
-
 					Promise.all(savingData)
-						.then((res) => resolve(res))
+						.then((res) => {
+							noteModel
+								.addEstimatedBalance(noteId, totalBalance)
+								.then((add) => resolve(res))
+								.catch((addErr) => reject(addErr));
+						})
 						.catch((err) => reject(err));
 				}
 			})
@@ -78,7 +86,6 @@ exports.getAll = (query, noteId) => {
 
 exports.getById = (id) => {
 	return new Promise((resolve, reject) => {
-		console.log(id);
 		schema.WalletNoteSchema.findById(id, async (err, result) => {
 			if (err) {
 				reject(err);
@@ -142,6 +149,49 @@ exports.edit = (id, data) => {
 					.catch((e) => reject(e));
 			}
 		}).lean();
+	});
+};
+
+exports.addBalance = (id, balance) => {
+	return new Promise((resolve, reject) => {
+		this.getById(id)
+			.then((walletNote) => {
+				const newBalanceWalletNote = {
+					...walletNote,
+					balance: walletNote.balance + balance,
+				};
+
+				this.edit(id, newBalanceWalletNote)
+					.then((res) => resolve(res))
+					.catch((err) => reject(err));
+			})
+			.catch((err) => reject(err));
+	});
+};
+
+exports.editEstimatedBalance = (id, noteId, balance) => {
+	return new Promise((resolve, reject) => {
+		this.getById(id)
+			.then((walletNote) => {
+				let currEstimatedBalanceWalletNote =
+					walletNote.estimated.balance;
+				let addition = -currEstimatedBalanceWalletNote + balance;
+				const newWalletNote = {
+					...walletNote,
+					estimated: {
+						balance: balance,
+					},
+				};
+				noteModel
+					.addEstimatedBalance(noteId, addition)
+					.then((result) => {
+						this.edit(id, newWalletNote)
+							.then((res) => resolve(res))
+							.catch((err) => reject(err));
+					})
+					.catch((err) => reject(err));
+			})
+			.catch((err) => reject(err));
 	});
 };
 

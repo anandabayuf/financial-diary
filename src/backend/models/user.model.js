@@ -48,7 +48,12 @@ exports.edit = (id, data) => {
 	return new Promise((resolve, reject) => {
 		schema.UserSchema.findByIdAndUpdate(id, data, (err, result) => {
 			if (err) {
-				reject(err);
+				if (err.codeName === "DuplicateKey")
+					reject({
+						message:
+							"Username is already exist, Please input unique username!",
+					});
+				else reject(err);
 			} else {
 				this.getById(id)
 					.then((res) => resolve(res))

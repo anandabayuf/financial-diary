@@ -15,4 +15,5 @@ export interface RegisterFormProps {
 
 export interface StyledUploadProps {
 	bordercolor?: string;
+	widthupload?: number;
 }

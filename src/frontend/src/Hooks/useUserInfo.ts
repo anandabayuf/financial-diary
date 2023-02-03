@@ -8,7 +8,7 @@ const useUserInfo = () => {
 
 	useMemo(() => {
 		const getUser = async () => {
-			const res = await getUserById(user.data.id, `${user.accessToken}`);
+			const res = await getUserById(user.data._id, `${user.accessToken}`);
 			if (res.request.status === 200) {
 				setUserInfo(res.data.data);
 			}

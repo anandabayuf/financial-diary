@@ -8,19 +8,32 @@ import AppLoader from '../../../General/AppLoader';
 import AppEmpty from '../../../General/AppEmpty';
 
 const DetailNoteForm: React.FC<DetailNoteFormProps> = ({
-	data,
-	isWallet,
+	walletData,
+	categoryData,
+	isWallet = false,
+	isCategory = false,
 	isLoading,
 	isFetching,
 	handleSubmit,
 	handleCancel,
 }) => {
-	const checkboxOptions: CheckboxGroupProps['options'] = data?.map((el) => {
-		return {
-			label: el.name,
-			value: el._id,
-		};
-	});
+	const checkboxOptions: () => CheckboxGroupProps['options'] = () => {
+		if (isWallet && walletData) {
+			return walletData.map((el) => {
+				return {
+					label: el.name,
+					value: el._id,
+				};
+			});
+		} else if (isCategory && categoryData) {
+			return categoryData.map((el) => {
+				return {
+					label: el.name,
+					value: el._id,
+				};
+			});
+		}
+	};
 
 	return isFetching ? (
 		<AppLoader />
@@ -30,7 +43,8 @@ const DetailNoteForm: React.FC<DetailNoteFormProps> = ({
 			layout='vertical'
 			onFinish={handleSubmit}
 		>
-			{data?.length! > 0 ? (
+			{(walletData && walletData.length > 0) ||
+			(categoryData && categoryData.length > 0) ? (
 				<AppFormItem
 					label={
 						isWallet
@@ -39,10 +53,13 @@ const DetailNoteForm: React.FC<DetailNoteFormProps> = ({
 					}
 					name='ids'
 					rules={[
-						{ required: true, message: 'Please select minimum 1!' },
+						{
+							required: true,
+							message: 'Please select minimum 1!',
+						},
 					]}
 				>
-					<AppCheckboxGroup options={checkboxOptions} />
+					<AppCheckboxGroup options={checkboxOptions()} />
 				</AppFormItem>
 			) : (
 				<AppEmpty className='mb-5' />
@@ -59,7 +76,8 @@ const DetailNoteForm: React.FC<DetailNoteFormProps> = ({
 					>
 						Cancel
 					</AppButton>
-					{data?.length! > 0 && (
+					{((walletData && walletData.length > 0) ||
+						(categoryData && categoryData.length > 0)) && (
 						<AppButton
 							type='primary'
 							htmlType='submit'

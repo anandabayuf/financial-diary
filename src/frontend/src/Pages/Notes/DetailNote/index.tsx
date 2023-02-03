@@ -6,44 +6,55 @@ import AppEmpty from '../../../Components/General/AppEmpty/index';
 import AppLoader from '../../../Components/General/AppLoader';
 import AppBreadcrumb from '../../../Components/General/AppBreadcrumb';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
-import { useAppSelector } from '../../../Hooks/useRedux';
+import { useAppSelector, useAppDispatch } from '../../../Hooks/useRedux';
 import AppMessage from '../../../Components/General/AppMessage/index';
 import AppTabs from '../../../Components/General/AppTabs/index';
 import DetailNoteTabs from '../../../Components/Notes/DetailNote/DetailNoteTabs/index';
-import { getRouteNames } from '../../../Utils/RouteUtils';
-import RouteNames from '../../../Constants/RouteNames';
 import {
 	getFullYearFromDate,
 	getLongMonthFromDate,
 } from '../../../Utils/DateUtils';
+import { setActiveKeyNoteTab } from '../../../Store/Note/NoteSlice';
 
 const DetailNotePage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
 	const navigate = useNavigate();
 	const location = useLocation();
 	const params = useParams();
+	const dispatch = useAppDispatch();
+
+	const { activeKeyNoteTab, selectedNote } = useAppSelector(
+		(state) => state.note
+	);
 
 	const [note, setNote] = useState<any>();
 
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	useEffect(() => {
+		const navigateIfLocationIsNotMatch = () => {
+			if (params) {
+				if (
+					params.year !== selectedNote?.year ||
+					params.month !== selectedNote?.month
+				) {
+					navigate(
+						`/notes/${selectedNote?.year}/${selectedNote?.month}`
+					);
+				}
+			}
+		};
+
 		const getNote = async () => {
 			setIsLoading(true);
-
+			navigateIfLocationIsNotMatch();
 			const res = await getUserNoteByDate(
 				token,
-				`${params.year}-${params.month}`
+				`${selectedNote?.year}-${selectedNote?.month}`
 			);
 			if (res.request.status === 200) {
 				const data = res.data.data;
-				if (data.length === 0) {
-					navigate(getRouteNames(RouteNames.NOTES), {
-						replace: true,
-					});
-				} else {
-					setNote(data[0]);
-				}
+				setNote(data[0]);
 			} else {
 				const response = JSON.parse(res.request.response);
 
@@ -55,6 +66,9 @@ const DetailNotePage: React.FC = () => {
 
 		getNote(); // eslint-disable-next-line
 	}, []);
+
+	const handleChangeTab = (activeKey: string) =>
+		dispatch(setActiveKeyNoteTab({ activeKeyNoteTab: activeKey }));
 
 	useEffect(() => {
 		const stateReceiveAction = () => {
@@ -69,6 +83,22 @@ const DetailNotePage: React.FC = () => {
 
 		stateReceiveAction(); // eslint-disable-next-line
 	}, [location.state]);
+
+	useEffect(() => {
+		if (note) {
+			document.title = `${getLongMonthFromDate(
+				note.date
+			)} ${getFullYearFromDate(note.date)} - ${
+				activeKeyNoteTab === 'estimation-note-tab'
+					? 'Estimation'
+					: activeKeyNoteTab === 'wallet-note-tab'
+					? 'Wallet'
+					: 'Category'
+			} Note - Financial Diary App`;
+		} else {
+			document.title = 'Monthly - Note - Financial Diary App';
+		}
+	}, [note, activeKeyNoteTab]);
 
 	return (
 		<MainLayout>
@@ -85,7 +115,13 @@ const DetailNotePage: React.FC = () => {
 							level={5}
 						/>
 					</div>
-					<AppTabs items={DetailNoteTabs({ noteId: note._id })} />
+					<AppTabs
+						items={DetailNoteTabs({
+							noteId: note._id,
+						})}
+						onChange={handleChangeTab}
+						activeKey={activeKeyNoteTab}
+					/>
 				</>
 			) : (
 				<AppEmpty />

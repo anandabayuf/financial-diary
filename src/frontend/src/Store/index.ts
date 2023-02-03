@@ -6,11 +6,15 @@ import { persistConfigType } from './interfaces/interfaces';
 import ThemeReducer from './Theme/ThemeSlice';
 import UserReducer from './User/UserSlice';
 import MenuReducer from './Menu/MenuSlice';
+import NoteReducer from './Note/NoteSlice';
+import ManagementReducer from './Management/ManagementSlice';
 
 const reducers = combineReducers({
 	theme: ThemeReducer,
 	user: UserReducer,
 	menu: MenuReducer,
+	note: NoteReducer,
+	management: ManagementReducer,
 });
 
 const persistConfig: persistConfigType = {

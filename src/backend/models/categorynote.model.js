@@ -2,33 +2,6 @@ const schema = require("./schema");
 const categoryModel = require("./category.model");
 const noteModel = require("./note.model");
 
-// exports.create = (data) => {
-// 	return new Promise((resolve, reject) => {
-// 		schema.CategoryNoteSchema.find(
-// 			{ noteId: data.noteId, categoryId: data.categoryId },
-// 			async (err, result) => {
-// 				if (err) {
-// 					reject(err);
-// 				} else {
-// 					if (result.length === 0) {
-// 						new schema.CategoryNoteSchema(data).save(
-// 							(err, response) => {
-// 								if (err) {
-// 									reject(err);
-// 								} else {
-// 									// console.log(response);
-// 									resolve(response.toObject());
-// 								}
-// 							}
-// 						);
-// 					} else {
-// 						reject("Category is already added");
-// 					}
-// 				}
-// 			}
-// 		).lean();
-// 	});
-// };
 exports.create = (datas) => {
 	return new Promise((resolve, reject) => {
 		let checkDatas = datas.map(async (data) => {
@@ -51,7 +24,12 @@ exports.create = (datas) => {
 						"Cannot add category, there is Category which has been added"
 					);
 				} else {
+					let total = 0;
+					let noteId = "";
 					let savingData = datas.map(async (data) => {
+						noteId = data.noteId;
+						total += data.estimated.total;
+
 						const saveData = await new schema.CategoryNoteSchema(
 							data
 						).save();
@@ -60,7 +38,12 @@ exports.create = (datas) => {
 					});
 
 					Promise.all(savingData)
-						.then((res) => resolve(res))
+						.then((res) => {
+							noteModel
+								.addEstimatedBalance(noteId, -total)
+								.then((add) => resolve(res))
+								.catch((addErr) => reject(addErr));
+						})
 						.catch((err) => reject(err));
 				}
 			})
@@ -106,7 +89,6 @@ exports.getAll = (query, noteId) => {
 
 exports.getById = (id) => {
 	return new Promise((resolve, reject) => {
-		console.log(id);
 		schema.CategoryNoteSchema.findById(id, async (err, result) => {
 			if (err) {
 				reject(err);
@@ -175,6 +157,55 @@ exports.edit = (id, data) => {
 					.catch((e) => reject(e));
 			}
 		}).lean();
+	});
+};
+
+exports.addTotal = (id, total) => {
+	return new Promise((resolve, reject) => {
+		this.getById(id)
+			.then((categoryNote) => {
+				const newCategoryNote = {
+					...categoryNote,
+					total: categoryNote.total + total,
+					estimated: {
+						...categoryNote.estimated,
+						remains: categoryNote.estimated.remains - total,
+					},
+				};
+
+				this.edit(id, newCategoryNote)
+					.then((res) => resolve(res))
+					.catch((err) => reject(err));
+			})
+			.catch((err) => reject(err));
+	});
+};
+
+exports.editEstimatedTotal = (id, noteId, total) => {
+	return new Promise((resolve, reject) => {
+		this.getById(id)
+			.then((catNote) => {
+				let currEstimatedTotalCatNote = catNote.estimated.total;
+				let addition = -currEstimatedTotalCatNote + total;
+
+				const newCatNote = {
+					...catNote,
+					estimated: {
+						remains: total - catNote.total,
+						total: total,
+					},
+				};
+
+				noteModel
+					.addEstimatedBalance(noteId, -addition)
+					.then((result) => {
+						this.edit(id, newCatNote)
+							.then((res) => resolve(res))
+							.catch((err) => reject(err));
+					})
+					.catch((err) => reject(err));
+			})
+			.catch((err) => reject(err));
 	});
 };
 

@@ -1,5 +1,8 @@
 import AppText from '../../../Components/General/AppText/index';
-import { MdDashboard, MdOutlineManageAccounts } from 'react-icons/md';
+import {
+	// MdDashboard,
+	MdOutlineManageAccounts,
+} from 'react-icons/md';
 import { GiNotebook } from 'react-icons/gi';
 import { IoWalletOutline } from 'react-icons/io5';
 import { BsCreditCard2Front } from 'react-icons/bs';
@@ -10,15 +13,15 @@ import RouteNames from '../../../Constants/RouteNames';
 
 const MenuItems: () => MenuProps['items'] = () => {
 	return [
-		{
-			key: 'dashboard',
-			label: (
-				<Link to={getRouteNames(RouteNames.DASHBOARD)}>
-					<AppText text='Dashboard' />
-				</Link>
-			),
-			icon: <MdDashboard />,
-		},
+		// {
+		// 	key: 'dashboard',
+		// 	label: (
+		// 		<Link to={getRouteNames(RouteNames.DASHBOARD)}>
+		// 			<AppText text='Dashboard' />
+		// 		</Link>
+		// 	),
+		// 	icon: <MdDashboard />,
+		// },
 		{
 			key: 'management',
 			label: <AppText text='Management' />,
@@ -47,11 +50,6 @@ const MenuItems: () => MenuProps['items'] = () => {
 			],
 		},
 		{
-			key: 'estimation',
-			label: <AppText text='Estimation' />,
-			icon: <MdDashboard />,
-		},
-		{
 			key: 'notes',
 			label: (
 				<Link to={getRouteNames(RouteNames.NOTES)}>
@@ -64,9 +62,8 @@ const MenuItems: () => MenuProps['items'] = () => {
 };
 
 export const rootSubmenuKeys = [
-	'dashboard',
+	// 'dashboard',
 	'management',
-	'estimation',
 	'notes',
 ];
 

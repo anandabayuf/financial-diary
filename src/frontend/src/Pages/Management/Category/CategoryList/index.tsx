@@ -1,10 +1,10 @@
 import AppTitle from '../../../../Components/General/AppTitle';
 import MainLayout from '../../../../Layouts/MainLayout/index';
 import { useState, useEffect } from 'react';
-import { useAppSelector } from '../../../../Hooks/useRedux';
+import { useAppSelector, useAppDispatch } from '../../../../Hooks/useRedux';
 import AppButton from '../../../../Components/General/AppButton';
 import { BsPlusLg } from 'react-icons/bs';
-import { Space } from 'antd';
+import { Space, TableProps } from 'antd';
 import AppTable from '../../../../Components/General/AppTable/index';
 import WalletColumns from '../../../../Components/Management/Category/CategoryColumn';
 import AppEmpty from '../../../../Components/General/AppEmpty/index';
@@ -16,11 +16,17 @@ import RouteNames from '../../../../Constants/RouteNames';
 import { getAllUserCategory } from '../../../../Api/Category';
 import AppMessage from '../../../../Components/General/AppMessage/index';
 import AppSearchInput from '../../../../Components/General/AppSearchInput/index';
+import { setManagementPaginationSize } from '../../../../Store/Management/ManagementSlice';
 
 const ManagementCategoryPage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
 	const navigate = useNavigate();
 	const location = useLocation();
+	const dispatch = useAppDispatch();
+
+	const pageSize = useAppSelector(
+		(state) => state.management.paginationSize?.category
+	);
 
 	const [categories, setCategories] = useState<any[]>([]);
 	const [categoriesList, setCategoriesList] = useState<any[]>([]);
@@ -90,6 +96,21 @@ const ManagementCategoryPage: React.FC = () => {
 		}
 	};
 
+	const pagination: TableProps<any>['pagination'] = {
+		pageSize: pageSize,
+		onShowSizeChange(current, size) {
+			dispatch(
+				setManagementPaginationSize({
+					paginationSize: { category: size },
+				})
+			);
+		},
+	};
+
+	useEffect(() => {
+		document.title = 'Category - Management - Financial Diary App';
+	}, []);
+
 	return (
 		<MainLayout>
 			<AppBreadcrumb />
@@ -125,6 +146,7 @@ const ManagementCategoryPage: React.FC = () => {
 					<AppTable
 						dataSource={categoriesList}
 						columns={WalletColumns({ navigate: navigate })}
+						pagination={pagination}
 					/>
 				</>
 			) : (

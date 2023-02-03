@@ -2,7 +2,7 @@ import MainLayout from '../../../../Layouts/MainLayout';
 import AppBreadcrumb from '../../../../Components/General/AppBreadcrumb/index';
 import AppTitle from '../../../../Components/General/AppTitle/index';
 import WalletForm from '../../../../Components/Management/Wallets/WalletForm/index';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { editUserWallet } from '../../../../Api/Wallets';
 import { useAppSelector } from '../../../../Hooks/useRedux';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -36,6 +36,10 @@ const EditWalletPage: React.FC = () => {
 			AppMessage({ content: response.data.message, type: 'error' });
 		}
 	};
+
+	useEffect(() => {
+		document.title = 'Edit Wallet - Management - Financial Diary App';
+	}, []);
 
 	return (
 		<MainLayout>

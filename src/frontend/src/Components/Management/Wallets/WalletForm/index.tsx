@@ -38,7 +38,6 @@ const WalletForm: React.FC<WalletFormProps> = ({
 					) : (
 						<>
 							<AppButton
-								block
 								type='text'
 								onClick={() => navigate(-1)}
 							>
@@ -46,7 +45,6 @@ const WalletForm: React.FC<WalletFormProps> = ({
 							</AppButton>
 							<AppButton
 								htmlType='submit'
-								block
 								type='primary'
 							>
 								{isEdit ? 'Edit Wallet' : 'Create Wallet'}

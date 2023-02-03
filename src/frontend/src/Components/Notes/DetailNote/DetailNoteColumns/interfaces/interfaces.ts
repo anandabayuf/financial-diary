@@ -1,12 +1,17 @@
-import { NavigateFunction } from 'react-router-dom';
 import { ColumnsType } from 'antd/es/table';
 
 export interface DetailNoteColumnsProps {
 	isWallet?: boolean;
-	handleView?: () => void;
+	isCategory?: boolean;
+	isEstimation?: boolean;
+	handleView?: (record: any) => void;
+	handleEdit?: (record: any) => void;
 }
 
 export type DetailNoteColumnsType = ({
-	handleView,
 	isWallet,
+	isCategory,
+	isEstimation,
+	handleView,
+	handleEdit,
 }: DetailNoteColumnsProps) => ColumnsType<any>;

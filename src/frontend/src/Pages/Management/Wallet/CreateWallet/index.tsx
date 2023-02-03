@@ -3,7 +3,7 @@ import AppBreadcrumb from '../../../../Components/General/AppBreadcrumb/index';
 import AppTitle from '../../../../Components/General/AppTitle/index';
 import withCreateWallet from '../../../../Components/Management/Wallets/WalletForm/withCreateWallet';
 import WalletForm from '../../../../Components/Management/Wallets/WalletForm/index';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createUserWallet } from '../../../../Api/Wallets';
 import { useAppSelector } from '../../../../Hooks/useRedux';
 import { useNavigate } from 'react-router-dom';
@@ -34,6 +34,10 @@ const CreateWalletPage: React.FC = () => {
 			AppMessage({ content: response.data.message, type: 'error' });
 		}
 	};
+
+	useEffect(() => {
+		document.title = 'Create New Wallet - Management - Financial Diary App';
+	}, []);
 
 	return (
 		<MainLayout>

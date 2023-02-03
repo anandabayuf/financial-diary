@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { getAllUserNotes } from '../../../Api/Notes';
 import AppButton from '../../../Components/General/AppButton';
 import { BsPlusLg } from 'react-icons/bs';
-import { Space } from 'antd';
+import { Space, TableProps } from 'antd';
 import AppTable from '../../../Components/General/AppTable/index';
 import NotesColumns from '../../../Components/Notes/NotesList/NoteColumn';
 import AppEmpty from '../../../Components/General/AppEmpty/index';
@@ -13,7 +13,7 @@ import AppBreadcrumb from '../../../Components/General/AppBreadcrumb';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getRouteNames } from '../../../Utils/RouteUtils';
 import RouteNames from '../../../Constants/RouteNames';
-import { useAppSelector } from '../../../Hooks/useRedux';
+import { useAppSelector, useAppDispatch } from '../../../Hooks/useRedux';
 import AppSegmented from '../../../Components/General/AppSegmented';
 import AppSelect from '../../../Components/General/AppSelect';
 import NotesOptionYear from '../../../Components/Notes/NotesList/NoteOptionYear';
@@ -21,22 +21,35 @@ import AppText from '../../../Components/General/AppText/index';
 import { DataViewTypeNames } from '../../../Constants/DataViewTypeNames';
 import NotesGrid from '../../../Components/Notes/NotesList/NoteGrid';
 import AppMessage from '../../../Components/General/AppMessage/index';
+import {
+	getFullYearFromDate,
+	getTwoDigitMonthStringFromDate,
+} from '../../../Utils/DateUtils';
+import {
+	setActiveKeyNoteTab,
+	setNoteDataViewType,
+	setNotePaginationSize,
+	setNoteShowYear,
+	setSelectedNote,
+} from '../../../Store/Note/NoteSlice';
 
 const NotesListPage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
 	const navigate = useNavigate();
 	const location = useLocation();
+	const dispatch = useAppDispatch();
 
 	const [notes, setNotes] = useState<any[]>([]);
 	const [notesList, setNotesList] = useState<any[]>([]);
 	const [optionYear, setOptionYear] = useState<number[]>([]);
-	const [selectedYear, setSelectedYear] = useState<number | string>('');
+	const selectedYear = useAppSelector((state) => state.note.showYear);
 
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
-	const [dataViewType, setDataViewType] = useState<DataViewTypeNames>(
-		DataViewTypeNames.LIST
+	const dataViewType = useAppSelector(
+		(state) => state.note.dataViewType?.note
 	);
+	const pageSize = useAppSelector((state) => state.note.paginationSize?.note);
 
 	useEffect(() => {
 		const getNotes = async () => {
@@ -59,7 +72,8 @@ const NotesListPage: React.FC = () => {
 				});
 
 				setOptionYear(years);
-				setSelectedYear('all-year');
+				// setSelectedYear('all-year');
+				// dispatch(setNoteShowYear({ showYear: 'all-year' }));
 				setNotes(
 					resNotes.map((note: any) => {
 						note['key'] = note._id;
@@ -88,12 +102,12 @@ const NotesListPage: React.FC = () => {
 		navigate(getRouteNames(RouteNames.CREATE_NOTE));
 	};
 
-	const handleChangeDataViewType = (values: any) => {
-		setDataViewType(values);
-	};
+	const handleChangeDataViewType = (values: any) =>
+		dispatch(setNoteDataViewType({ dataViewType: { note: values } }));
 
 	const handleChangeYear = (value: any) => {
-		setSelectedYear(value);
+		// setSelectedYear(value);
+		dispatch(setNoteShowYear({ showYear: value }));
 
 		if (value === 'all-year') {
 			setNotesList(notes);
@@ -106,6 +120,26 @@ const NotesListPage: React.FC = () => {
 
 			setNotesList(newWalletLists);
 		}
+	};
+
+	const handleView = (record?: any) => {
+		dispatch(
+			setSelectedNote({
+				selectedNote: {
+					id: record._id,
+					month: getTwoDigitMonthStringFromDate(record.date),
+					year: getFullYearFromDate(record.date).toString(),
+				},
+			})
+		);
+		dispatch(
+			setActiveKeyNoteTab({ activeKeyNoteTab: 'estimation-note-tab' })
+		);
+		navigate(
+			`/notes/${getFullYearFromDate(
+				record.date
+			)}/${getTwoDigitMonthStringFromDate(record.date)}`
+		);
 	};
 
 	useEffect(() => {
@@ -121,6 +155,21 @@ const NotesListPage: React.FC = () => {
 
 		stateReceiveAction(); // eslint-disable-next-line
 	}, [location.state]);
+
+	const pagination: TableProps<any>['pagination'] = {
+		pageSize: pageSize,
+		onShowSizeChange(current, size) {
+			dispatch(
+				setNotePaginationSize({
+					paginationSize: { note: size },
+				})
+			);
+		},
+	};
+
+	useEffect(() => {
+		document.title = 'Notes - Financial Diary App';
+	}, []);
 
 	return (
 		<MainLayout>
@@ -156,7 +205,8 @@ const NotesListPage: React.FC = () => {
 							value={selectedYear}
 							options={NotesOptionYear({ years: optionYear })}
 							loading={isLoading}
-							handleChange={handleChangeYear}
+							onChange={handleChangeYear}
+							className='w-[100px]'
 						/>
 						<AppSegmented
 							value={dataViewType}
@@ -167,14 +217,16 @@ const NotesListPage: React.FC = () => {
 						<AppTable
 							dataSource={notesList}
 							columns={NotesColumns({
-								navigate,
+								handleView,
 								showYear: selectedYear,
 							})}
+							pagination={pagination}
 						/>
 					) : (
 						<NotesGrid
 							data={notesList}
 							showYear={selectedYear}
+							handleView={handleView}
 						/>
 					)}
 				</>

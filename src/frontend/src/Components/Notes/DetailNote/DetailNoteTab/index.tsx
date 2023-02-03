@@ -12,17 +12,22 @@ import { DetailNoteTabProps } from './interfaces/interfaces';
 import DetailNoteColumns from '../DetailNoteColumns/index';
 import AppSearchInput from '../../../General/AppSearchInput';
 import DetailNoteGrid from '../DetailNoteGrid/index';
+import { formatIDR } from '../../../../Utils/CurrencyUtils';
 
 const DetailNoteTab: React.FC<DetailNoteTabProps> = ({
 	data,
 	dataList,
-	isWallet,
+	isWallet = false,
+	isCategory = false,
+	isEstimation = false,
 	isLoading,
 	isSearching,
-	dataViewType,
+	dataViewType = DataViewTypeNames.LIST,
 	modalAdd,
+	pagination,
 	handleClickAdd,
 	handleClickView,
+	handleClickEdit,
 	handleChangeDataViewType,
 	handleChangeSearch,
 	handleSearch,
@@ -31,7 +36,13 @@ const DetailNoteTab: React.FC<DetailNoteTabProps> = ({
 		<>
 			<div className='flex justify-between items-center mb-5'>
 				<AppTitle
-					title={isWallet ? 'Wallet Note' : 'Category Note'}
+					title={
+						isWallet
+							? 'Wallet Note'
+							: isCategory
+							? 'Category Note'
+							: 'Estimation Note'
+					}
 					level={5}
 				/>
 				<AppButton
@@ -44,7 +55,9 @@ const DetailNoteTab: React.FC<DetailNoteTabProps> = ({
 						</div>
 						{isWallet
 							? 'Add Wallet to Note'
-							: 'Add Category to Note'}
+							: isCategory
+							? 'Add Category to Note'
+							: 'Add Wallet or Category'}
 					</Space>
 				</AppButton>
 			</div>
@@ -60,32 +73,50 @@ const DetailNoteTab: React.FC<DetailNoteTabProps> = ({
 								placeholder={
 									isWallet
 										? 'Search Wallet Name...'
-										: 'Search Category Name...'
+										: isCategory
+										? 'Search Category Name...'
+										: 'Search Wallet or Category Name...'
 								}
 								onSearch={handleSearch}
 								onChange={handleChangeSearch}
 								loading={isSearching}
 							/>
-							<div className='flex items-center gap-x-3'>
-								<div className='max-sm:hidden'>
+							{isEstimation ? (
+								<div>
+									<AppText text='Balance: ' />
 									<AppText
-										text='Show:'
-										className='text-sm'
+										text={formatIDR(
+											data[0].note.estimated.balance || 0
+										)}
+										strong
 									/>
 								</div>
-								<AppSegmented
-									value={dataViewType}
-									handleChange={handleChangeDataViewType}
-								/>
-							</div>
+							) : (
+								<div className='flex items-center gap-x-3'>
+									<div className='max-sm:hidden'>
+										<AppText
+											text='Show:'
+											className='text-sm'
+										/>
+									</div>
+									<AppSegmented
+										value={dataViewType}
+										handleChange={handleChangeDataViewType}
+									/>
+								</div>
+							)}
 						</div>
 						{dataViewType === DataViewTypeNames.LIST ? (
 							<AppTable
 								dataSource={dataList}
 								columns={DetailNoteColumns({
 									isWallet: isWallet,
+									isCategory: isCategory,
+									isEstimation: isEstimation,
 									handleView: handleClickView,
+									handleEdit: handleClickEdit,
 								})}
+								pagination={pagination}
 							/>
 						) : (
 							<DetailNoteGrid
