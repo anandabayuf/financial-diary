@@ -2,7 +2,7 @@ import { Outlet, RouteObject, Navigate } from 'react-router-dom';
 import useAuth from '../Hooks/useAuth';
 import { getRouteNames } from '../Utils/RouteUtils';
 import RouteNames from '../Constants/RouteNames';
-import DashboardPage from '../Pages/Dashboard';
+// import DashboardPage from '../Pages/Dashboard';
 import ManagementCategoryPage from '../Pages/Management/Category/CategoryList';
 import ManagementWalletPage from '../Pages/Management/Wallet/WalletList/index';
 import NotesPage from '../Pages/Notes/NotesList/index';
@@ -27,10 +27,10 @@ const SecuredRoutes: RouteObject[] = [
 	{
 		element: <ProtectedRoute />,
 		children: [
-			{
-				path: getRouteNames(RouteNames.DASHBOARD),
-				element: <DashboardPage />,
-			},
+			// {
+			// 	path: getRouteNames(RouteNames.DASHBOARD),
+			// 	element: <DashboardPage />,
+			// },
 			{
 				path: '/management/*',
 				element: (

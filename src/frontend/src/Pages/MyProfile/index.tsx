@@ -164,6 +164,14 @@ const MyProfilePage: React.FC = () => {
 		setIsLoading(false);
 	};
 
+	useEffect(() => {
+		if (isEdit) {
+			document.title = 'Edit My Profile - Financial Diary App';
+		} else {
+			document.title = 'My Profile - Financial Diary App';
+		}
+	}, [isEdit]);
+
 	return (
 		<MainLayout>
 			<AppBreadcrumb />

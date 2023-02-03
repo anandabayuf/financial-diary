@@ -8,7 +8,7 @@ import RegisterPage from '../Pages/Register';
 const LoginRoute = () => {
 	const isLoggedIn = useAuth();
 
-	return isLoggedIn ? <Navigate to='/dashboard' /> : <Outlet />;
+	return isLoggedIn ? <Navigate to='/notes' /> : <Outlet />;
 };
 
 const PublicRoutes: RouteObject[] = [

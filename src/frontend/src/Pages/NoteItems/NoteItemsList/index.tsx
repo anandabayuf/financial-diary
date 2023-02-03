@@ -208,6 +208,14 @@ const NoteItemsPage: React.FC = () => {
 		},
 	};
 
+	useEffect(() => {
+		document.title = `${
+			selectedCategoryNote?.name === ''
+				? selectedWalletNote?.name!
+				: selectedCategoryNote?.name!
+		} - ${document.title}`;
+	}, [selectedWalletNote?.name, selectedCategoryNote?.name]);
+
 	return (
 		<MainLayout>
 			<AppBreadcrumb />

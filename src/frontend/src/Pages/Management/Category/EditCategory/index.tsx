@@ -1,7 +1,7 @@
 import MainLayout from '../../../../Layouts/MainLayout';
 import AppBreadcrumb from '../../../../Components/General/AppBreadcrumb/index';
 import AppTitle from '../../../../Components/General/AppTitle/index';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAppSelector } from '../../../../Hooks/useRedux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getRouteNames } from '../../../../Utils/RouteUtils';
@@ -36,6 +36,10 @@ const EditCategoryPage: React.FC = () => {
 			AppMessage({ content: response.data.message, type: 'error' });
 		}
 	};
+
+	useEffect(() => {
+		document.title = 'Edit Category - Financial Diary App';
+	}, []);
 
 	return (
 		<MainLayout>

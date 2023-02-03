@@ -84,6 +84,22 @@ const DetailNotePage: React.FC = () => {
 		stateReceiveAction(); // eslint-disable-next-line
 	}, [location.state]);
 
+	useEffect(() => {
+		if (note) {
+			document.title = `${getLongMonthFromDate(
+				note.date
+			)} ${getFullYearFromDate(note.date)} - ${
+				activeKeyNoteTab === 'estimation-note-tab'
+					? 'Estimation'
+					: activeKeyNoteTab === 'wallet-note-tab'
+					? 'Wallet'
+					: 'Category'
+			} Note - Financial Diary App`;
+		} else {
+			document.title = 'Monthly - Note - Financial Diary App';
+		}
+	}, [note, activeKeyNoteTab]);
+
 	return (
 		<MainLayout>
 			<AppBreadcrumb />
