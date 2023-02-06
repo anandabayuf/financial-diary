@@ -8,7 +8,9 @@ const authModel = require("../models/auth.model");
 
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
-		cb(null, "./uploads");
+		const path = `./uploads`;
+		fs.mkdirSync(path, { recursive: true });
+		return cb(null, path);
 	},
 	filename: (req, file, cb) => {
 		cb(null, file.originalname);
