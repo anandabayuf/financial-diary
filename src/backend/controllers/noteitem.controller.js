@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const noteItemModel = require("../models/noteItem.model");
+const noteItemModel = require("../models/noteItem.model.js");
 
 router.get("/note/:noteId", async (req, res) => {
 	try {
