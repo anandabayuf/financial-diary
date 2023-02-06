@@ -415,7 +415,7 @@ exports.editFunction = (id, data) => {
 									} else {
 										this.spendTransaction(
 											noteItem.walletNote._id,
-											noteItem.categoryNoteId,
+											noteItem.categoryNote._id,
 											-noteItem.credit + data.credit
 										)
 											.then((spend) => {
@@ -511,7 +511,7 @@ exports.deleteFunction = (id) => {
 							.catch((err) => reject(err));
 						break;
 					case "SPEND":
-						console.log(noteItem);
+						// console.log(noteItem);
 						this.spendTransaction(
 							noteItem.walletNote._id,
 							noteItem.categoryNote._id,
