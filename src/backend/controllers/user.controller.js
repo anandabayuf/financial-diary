@@ -8,7 +8,7 @@ const userModel = require("../models/user.model");
 
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
-		const path = `${__dirname}/../uploads`;
+		const path = `./uploads`;
 		fs.mkdirSync(path, { recursive: true });
 		return cb(null, path);
 	},
