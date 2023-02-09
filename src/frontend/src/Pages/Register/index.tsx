@@ -7,7 +7,7 @@ import StyledRegisterContainer from './styled/StyledRegisterContainer';
 import { useNavigate } from 'react-router-dom';
 import RegisterForm from '../../Components/Register/RegisterForm/index';
 import { RcFile, UploadFile, UploadProps } from 'antd/es/upload';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { getBase64 } from '../../Utils/ImageUtils';
 import { register } from '../../Api/Auth';
 import StyledTitle from './styled/StyledTitle';
@@ -113,6 +113,10 @@ const RegisterPage: React.FC = () => {
 
 		return false;
 	};
+
+	useEffect(() => {
+		document.title = 'Register - Financial Diary App';
+	}, []);
 
 	return (
 		<FrontLayout>

@@ -2,20 +2,9 @@ const express = require("express");
 const router = express.Router();
 const crypto = require("crypto");
 const multer = require("multer");
-const fs = require("fs");
-const path = require("path");
 const userModel = require("../models/user.model");
 
-const storage = multer.diskStorage({
-	destination: (req, file, cb) => {
-		cb(null, "./uploads");
-	},
-	filename: (req, file, cb) => {
-		cb(null, file.originalname);
-	},
-});
-
-const upload = multer({ storage: storage });
+const upload = multer({ storage: multer.memoryStorage() });
 
 router.get("", async (req, res) => {
 	try {
@@ -69,9 +58,7 @@ router.post("/", upload.single("picture"), async (req, res) => {
 
 	if (req.file) {
 		payload["picture"] = {
-			data: fs.readFileSync(
-				path.join(__dirname, "..", "/uploads/" + req.file.filename)
-			),
+			data: req.file.buffer,
 			contentType: "image/png",
 		};
 	}
@@ -105,9 +92,7 @@ router.put("/:id", upload.single("picture"), async (req, res) => {
 
 	if (req.file) {
 		payload["picture"] = {
-			data: fs.readFileSync(
-				path.join(__dirname, "..", "/uploads/" + req.file.filename)
-			),
+			data: req.file.buffer,
 			contentType: "image/png",
 		};
 	}

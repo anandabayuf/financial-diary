@@ -1,6 +1,6 @@
 import AppTitle from '../../../Components/General/AppTitle';
 import MainLayout from '../../../Layouts/MainLayout';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AppBreadcrumb from '../../../Components/General/AppBreadcrumb';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../Hooks/useRedux';
@@ -45,6 +45,10 @@ const CreateNotePage: React.FC = () => {
 
 		setIsLoading(false);
 	};
+
+	useEffect(() => {
+		document.title = 'Create New Note - Financial Diary App';
+	}, []);
 
 	return (
 		<MainLayout>

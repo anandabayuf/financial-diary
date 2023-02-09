@@ -106,6 +106,10 @@ const ManagementWalletPage: React.FC = () => {
 		},
 	};
 
+	useEffect(() => {
+		document.title = 'Wallet - Management - Financial Diary App';
+	}, []);
+
 	return (
 		<MainLayout>
 			<AppBreadcrumb />

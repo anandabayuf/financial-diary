@@ -297,13 +297,25 @@ exports.getById = (id) => {
 			if (err) {
 				reject(err);
 			} else {
-				let { walletNoteId, categoryNoteId, ...rest } = result;
+				let { walletNoteId, categoryNoteId, walletNoteId2, ...rest } =
+					result;
 				if (walletNoteId) {
 					try {
 						let walletNote = await walletNoteModel.getById(
 							walletNoteId
 						);
 						rest["walletNote"] = walletNote;
+					} catch (err) {
+						reject(err);
+					}
+				}
+
+				if (walletNoteId2) {
+					try {
+						let walletNote2 = await walletNoteModel.getById(
+							walletNoteId2
+						);
+						rest["walletNote2"] = walletNote2;
 					} catch (err) {
 						reject(err);
 					}
@@ -360,7 +372,7 @@ exports.editFunction = (id, data) => {
 										);
 									} else {
 										this.incomeTransaction(
-											noteItem.walletNoteId,
+											noteItem.walletNote._id,
 											-noteItem.debit + data.debit
 										)
 											.then((income) => {
@@ -380,8 +392,8 @@ exports.editFunction = (id, data) => {
 										);
 									} else {
 										this.withdrawOrTransferTransaction(
-											noteItem.walletNoteId,
-											noteItem.walletNoteId2,
+											noteItem.walletNote._id,
+											noteItem.walletNote2._id,
 											-noteItem.debit + data.debit
 										)
 											.then((wott) => {
@@ -402,8 +414,8 @@ exports.editFunction = (id, data) => {
 										);
 									} else {
 										this.spendTransaction(
-											noteItem.walletNoteId,
-											noteItem.categoryNoteId,
+											noteItem.walletNote._id,
+											noteItem.categoryNote._id,
 											-noteItem.credit + data.credit
 										)
 											.then((spend) => {
@@ -424,7 +436,7 @@ exports.editFunction = (id, data) => {
 										);
 									} else {
 										this.spendOnlyInWalletTransaction(
-											noteItem.walletNoteId,
+											noteItem.walletNote._id,
 											-noteItem.credit + data.credit
 										)
 											.then((soiw) => {
@@ -475,7 +487,7 @@ exports.deleteFunction = (id) => {
 				switch (ITEM_TYPE[noteItem.type]) {
 					case "INCOME":
 						this.incomeTransaction(
-							noteItem.walletNoteId,
+							noteItem.walletNote._id,
 							-noteItem.debit
 						)
 							.then((income) => {
@@ -487,8 +499,8 @@ exports.deleteFunction = (id) => {
 						break;
 					case "WITHDRAW_OR_TRANSFER":
 						this.withdrawOrTransferTransaction(
-							noteItem.walletNoteId,
-							noteItem.walletNoteId2,
+							noteItem.walletNote._id,
+							noteItem.walletNote2._id,
 							-noteItem.debit
 						)
 							.then((wott) => {
@@ -499,9 +511,10 @@ exports.deleteFunction = (id) => {
 							.catch((err) => reject(err));
 						break;
 					case "SPEND":
+						// console.log(noteItem);
 						this.spendTransaction(
-							noteItem.walletNoteId,
-							noteItem.categoryNoteId,
+							noteItem.walletNote._id,
+							noteItem.categoryNote._id,
 							-noteItem.credit
 						)
 							.then((spend) => {
@@ -513,7 +526,7 @@ exports.deleteFunction = (id) => {
 						break;
 					case "SPEND_ONLY_IN_WALLET":
 						this.spendOnlyInWalletTransaction(
-							noteItem.walletNoteId,
+							noteItem.walletNote._id,
 							-noteItem.credit
 						)
 							.then((soiw) => {
