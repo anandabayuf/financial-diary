@@ -209,12 +209,18 @@ const NoteItemsPage: React.FC = () => {
 	};
 
 	useEffect(() => {
-		document.title = `${
-			selectedCategoryNote?.name === ''
-				? selectedWalletNote?.name!
-				: selectedCategoryNote?.name!
-		} - ${document.title}`;
-	}, [selectedWalletNote?.name, selectedCategoryNote?.name]);
+		if (selectedCategoryNote) {
+			document.title = document.title.includes(selectedCategoryNote.name!)
+				? document.title
+				: `${selectedCategoryNote.name} - ${document.title}`;
+		}
+
+		if (selectedWalletNote) {
+			document.title = document.title.includes(selectedWalletNote.name!)
+				? document.title
+				: `${selectedWalletNote.name} - ${document.title}`;
+		}
+	}, [selectedWalletNote, selectedCategoryNote]);
 
 	return (
 		<MainLayout>
