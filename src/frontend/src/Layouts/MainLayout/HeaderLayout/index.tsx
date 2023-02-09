@@ -7,7 +7,6 @@ import { AiOutlineUser, AiFillCaretDown, AiFillCaretUp } from 'react-icons/ai';
 import AppText from '../../../Components/General/AppText';
 import { useState } from 'react';
 import StyledUsernameContainer from './styled/StyledUsernameContainer';
-import StyledTitle from './styled/StyledTitle';
 import StyledSpace from './styled/StyledSpace';
 import React from 'react';
 import ProfileMenuItems from './ProfileMenuItems';
@@ -15,6 +14,10 @@ import { useAppDispatch, useAppSelector } from '../../../Hooks/useRedux';
 import { setUserLoggedOut } from '../../../Store/User/UserSlice';
 import ThemeModeNames from '../../../Constants/ThemeModeNames';
 import { setDarkMode, setLightMode } from '../../../Store/Theme/ThemeSlice';
+import { Link } from 'react-router-dom';
+import { getRouteNames } from '../../../Utils/RouteUtils';
+import RouteNames from '../../../Constants/RouteNames';
+import AppLogo from '../../../Components/General/AppLogo';
 
 const HeaderLayout: React.FC<HeaderLayoutProps> = ({
 	user,
@@ -57,10 +60,9 @@ const HeaderLayout: React.FC<HeaderLayoutProps> = ({
 					size='large'
 					onClick={handleOpenDrawer}
 				/>
-				<StyledTitle
-					title='Financial Diary'
-					level={4}
-				/>
+				<Link to={getRouteNames(RouteNames.NOTES)}>
+					<AppLogo width='128px' />
+				</Link>
 			</div>
 			<Dropdown
 				menu={{
