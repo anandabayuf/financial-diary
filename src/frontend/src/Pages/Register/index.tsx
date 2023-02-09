@@ -10,8 +10,9 @@ import { RcFile, UploadFile, UploadProps } from 'antd/es/upload';
 import { useState, useEffect } from 'react';
 import { getBase64 } from '../../Utils/ImageUtils';
 import { register } from '../../Api/Auth';
-import StyledTitle from './styled/StyledTitle';
 import AppMessage from '../../Components/General/AppMessage/index';
+import AppLogo from '../../Components/General/AppLogo/index';
+import AppTitle from '../../Components/General/AppTitle/index';
 
 const RegisterPage: React.FC = () => {
 	const [loading, setLoading] = useState(false);
@@ -121,10 +122,13 @@ const RegisterPage: React.FC = () => {
 	return (
 		<FrontLayout>
 			<AppCard>
-				<StyledTitle
-					level={3}
-					title='Register'
-				/>
+				<div className='flex justify-between items-baseline mb-5'>
+					<AppTitle
+						level={4}
+						title='Register'
+					/>
+					<AppLogo width='128px' />
+				</div>
 				<RegisterForm
 					handleFinish={handleRegister}
 					handleFinishFailed={handleRegisterFailed}

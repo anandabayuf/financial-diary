@@ -13,9 +13,10 @@ import { useAppDispatch } from '../../Hooks/useRedux';
 import { setUserLoggedIn } from '../../Store/User/UserSlice';
 import { decodeJWT } from '../../Utils/AuthUtils';
 import { useLocation, useNavigate } from 'react-router-dom';
-import StyledTitle from './styled/StyledTitle';
 import { getUserById } from '../../Api/User';
 import AppMessage from '../../Components/General/AppMessage/index';
+import AppTitle from '../../Components/General/AppTitle/index';
+import AppLogo from '../../Components/General/AppLogo';
 
 const LoginPage: React.FC = () => {
 	const [loading, setLoading] = useState(false);
@@ -91,10 +92,13 @@ const LoginPage: React.FC = () => {
 						/>
 					</Col>
 					<Col className='login-form-container'>
-						<StyledTitle
-							level={3}
-							title='Welcome!'
-						/>
+						<div className='flex justify-between items-baseline mb-5'>
+							<AppTitle
+								level={4}
+								title='Login'
+							/>
+							<AppLogo width='128px' />
+						</div>
 						<LoginForm
 							handleFinish={handleLogin}
 							handleFinishFailed={handleLoginFailed}

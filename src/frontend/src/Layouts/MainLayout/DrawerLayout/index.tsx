@@ -2,7 +2,7 @@ import { DrawerLayoutProps } from './interfaces/interfaces';
 import StyledMenu from '../SiderLayout/styled/StyledMenu';
 import MenuItems from '../SiderLayout/MenuItems';
 import StyledDrawer from './styled/StyledDrawer';
-import AppTitle from '../../../Components/General/AppTitle';
+import AppLogo from '../../../Components/General/AppLogo';
 
 const DrawerLayout: React.FC<DrawerLayoutProps> = ({
 	theme,
@@ -12,12 +12,7 @@ const DrawerLayout: React.FC<DrawerLayoutProps> = ({
 }) => {
 	return (
 		<StyledDrawer
-			title={
-				<AppTitle
-					title='Financial Diary'
-					level={5}
-				/>
-			}
+			title={<AppLogo width='128px' />}
 			placement={'left'}
 			closable={false}
 			onClose={handleClose}
