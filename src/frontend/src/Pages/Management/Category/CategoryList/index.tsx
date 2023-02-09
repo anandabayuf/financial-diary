@@ -107,6 +107,10 @@ const ManagementCategoryPage: React.FC = () => {
 		},
 	};
 
+	useEffect(() => {
+		document.title = 'Category - Management - Financial Diary App';
+	}, []);
+
 	return (
 		<MainLayout>
 			<AppBreadcrumb />

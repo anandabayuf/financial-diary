@@ -1,5 +1,8 @@
 import { FiLogOut } from 'react-icons/fi';
-import { AiOutlineUser, AiOutlineSetting } from 'react-icons/ai';
+import {
+	AiOutlineUser,
+	// AiOutlineSetting
+} from 'react-icons/ai';
 import { BsSun, BsMoon } from 'react-icons/bs';
 import AppText from '../../../Components/General/AppText';
 import { ProfileMenuItemsType } from '../interfaces/interfaces';
@@ -27,14 +30,14 @@ const ProfileMenuItems: ProfileMenuItemsType = (
 				color: textColor,
 			},
 		},
-		{
-			label: <AppText text='Settings' />,
-			key: 'settings',
-			icon: <AiOutlineSetting />,
-			style: {
-				color: textColor,
-			},
-		},
+		// {
+		// 	label: <AppText text='Settings' />,
+		// 	key: 'settings',
+		// 	icon: <AiOutlineSetting />,
+		// 	style: {
+		// 		color: textColor,
+		// 	},
+		// },
 		{
 			type: 'divider',
 		},

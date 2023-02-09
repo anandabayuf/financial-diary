@@ -73,7 +73,7 @@ const NotesListPage: React.FC = () => {
 
 				setOptionYear(years);
 				// setSelectedYear('all-year');
-				dispatch(setNoteShowYear({ showYear: 'all-year' }));
+				// dispatch(setNoteShowYear({ showYear: 'all-year' }));
 				setNotes(
 					resNotes.map((note: any) => {
 						note['key'] = note._id;
@@ -166,6 +166,10 @@ const NotesListPage: React.FC = () => {
 			);
 		},
 	};
+
+	useEffect(() => {
+		document.title = 'Notes - Financial Diary App';
+	}, []);
 
 	return (
 		<MainLayout>

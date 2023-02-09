@@ -2,20 +2,9 @@ const express = require("express");
 const router = express.Router();
 const crypto = require("crypto");
 const multer = require("multer");
-const fs = require("fs");
-const path = require("path");
 const authModel = require("../models/auth.model");
 
-const storage = multer.diskStorage({
-	destination: (req, file, cb) => {
-		cb(null, "./uploads");
-	},
-	filename: (req, file, cb) => {
-		cb(null, file.originalname);
-	},
-});
-
-const upload = multer({ storage: storage });
+const upload = multer({ storage: multer.memoryStorage() });
 
 router.post("/login", async (req, res) => {
 	const credential = req.body;
@@ -39,9 +28,7 @@ router.post("/register", upload.single("picture"), async (req, res) => {
 
 	if (req.file) {
 		payload["picture"] = {
-			data: fs.readFileSync(
-				path.join(__dirname, "..", "/uploads/" + req.file.filename)
-			),
+			data: req.file.buffer,
 			contentType: "image/png",
 		};
 	}
