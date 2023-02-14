@@ -1,6 +1,7 @@
 const schema = require("./schema");
 const categoryModel = require("./category.model");
 const noteModel = require("./note.model");
+const message = require("../constants/message");
 
 exports.create = (datas) => {
 	return new Promise((resolve, reject) => {
@@ -20,9 +21,7 @@ exports.create = (datas) => {
 				const dataToAdd = res.filter((el) => el !== undefined);
 
 				if (dataToAdd.length !== datas.length) {
-					reject(
-						"Cannot add category, there is Category which has been added"
-					);
+					reject(message["categorynote.already_added"]);
 				} else {
 					let total = 0;
 					let noteId = "";

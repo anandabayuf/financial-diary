@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const message = require("../constants/message");
 
 const walletNoteModel = require("../models/walletnote.model");
 
@@ -7,13 +8,13 @@ router.get("/note/:noteId", async (req, res) => {
 	try {
 		res.status(200).json({
 			status: 200,
-			message: "Successfully get wallet note",
+			message: message["walletnote.success.get_all"],
 			data: await walletNoteModel.getAll(req.query, req.params.noteId),
 		});
 	} catch (err) {
 		res.status(404).json({
 			status: 404,
-			message: "Failed to get wallet note",
+			message: message["walletnote.failed.get_all"],
 			detail: err,
 		});
 	}
@@ -23,7 +24,7 @@ router.get("/note/:noteId/available", async (req, res) => {
 	try {
 		res.status(200).json({
 			status: 200,
-			message: "Successfully get available wallet note",
+			message: message["walletnote.success.get_available"],
 			data: await walletNoteModel.getAllAvailableByNoteId(
 				req.query,
 				req.params.noteId,
@@ -33,7 +34,7 @@ router.get("/note/:noteId/available", async (req, res) => {
 	} catch (err) {
 		res.status(404).json({
 			status: 404,
-			message: "Failed to get available wallet note",
+			message: message["walletnote.failed.get_available"],
 			detail: err,
 		});
 	}
@@ -43,13 +44,13 @@ router.get("/:id", async (req, res) => {
 	try {
 		res.status(200).json({
 			status: 200,
-			message: "Successfully get wallet note data",
+			message: message["walletnote.success.get"],
 			data: await walletNoteModel.getById(req.params.id),
 		});
 	} catch (err) {
 		res.status(404).json({
 			status: 404,
-			message: "Failed to get wallet note data",
+			message: message["walletnote.failed.get"],
 			detail: err,
 		});
 	}
@@ -73,13 +74,13 @@ router.post("/", async (req, res) => {
 	try {
 		res.status(201).json({
 			status: 201,
-			message: "Successfully create wallet note",
+			message: message["walletnote.success.create"],
 			data: await walletNoteModel.create(payload),
 		});
 	} catch (err) {
 		res.status(404).json({
 			status: 404,
-			message: "Failed to create wallet note",
+			message: message["walletnote.failed.create"],
 			detail: err,
 		});
 	}
@@ -115,13 +116,13 @@ router.post("/estimated", async (req, res) => {
 	try {
 		res.status(201).json({
 			status: 201,
-			message: "Successfully create wallet note",
+			message: message["walletnote.success.create"],
 			data: await walletNoteModel.create(payload),
 		});
 	} catch (err) {
 		res.status(404).json({
 			status: 404,
-			message: "Failed to create wallet note",
+			message: message["walletnote.failed.create"],
 			detail: err,
 		});
 	}
@@ -131,13 +132,13 @@ router.put("/:id", async (req, res) => {
 	try {
 		res.status(201).json({
 			status: 201,
-			message: "Successfully edit wallet note data",
+			message: message["walletnote.success.edit"],
 			data: await walletNoteModel.edit(req.params.id, req.body),
 		});
 	} catch (err) {
 		res.status(404).json({
 			status: 404,
-			message: "Failed to edit wallet note data",
+			message: message["walletnote.failed.edit"],
 			detail: err,
 		});
 	}
@@ -149,7 +150,7 @@ router.put("/:id/estimated", async (req, res) => {
 	try {
 		res.status(201).json({
 			status: 201,
-			message: "Successfully edit wallet note estimated balance data",
+			message: message["walletnote.success.edit_estimated"],
 			data: await walletNoteModel.editEstimatedBalance(
 				req.params.id,
 				data.noteId,
@@ -159,7 +160,7 @@ router.put("/:id/estimated", async (req, res) => {
 	} catch (err) {
 		res.status(404).json({
 			status: 404,
-			message: "Failed to edit wallet note estimated balance data",
+			message: message["walletnote.failed.edit_estimated"],
 			detail: err,
 		});
 	}

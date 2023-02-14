@@ -4,10 +4,18 @@ body.dark {
     .ant-dropdown-menu-item-divider {
         background-color: $dark-half-text !important;
     }
+
+    .ant-dropdown-menu-item-selected {
+        background-color: $dark-button !important;
+    }
 }
 
 body.light {
     .ant-dropdown-menu-item-divider {
         background-color: $light-half-text !important;
+    }
+
+    .ant-dropdown-menu-item-selected {
+        background-color: $light-button !important;
     }
 }

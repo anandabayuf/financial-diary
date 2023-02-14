@@ -5,7 +5,7 @@ import StyledSider from './styled/StyledSider';
 import StyledMenu from './styled/StyledMenu';
 import { useAppSelector } from '../../../Hooks/useRedux';
 
-const SiderLayout: React.FC<SiderLayoutProps> = ({ theme, menu }) => {
+const SiderLayout: React.FC<SiderLayoutProps> = ({ theme, menu, I18n }) => {
 	const themeMode = useAppSelector((state) => state.theme);
 
 	return (
@@ -19,7 +19,7 @@ const SiderLayout: React.FC<SiderLayoutProps> = ({ theme, menu }) => {
 				openKeys={menu?.opensKeys}
 				onOpenChange={menu?.onOpenChange}
 				style={{ height: '100%', borderRight: 0 }}
-				items={MenuItems()}
+				items={MenuItems({ I18n: I18n })}
 				theme={theme}
 				thememode={themeMode}
 			/>

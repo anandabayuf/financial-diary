@@ -3,6 +3,7 @@ const router = express.Router();
 const crypto = require("crypto");
 const multer = require("multer");
 const authModel = require("../models/auth.model");
+const message = require("../constants/message");
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -11,13 +12,13 @@ router.post("/login", async (req, res) => {
 
 	try {
 		res.json({
-			message: "Successfully sign in",
+			message: message["login.success"],
 			token: await authModel.authenticate(credential),
 		});
 	} catch (err) {
 		res.status(401).json({
 			status: 401,
-			message: "Failed to sign in",
+			message: message["login.failed"],
 			detail: err,
 		});
 	}
@@ -45,13 +46,13 @@ router.post("/register", upload.single("picture"), async (req, res) => {
 		// console.log(rest);
 		res.status(201).json({
 			status: 201,
-			message: "Successfully register",
+			message: message["register.success"],
 			data: rest,
 		});
 	} catch (err) {
 		res.status(404).json({
 			status: 404,
-			message: "Failed to register",
+			message: message["register.failed"],
 			detail: err,
 		});
 	}
@@ -64,13 +65,13 @@ router.get("/authToken", async (req, res) => {
 	try {
 		res.status(200).json({
 			status: 200,
-			message: "Token is valid",
+			message: message["authtoken.success"],
 			data: await authModel.authToken(token),
 		});
 	} catch (err) {
 		res.status(401).json({
 			status: 401,
-			message: "Token is not valid",
+			message: message["authtoken.failed"],
 			detail: err,
 		});
 	}

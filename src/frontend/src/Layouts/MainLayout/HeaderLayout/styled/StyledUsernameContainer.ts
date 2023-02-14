@@ -1,7 +1,9 @@
 import styled from 'styled-components';
+import { StyledUsernameContainerProps } from '../interfaces/interfaces';
 
-const StyledUsernameContainer = styled.div`
+const StyledUsernameContainer = styled.div<StyledUsernameContainerProps>`
 	width: 50px;
+	color: ${(props) => props.themecontainer?.text};
 
 	@media screen and (min-width: 768px) {
 		width: auto;

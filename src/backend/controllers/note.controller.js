@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const message = require("../constants/message");
 
 const noteModel = require("../models/note.model");
 
@@ -7,13 +8,13 @@ router.get("", async (req, res) => {
 	try {
 		res.status(200).json({
 			status: 200,
-			message: "Successfully get user note",
+			message: message["note.success.get_all"],
 			data: await noteModel.getAll(req.query, req.user.id),
 		});
 	} catch (err) {
 		res.status(404).json({
 			status: 404,
-			message: "Failed to get user note",
+			message: message["note.failed.get_all"],
 			detail: err,
 		});
 	}
@@ -23,13 +24,13 @@ router.get("/:id", async (req, res) => {
 	try {
 		res.status(200).json({
 			status: 200,
-			message: "Successfully get user note data",
+			message: message["note.success.get"],
 			data: await noteModel.getById(req.params.id),
 		});
 	} catch (err) {
 		res.status(404).json({
 			status: 404,
-			message: "Failed to get user note data",
+			message: message["note.failed.get"],
 			detail: err,
 		});
 	}
@@ -48,13 +49,13 @@ router.post("/", async (req, res) => {
 	try {
 		res.status(201).json({
 			status: 201,
-			message: "Successfully create user note",
+			message: message["note.success.create"],
 			data: await noteModel.create(data),
 		});
 	} catch (err) {
 		res.status(404).json({
 			status: 404,
-			message: "Failed to create user note",
+			message: message["note.failed.create"],
 			detail: err,
 		});
 	}

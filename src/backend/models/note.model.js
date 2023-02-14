@@ -1,8 +1,8 @@
 const schema = require("./schema");
+const message = require("../constants/message");
 
 exports.create = (data) => {
 	return new Promise((resolve, reject) => {
-		// console.log(data);
 		schema.NoteSchema.find(
 			{ date: data.date, userId: data.userId },
 			async (err, result) => {
@@ -18,7 +18,7 @@ exports.create = (data) => {
 							}
 						});
 					} else {
-						reject("Note with the month is already available");
+						reject(message["note.month_already_available"]);
 					}
 				}
 			}

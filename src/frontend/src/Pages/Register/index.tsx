@@ -1,4 +1,3 @@
-import { Modal } from 'antd';
 import AppCard from '../../Components/General/AppCard';
 import FrontLayout from '../../Layouts/FrontLayout';
 import AppButton from '../../Components/General/AppButton';
@@ -13,6 +12,9 @@ import { register } from '../../Api/Auth';
 import AppMessage from '../../Components/General/AppMessage/index';
 import AppLogo from '../../Components/General/AppLogo/index';
 import AppTitle from '../../Components/General/AppTitle/index';
+import useLocale from '../../Hooks/useLocale';
+import AppModal from '../../Components/General/AppModal/index';
+import { errorHandling } from '../../Api/errorHandling';
 
 const RegisterPage: React.FC = () => {
 	const [loading, setLoading] = useState(false);
@@ -24,6 +26,7 @@ const RegisterPage: React.FC = () => {
 	const [fileList, setFileList] = useState<UploadFile[]>([]);
 
 	const navigate = useNavigate();
+	const { I18n, language } = useLocale();
 
 	const handleRegister = async (values: any) => {
 		setLoading(true);
@@ -35,21 +38,15 @@ const RegisterPage: React.FC = () => {
 		}
 		payload.append('data', JSON.stringify(data));
 
-		const res = await register(payload);
-
-		if (res.request.status === 404) {
-			AppMessage({
-				content: `${res.response.data.message}, username already taken.`,
-				type: 'error',
-			});
-			setLoading(false);
-		} else if (res.request.status === 201) {
-			AppMessage({ content: res.data.message, type: 'success' });
-			setTimeout(() => {
-				navigate('/login', { replace: true });
-				setLoading(false);
-			}, 2000);
+		try {
+			const res = await register(payload);
+			AppMessage({ content: I18n.t(res.data.message), type: 'success' });
+			navigate('/login', { replace: true });
+		} catch (error) {
+			errorHandling(error, I18n);
 		}
+
+		setLoading(false);
 	};
 
 	const handleRegisterFailed = (errorInfo: string) => {};
@@ -96,14 +93,14 @@ const RegisterPage: React.FC = () => {
 			file.type === 'image/jpeg' || file.type === 'image/png';
 		if (!isJpgOrPng) {
 			AppMessage({
-				content: 'You can only upload JPG/PNG file!',
+				content: I18n.t('form.validation.upload_only_image'),
 				type: 'error',
 			});
 		}
 		const isLt2M = file.size / 1024 / 1024 < 2;
 		if (!isLt2M) {
 			AppMessage({
-				content: 'Image must smaller than 2MB!',
+				content: I18n.t('form.validation.size_lower_than_2mb'),
 				type: 'error',
 			});
 		}
@@ -116,18 +113,23 @@ const RegisterPage: React.FC = () => {
 	};
 
 	useEffect(() => {
-		document.title = 'Register - Financial Diary App';
-	}, []);
+		document.title = `${I18n.t('register')} - Financial Diary App`;
+	}, [language, I18n]);
 
 	return (
 		<FrontLayout>
 			<AppCard>
+				<div className='min-[426px]:hidden flex justify-center mb-3'>
+					<AppLogo width='128px' />
+				</div>
 				<div className='flex justify-between items-baseline mb-5'>
 					<AppTitle
 						level={4}
-						title='Register'
+						title={I18n.t('register')!}
 					/>
-					<AppLogo width='128px' />
+					<div className='max-[425px]:hidden'>
+						<AppLogo width='128px' />
+					</div>
 				</div>
 				<RegisterForm
 					handleFinish={handleRegister}
@@ -142,21 +144,26 @@ const RegisterPage: React.FC = () => {
 				/>
 				<StyledRegisterContainer>
 					<AppText
-						text='Already have an account?'
+						text={I18n.t('content.already_have_an_account?')}
 						className='text-xs'
 					/>
 					<AppButton
 						type='link'
 						onClick={handleClickLogin}
 					>
-						Login
+						{I18n.t('login')}
 					</AppButton>
 				</StyledRegisterContainer>
 			</AppCard>
-			<Modal
+			<AppModal
 				open={previewState.isOpen}
-				title={previewState.title}
-				footer={null}
+				title={
+					<AppTitle
+						title={previewState.title}
+						level={5}
+					/>
+				}
+				closable
 				onCancel={handleCancelViewProfilePic}
 			>
 				<img
@@ -164,7 +171,7 @@ const RegisterPage: React.FC = () => {
 					style={{ width: '100%' }}
 					src={previewState.image}
 				/>
-			</Modal>
+			</AppModal>
 		</FrontLayout>
 	);
 };
