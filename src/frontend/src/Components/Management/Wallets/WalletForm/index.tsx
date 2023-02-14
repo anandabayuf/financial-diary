@@ -11,6 +11,7 @@ const WalletForm: React.FC<WalletFormProps> = ({
 	data,
 	handleSubmit,
 	isLoading,
+	I18n,
 }) => {
 	const navigate = useNavigate();
 
@@ -22,13 +23,18 @@ const WalletForm: React.FC<WalletFormProps> = ({
 			onFinish={handleSubmit}
 		>
 			<AppFormItem
-				label='Wallet Name'
+				label={I18n?.t('form.label.wallet_name')}
 				name='name'
 				rules={[
-					{ required: true, message: 'Please input wallet name!' },
+					{
+						required: true,
+						message: I18n?.t('form.required.wallet_name')!,
+					},
 				]}
 			>
-				<AppInput placeholder='input wallet name...' />
+				<AppInput
+					placeholder={I18n?.t('form.placeholder.wallet_name')}
+				/>
 			</AppFormItem>
 
 			<AppFormItem>
@@ -41,13 +47,15 @@ const WalletForm: React.FC<WalletFormProps> = ({
 								type='text'
 								onClick={() => navigate(-1)}
 							>
-								Cancel
+								{I18n?.t('label.cancel')!}
 							</AppButton>
 							<AppButton
 								htmlType='submit'
 								type='primary'
 							>
-								{isEdit ? 'Edit Wallet' : 'Create Wallet'}
+								{isEdit
+									? I18n?.t('label.edit.wallet')
+									: I18n?.t('label.create.wallet')}
 							</AppButton>
 						</>
 					)}

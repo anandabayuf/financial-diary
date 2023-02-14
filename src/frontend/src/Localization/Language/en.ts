@@ -1,25 +1,76 @@
 const general = {
 	login: 'Login',
 	register: 'Register',
+
+	my_profile: 'My Profile',
+	edit_my_profile: 'Edit My Profile',
+
+	management: 'Management',
+	'management.wallet': 'Management Wallet',
+	'management.wallet.create': 'Create New Wallet',
+	'management.wallet.edit': 'Edit Wallet',
+
+	'management.category': 'Management Category',
+	'management.category.create': 'Create New Category',
+	'management.category.edit': 'Edit Category',
+
+	notes: 'Notes',
+	'notes.create': 'Buat Pencatatan',
 };
 
 const content = {
 	'content.dont_have_an_account?': "Don't have an account?",
 	'content.already_have_an_account?': 'Already have an account?',
+
+	'content.show': 'Tampilkan',
+	'content.pagination.of': 'of',
+	'content.pagination.items': 'items',
+	'content.pagination.go_to': 'Go to',
 };
 
 const label = {
+	'label.username': 'Username',
+	'label.name': 'Name',
+
+	//button
+	'label.cancel': 'Cancel',
+	'label.save': 'Save',
+	'label.view': 'View',
+	'label.edit': 'Edit',
+
+	'label.create.wallet': 'Create Wallet',
+	'label.create.category': 'Create Category',
+	'label.create.note': 'Create Note',
+
+	'label.edit.my_profile': 'Edit My Profile',
+	'label.edit.wallet': 'Edit Wallet',
+	'label.edit.category': 'Edit Category',
+
+	'label.action': 'Action',
+	'label.year': 'Year',
+	'label.month': 'Month',
+
+	'label.no_data': 'No Data',
+	'label.page': 'Page',
+
 	'form.label.username': 'Username',
 	'form.label.password': 'Password',
 	'form.label.profile_picture': 'Profile Picture',
 	'form.label.name': 'Name',
 	'form.label.password_confirmation': 'Password Confirmation',
+	'form.label.wallet_name': 'Wallet Name',
+	'form.label.category_name': 'Category Name',
 
 	'form.placeholder.username': 'input your username',
 	'form.placeholder.password': 'input your password',
 	'form.placeholder.profile_picture': 'Upload Image',
 	'form.placeholder.name': 'input your name',
 	'form.placeholder.password_confirmation': 're-input your password',
+	'form.placeholder.wallet_name': 'input wallet name',
+	'form.placeholder.category_name': 'input category name',
+
+	'search.placeholder.management_wallet': 'Search Wallet Name',
+	'search.placeholder.management_category': 'Search Category Name',
 };
 
 const menu = {
@@ -33,6 +84,16 @@ const menu = {
 	'menu.logout': 'Logout',
 };
 
+const titlepage = {
+	'title.management.wallet': 'Wallet - Management',
+	'title.management.wallet.create': 'Create New Wallet - Management',
+	'title.management.wallet.edit': 'Edit Wallet - Management',
+
+	'title.management.category': 'Category - Management',
+	'title.management.category.create': 'Buat Kategori Baru - Manajemen',
+	'title.management.category.edit': 'Ubah Kategori - Manajemen',
+};
+
 const info = {
 	'session.expired': 'Session has expired, please log in again',
 };
@@ -42,6 +103,8 @@ const error = {
 	'form.required.password': 'Please input your password!',
 	'form.required.name': 'Please input your name!',
 	'form.required.password_confirmation': 'Please re-input your password!',
+	'form.required.wallet_name': 'Please input wallet name!',
+	'form.required.category_name': 'Please input category name!',
 
 	'form.validation.no_spaces': 'No spaces allowed!',
 	'form.validation.password_not_match': "Password doesn't match!",
@@ -175,6 +238,7 @@ const en = {
 	...content,
 	...label,
 	...menu,
+	...titlepage,
 	...info,
 	...error,
 	...backend,

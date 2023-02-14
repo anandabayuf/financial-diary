@@ -10,43 +10,53 @@ import { getRouteNames } from '../../../../Utils/RouteUtils';
 import RouteNames from '../../../../Constants/RouteNames';
 import withEditWallet from '../../../../Components/Management/Wallets/WalletForm/withEditWallet';
 import AppMessage from '../../../../Components/General/AppMessage/index';
+import useLocale from '../../../../Hooks/useLocale';
+import { errorHandling } from '../../../../Api/errorHandling';
 
 const EditForm = withEditWallet(WalletForm);
 
 const EditWalletPage: React.FC = () => {
-	const [isLoading, setIsLoading] = useState(false);
 	const token = useAppSelector((state) => state.user.accessToken);
 	const navigate = useNavigate();
 	const location = useLocation();
 	const wallet = location.state;
+	const { I18n, language } = useLocale();
+
+	const [isLoading, setIsLoading] = useState(false);
 
 	const handleEditWallet = async (values: any) => {
 		setIsLoading(true);
 
-		const response = await editUserWallet(token, wallet._id, values);
-		setIsLoading(false);
-		if (response.request.status === 201) {
+		try {
+			const response = await editUserWallet(token, wallet._id, values);
+
 			navigate(getRouteNames(RouteNames.MANAGEMENT_WALLETS), {
 				replace: true,
-				state: {
-					message: response.data.message,
-				},
 			});
-		} else {
-			AppMessage({ content: response.data.message, type: 'error' });
+
+			AppMessage({
+				type: 'success',
+				content: I18n.t(response.data.message),
+			});
+		} catch (error) {
+			errorHandling(error, I18n);
 		}
+
+		setIsLoading(false);
 	};
 
 	useEffect(() => {
-		document.title = 'Edit Wallet - Management - Financial Diary App';
-	}, []);
+		document.title = `${I18n.t(
+			'title.management.wallet.edit'
+		)} - Financial Diary App`;
+	}, [language, I18n]);
 
 	return (
 		<MainLayout>
 			<AppBreadcrumb className='mb-1' />
 			<div className='mb-5'>
 				<AppTitle
-					title='Edit Wallet'
+					title={I18n.t('management.wallet.edit')!}
 					level={5}
 				/>
 			</div>
@@ -54,6 +64,7 @@ const EditWalletPage: React.FC = () => {
 				isLoading={isLoading}
 				handleSubmit={handleEditWallet}
 				data={wallet}
+				I18n={I18n}
 			/>
 		</MainLayout>
 	);

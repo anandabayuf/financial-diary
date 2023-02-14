@@ -22,19 +22,13 @@ export const editUserById = async (
 	id?: string,
 	data?: any
 ): Promise<any> => {
-	try {
-		const response = await instance({
-			url: `/user/${id}`,
-			method: 'PUT',
-			headers: {
-				Authorization: `Bearer ${token}`,
-				'Content-Type': 'multipart/form-data;',
-			},
-			data: data,
-		});
-
-		return response;
-	} catch (err) {
-		return err;
-	}
+	return await instance({
+		url: `/user/${id}`,
+		method: 'PUT',
+		headers: {
+			Authorization: `Bearer ${token}`,
+			'Content-Type': 'multipart/form-data;',
+		},
+		data: data,
+	});
 };

@@ -7,7 +7,7 @@ import id from './Language/id';
 I18n.use(initReactI18next)
 	.use(LanguageDetector)
 	.init({
-		debug: process.env.NODE_ENV !== 'production',
+		debug: false,
 		nsSeparator: ':::',
 		keySeparator: '::',
 		load: 'languageOnly',

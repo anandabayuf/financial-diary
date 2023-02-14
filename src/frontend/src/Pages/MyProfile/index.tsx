@@ -13,10 +13,14 @@ import AppMessage from '../../Components/General/AppMessage';
 import { getBase64, dataURLtoFile } from '../../Utils/ImageUtils';
 import { editUserById } from '../../Api/User';
 import { updateUserData } from '../../Store/User/UserSlice';
+import useLocale from '../../Hooks/useLocale';
+import { errorHandling } from '../../Api/errorHandling';
 
 const MyProfilePage: React.FC = () => {
 	const { data, accessToken } = useAppSelector((state) => state.user);
 	const dispatch = useAppDispatch();
+	const { I18n, language } = useLocale();
+
 	const [isEdit, setIsEdit] = useState(false);
 
 	const [profilePicture, setProfilePicture] = useState<UploadFile>();
@@ -148,17 +152,14 @@ const MyProfilePage: React.FC = () => {
 
 		payload.append('data', JSON.stringify(userData));
 
-		const res = await editUserById(accessToken, data._id, payload);
+		try {
+			const res = await editUserById(accessToken, data._id, payload);
 
-		if (res.request.status === 201) {
-			AppMessage({ content: res.data.message, type: 'success' });
+			AppMessage({ content: I18n.t(res.data.message), type: 'success' });
 			dispatch(updateUserData({ data: res.data.data }));
 			handleClickCancelEdit();
-		} else if (res.request.status === 404) {
-			AppMessage({
-				content: `${res.response.data.message} - ${res.response.data.detail.message}`,
-				type: 'error',
-			});
+		} catch (error) {
+			errorHandling(error, I18n);
 		}
 
 		setIsLoading(false);
@@ -166,18 +167,20 @@ const MyProfilePage: React.FC = () => {
 
 	useEffect(() => {
 		if (isEdit) {
-			document.title = 'Edit My Profile - Financial Diary App';
+			document.title = `${I18n.t(
+				'edit_my_profile'
+			)} - Financial Diary App`;
 		} else {
-			document.title = 'My Profile - Financial Diary App';
+			document.title = `${I18n.t('my_profile')} - Financial Diary App`;
 		}
-	}, [isEdit]);
+	}, [isEdit, language, I18n]);
 
 	return (
 		<MainLayout>
 			<AppBreadcrumb />
 			<div className='flex justify-between items-center mb-5'>
 				<AppTitle
-					title='My Profile'
+					title={I18n.t('my_profile')!}
 					level={5}
 				/>
 				{!isEdit && (
@@ -189,13 +192,16 @@ const MyProfilePage: React.FC = () => {
 							<div className='flex justify-center'>
 								<BsPencil />
 							</div>
-							Edit My Profile
+							{I18n.t('label.edit.my_profile')}
 						</Space>
 					</AppButton>
 				)}
 			</div>
 			{!isEdit ? (
-				<MyProfileCard user={data} />
+				<MyProfileCard
+					user={data}
+					I18n={I18n}
+				/>
 			) : (
 				<MyProfileForm
 					user={data}
@@ -213,6 +219,7 @@ const MyProfilePage: React.FC = () => {
 						previewState: previewState,
 						handleCancelViewProfilePic: handleCancelViewProfilePic,
 					}}
+					I18n={I18n}
 				/>
 			)}
 		</MainLayout>

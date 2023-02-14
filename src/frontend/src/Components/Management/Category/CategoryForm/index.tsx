@@ -11,6 +11,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
 	data,
 	handleSubmit,
 	isLoading,
+	I18n,
 }) => {
 	const navigate = useNavigate();
 
@@ -22,13 +23,18 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
 			onFinish={handleSubmit}
 		>
 			<AppFormItem
-				label='Category Name'
+				label={I18n?.t('form.label.category_name')}
 				name='name'
 				rules={[
-					{ required: true, message: 'Please input category name!' },
+					{
+						required: true,
+						message: I18n?.t('form.required.category_name')!,
+					},
 				]}
 			>
-				<AppInput placeholder='input category name...' />
+				<AppInput
+					placeholder={I18n?.t('form.placeholder.category_name')}
+				/>
 			</AppFormItem>
 
 			<AppFormItem>
@@ -41,13 +47,15 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
 								type='text'
 								onClick={() => navigate(-1)}
 							>
-								Cancel
+								{I18n?.t('label.cancel')}
 							</AppButton>
 							<AppButton
 								htmlType='submit'
 								type='primary'
 							>
-								{isEdit ? 'Edit Category' : 'Create Category'}
+								{isEdit
+									? I18n?.t('label.edit.category')
+									: I18n?.t('label.create.category')}
 							</AppButton>
 						</>
 					)}

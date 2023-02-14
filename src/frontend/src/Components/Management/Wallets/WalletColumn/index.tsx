@@ -1,16 +1,13 @@
-import { ColumnsType } from 'antd/es/table';
 import AppButton from '../../../General/AppButton';
 import AppText from '../../../General/AppText';
-import { WalletColumnProps } from './interfaces/interfaces';
+import { WalletColumnsType } from './interfaces/interfaces';
 
-const WalletColumns: ({ navigate }: WalletColumnProps) => ColumnsType<any> = ({
-	navigate,
-}) => {
+const WalletColumns: WalletColumnsType = ({ navigate, I18n }) => {
 	return [
 		{
 			title: (
 				<AppText
-					text='Name'
+					text={I18n?.t('label.name')}
 					strong
 				/>
 			),
@@ -22,7 +19,7 @@ const WalletColumns: ({ navigate }: WalletColumnProps) => ColumnsType<any> = ({
 		{
 			title: (
 				<AppText
-					text='Action'
+					text={I18n?.t('label.action')}
 					strong
 				/>
 			),
@@ -39,7 +36,7 @@ const WalletColumns: ({ navigate }: WalletColumnProps) => ColumnsType<any> = ({
 							})
 						}
 					>
-						Edit
+						{I18n?.t('label.edit')}
 					</AppButton>
 				);
 			},

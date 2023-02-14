@@ -10,47 +10,57 @@ import { useNavigate } from 'react-router-dom';
 import { getRouteNames } from '../../../../Utils/RouteUtils';
 import RouteNames from '../../../../Constants/RouteNames';
 import AppMessage from '../../../../Components/General/AppMessage/index';
+import useLocale from '../../../../Hooks/useLocale';
+import { errorHandling } from '../../../../Api/errorHandling';
 
 const CreateForm = withCreateWallet(WalletForm);
 
 const CreateWalletPage: React.FC = () => {
-	const [isLoading, setIsLoading] = useState(false);
 	const token = useAppSelector((state) => state.user.accessToken);
 	const navigate = useNavigate();
+	const { I18n, language } = useLocale();
+
+	const [isLoading, setIsLoading] = useState(false);
 
 	const handleCreateWallet = async (values: any) => {
 		setIsLoading(true);
 
-		const response = await createUserWallet(token, values);
-		setIsLoading(false);
-		if (response.request.status === 201) {
+		try {
+			const response = await createUserWallet(token, values);
+
 			navigate(getRouteNames(RouteNames.MANAGEMENT_WALLETS), {
 				replace: true,
-				state: {
-					message: response.data.message,
-				},
 			});
-		} else {
-			AppMessage({ content: response.data.message, type: 'error' });
+			AppMessage({
+				type: 'success',
+				content: I18n.t(response.data.message),
+			});
+		} catch (error) {
+			errorHandling(error, I18n);
 		}
+
+		setIsLoading(false);
 	};
 
 	useEffect(() => {
-		document.title = 'Create New Wallet - Management - Financial Diary App';
-	}, []);
+		document.title = `${I18n.t(
+			'title.management.wallet.create'
+		)} - Financial Diary App`;
+	}, [language, I18n]);
 
 	return (
 		<MainLayout>
 			<AppBreadcrumb className='mb-1' />
 			<div className='mb-5'>
 				<AppTitle
-					title='Create New Wallet'
+					title={I18n.t('management.wallet.create')!}
 					level={5}
 				/>
 			</div>
 			<CreateForm
 				isLoading={isLoading}
 				handleSubmit={handleCreateWallet}
+				I18n={I18n}
 			/>
 		</MainLayout>
 	);

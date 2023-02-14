@@ -10,47 +10,56 @@ import withCreateCategory from '../../../../Components/Management/Category/Categ
 import CategoryForm from '../../../../Components/Management/Category/CategoryForm/index';
 import { createUserCategory } from '../../../../Api/Category';
 import AppMessage from '../../../../Components/General/AppMessage/index';
+import { errorHandling } from '../../../../Api/errorHandling';
+import useLocale from '../../../../Hooks/useLocale';
 
 const CreateForm = withCreateCategory(CategoryForm);
 
 const CreateCategoryPage: React.FC = () => {
-	const [isLoading, setIsLoading] = useState(false);
 	const token = useAppSelector((state) => state.user.accessToken);
 	const navigate = useNavigate();
+	const { I18n, language } = useLocale();
+
+	const [isLoading, setIsLoading] = useState(false);
 
 	const handleCreateCategory = async (values: any) => {
 		setIsLoading(true);
 
-		const response = await createUserCategory(token, values);
-		setIsLoading(false);
-		if (response.request.status === 201) {
+		try {
+			const response = await createUserCategory(token, values);
 			navigate(getRouteNames(RouteNames.MANAGEMENT_CATEGORY), {
 				replace: true,
-				state: {
-					message: response.data.message,
-				},
 			});
-		} else {
-			AppMessage({ content: response.data.message, type: 'error' });
+			AppMessage({
+				type: 'success',
+				content: I18n.t(response.data.message),
+			});
+		} catch (error) {
+			errorHandling(error, I18n);
 		}
+
+		setIsLoading(false);
 	};
 
 	useEffect(() => {
-		document.title = 'Create New Category - Financial Diary App';
-	}, []);
+		document.title = `${I18n.t(
+			'title.management.category.create'
+		)} - Financial Diary App`;
+	}, [I18n, language]);
 
 	return (
 		<MainLayout>
 			<AppBreadcrumb className='mb-1' />
 			<div className='mb-5'>
 				<AppTitle
-					title='Create New Category'
+					title={I18n.t('management.category.create')!}
 					level={5}
 				/>
 			</div>
 			<CreateForm
 				isLoading={isLoading}
 				handleSubmit={handleCreateCategory}
+				I18n={I18n}
 			/>
 		</MainLayout>
 	);

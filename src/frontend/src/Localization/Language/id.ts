@@ -1,19 +1,65 @@
 const general = {
 	login: 'Masuk',
 	register: 'Daftar',
+
+	my_profile: 'Profil Saya',
+	edit_my_profile: 'Ubah Profile Saya',
+
+	management: 'Manajemen',
+	'management.wallet': 'Manajemen Dompet',
+	'management.wallet.create': 'Buat Dompet Baru',
+	'management.wallet.edit': 'Ubah Dompet',
+
+	'management.category': 'Manajemen Kategori',
+	'management.category.create': 'Buat Kategori Baru',
+	'management.category.edit': 'Ubah Kategori',
+
+	notes: 'Pencatatan',
+	'notes.create': 'Buat Pencatatan',
 };
 
 const content = {
 	'content.dont_have_an_account?': 'Belum memiliki akun?',
 	'content.already_have_an_account?': 'Sudah memiliki akun?',
+
+	'content.show': 'Tampilkan',
+	'content.pagination.of': 'dari',
+	'content.pagination.items': 'item',
+	'content.pagination.go_to': 'Loncat ke halaman',
 };
 
 const label = {
+	'label.username': 'Nama Pengguna',
+	'label.name': 'Nama',
+
+	//button
+	'label.cancel': 'Batal',
+	'label.save': 'Simpan',
+	'label.view': 'Lihat',
+	'label.edit': 'Ubah',
+
+	'label.create.wallet': 'Buat Dompet',
+	'label.create.category': 'Buat Kategori',
+	'label.create.note': 'Buat Pencatatan',
+
+	'label.edit.my_profile': 'Ubah Profil Saya',
+	'label.edit.wallet': 'Ubah Dompet',
+	'label.edit.category': 'Ubah Kategori',
+
+	'label.action': 'Aksi',
+	'label.year': 'Tahun',
+	'label.month': 'Bulan',
+
+	'label.no_data': 'Tidak Ada Data',
+	'label.page': 'Halaman',
+
 	'form.label.username': 'Nama Pengguna',
 	'form.label.password': 'Kata Sandi',
 	'form.label.profile_picture': 'Foto Profil',
 	'form.label.name': 'Nama',
 	'form.label.password_confirmation': 'Konfirmasi Kata Sandi',
+	'form.label.wallet_name': 'Nama Dompet',
+	'form.label.category_name': 'Nama Kategori',
 
 	'form.placeholder.username': 'masukkan nama pengguna anda',
 	'form.placeholder.password': 'masukkan kata sandi anda',
@@ -21,6 +67,11 @@ const label = {
 	'form.placeholder.name': 'masukkan nama anda',
 	'form.placeholder.password_confirmation':
 		'masukkan kembali kata sandi anda',
+	'form.placeholder.wallet_name': 'masukkan nama dompet',
+	'form.placeholder.category_name': 'masukkan nama kategori',
+
+	'search.placeholder.management_wallet': 'Cari Nama Dompet',
+	'search.placeholder.management_category': 'Cari Nama Kategori',
 };
 
 const menu = {
@@ -34,6 +85,16 @@ const menu = {
 	'menu.logout': 'Keluar',
 };
 
+const titlepage = {
+	'title.management.wallet': 'Dompet - Manajemen',
+	'title.management.wallet.create': 'Buat Dompet Baru - Manajemen',
+	'title.management.wallet.edit': 'Ubah Dompet - Manajemen',
+
+	'title.management.category': 'Kategori - Manajemen',
+	'title.management.category.create': 'Buat Kategori Baru - Manajemen',
+	'title.management.category.edit': 'Ubah Kategori - Manajemen',
+};
+
 const info = {
 	'session.expired': 'Sesi telah berakhir, silakan masuk kembali',
 };
@@ -44,6 +105,8 @@ const error = {
 	'form.required.name': 'Mohon masukkan nama anda!',
 	'form.required.password_confirmation':
 		'Mohon masukkan kembali kata sandi anda!',
+	'form.required.wallet_name': 'Mohon masukkan nama dompet!',
+	'form.required.category_name': 'Mohon masukkan nama kategori!',
 
 	'form.validation.no_spaces': 'Tidak boleh mengandung spasi!',
 	'form.validation.password_not_match': 'Kata sandi tidak sama!',
@@ -181,6 +244,7 @@ const id = {
 	...content,
 	...label,
 	...menu,
+	...titlepage,
 	...info,
 	...error,
 	...backend,
