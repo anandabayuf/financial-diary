@@ -121,6 +121,7 @@ const ProfileMenuItems: ProfileMenuItemsType = ({
 						setIsDropdownLangOpen &&
 						setIsDropdownLangOpen(!isDropdownLangOpen)
 					}
+					overlayClassName='language-switcher'
 				>
 					<div className='flex justify-between items-center'>
 						<Space>

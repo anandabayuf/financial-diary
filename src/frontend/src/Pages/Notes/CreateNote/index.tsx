@@ -10,10 +10,14 @@ import { createUserNote } from '../../../Api/Notes';
 import { getRouteNames } from '../../../Utils/RouteUtils';
 import RouteNames from '../../../Constants/RouteNames';
 import AppMessage from '../../../Components/General/AppMessage/index';
+import useLocale from '../../../Hooks/useLocale';
+import { errorHandling } from '../../../Api/errorHandling';
 
 const CreateNotePage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
 	const navigate = useNavigate();
+	const { I18n, language } = useLocale();
+
 	const [isLoading, setIsLoading] = useState(false);
 	const [dateString, setDateString] = useState<any>();
 
@@ -26,36 +30,37 @@ const CreateNotePage: React.FC = () => {
 
 	const handleSubmit = async (values: any) => {
 		setIsLoading(true);
+
 		const payload = {
 			date: dateString,
 		};
-		const response = await createUserNote(token, payload);
 
-		if (response.request.status === 201) {
+		try {
+			const response = await createUserNote(token, payload);
 			navigate(getRouteNames(RouteNames.NOTES), {
 				replace: true,
-				state: { message: response.data.message },
 			});
-		} else {
 			AppMessage({
-				type: 'error',
-				content: `${response.response.data.message}. ${response.response.data.detail}`,
+				type: 'success',
+				content: I18n.t(response.data.message),
 			});
+		} catch (error) {
+			errorHandling(error, I18n);
 		}
 
 		setIsLoading(false);
 	};
 
 	useEffect(() => {
-		document.title = 'Create New Note - Financial Diary App';
-	}, []);
+		document.title = `${I18n.t('notes.create')}  - Financial Diary App`;
+	}, [language, I18n]);
 
 	return (
 		<MainLayout>
 			<AppBreadcrumb />
 			<div className='mb-5'>
 				<AppTitle
-					title='Create Notes'
+					title={I18n.t('notes.create')!}
 					level={5}
 				/>
 			</div>
@@ -63,6 +68,7 @@ const CreateNotePage: React.FC = () => {
 				isLoading={isLoading}
 				handleSubmit={handleSubmit}
 				handleChangeDatePicker={handleChangeDatePicker}
+				I18n={I18n}
 			/>
 		</MainLayout>
 	);

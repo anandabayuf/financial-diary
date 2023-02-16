@@ -28,7 +28,10 @@ export const errorHandling = (
 			AppNotification({
 				type: 'error',
 				message: I18n.t(error.response?.data.message),
-				description: I18n.t(error.response?.data.detail),
+				description:
+					typeof error.response?.data.detail === 'object'
+						? I18n.t('error.unknown_error')
+						: I18n.t(error.response?.data.detail),
 			});
 		}
 	} else {

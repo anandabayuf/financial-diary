@@ -5,7 +5,11 @@ body.dark {
         background-color: $dark-half-text !important;
     }
 
-    .ant-dropdown-menu-item-selected {
+    .language-switcher .ant-dropdown-menu-item-selected {
+        background-color: $dark-button !important;
+    }
+
+    .language-switcher .ant-dropdown-menu-item:hover {
         background-color: $dark-button !important;
     }
 }
@@ -15,7 +19,11 @@ body.light {
         background-color: $light-half-text !important;
     }
 
-    .ant-dropdown-menu-item-selected {
+    .language-switcher .ant-dropdown-menu-item-selected {
+        background-color: $light-button !important;
+    }
+
+    .language-switcher .ant-dropdown-menu-item:hover {
         background-color: $light-button !important;
     }
 }

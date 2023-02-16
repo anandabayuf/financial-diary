@@ -1,6 +1,6 @@
 import { NotesOptionYearProps } from './interfaces/interfaces';
 
-const NotesOptionYear = ({ years }: NotesOptionYearProps) => {
+const NotesOptionYear = ({ years, I18n }: NotesOptionYearProps) => {
 	const options = years?.map((year) => {
 		return {
 			label: year,
@@ -10,7 +10,7 @@ const NotesOptionYear = ({ years }: NotesOptionYearProps) => {
 
 	return [
 		{
-			label: 'All Year',
+			label: I18n?.t('label.all_year'),
 			value: 'all-year',
 		},
 		...options!,

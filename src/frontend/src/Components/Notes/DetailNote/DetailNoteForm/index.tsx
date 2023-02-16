@@ -14,6 +14,7 @@ const DetailNoteForm: React.FC<DetailNoteFormProps> = ({
 	isCategory = false,
 	isLoading,
 	isFetching,
+	I18n,
 	handleSubmit,
 	handleCancel,
 }) => {
@@ -48,14 +49,14 @@ const DetailNoteForm: React.FC<DetailNoteFormProps> = ({
 				<AppFormItem
 					label={
 						isWallet
-							? 'Select Wallet you want to add to the note'
-							: 'Select Category you want to add to the note'
+							? I18n?.t('form.label.note.wallet')
+							: I18n?.t('form.label.note.category')
 					}
 					name='ids'
 					rules={[
 						{
 							required: true,
-							message: 'Please select minimum 1!',
+							message: I18n?.t('form.required.note.detail')!,
 						},
 					]}
 				>
@@ -74,7 +75,7 @@ const DetailNoteForm: React.FC<DetailNoteFormProps> = ({
 						htmlType='button'
 						onClick={handleCancel}
 					>
-						Cancel
+						{I18n?.t('label.cancel')}
 					</AppButton>
 					{((walletData && walletData.length > 0) ||
 						(categoryData && categoryData.length > 0)) && (
@@ -82,7 +83,7 @@ const DetailNoteForm: React.FC<DetailNoteFormProps> = ({
 							type='primary'
 							htmlType='submit'
 						>
-							Add to the note
+							{I18n?.t('label.create.note.detail')}
 						</AppButton>
 					)}
 				</div>

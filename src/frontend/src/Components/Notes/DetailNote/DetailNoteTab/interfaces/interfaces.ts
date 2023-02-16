@@ -1,11 +1,12 @@
 import { DataViewTypeNames } from '../../../../../Constants/DataViewTypeNames';
 import { TableProps } from 'antd';
+import { i18n } from 'i18next';
 
 export interface DetailNoteTabProps {
 	noteId?: string;
 	isWallet?: boolean;
 	isCategory?: boolean;
-	isEstimation?: boolean;
+	isBudget?: boolean;
 	data?: any[];
 	dataList?: any[];
 	isLoading?: boolean;
@@ -13,6 +14,7 @@ export interface DetailNoteTabProps {
 	dataViewType?: DataViewTypeNames;
 	modalAdd?: React.ReactNode;
 	pagination?: TableProps<any>['pagination'];
+	I18n?: i18n;
 	handleClickAdd?: () => void;
 	handleClickView?: (record: any) => void;
 	handleClickEdit?: (record: any) => void;

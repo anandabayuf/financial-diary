@@ -15,22 +15,33 @@ const general = {
 	'management.category.edit': 'Edit Category',
 
 	notes: 'Notes',
-	'notes.create': 'Buat Pencatatan',
+	'notes.create': 'Create New Note',
+
+	'notes.wallet': 'Wallet Note',
+	'notes.category': 'Category Note',
+	'notes.budget': 'Budget Note',
 };
 
 const content = {
 	'content.dont_have_an_account?': "Don't have an account?",
 	'content.already_have_an_account?': 'Already have an account?',
 
-	'content.show': 'Tampilkan',
+	'content.show': 'Show',
 	'content.pagination.of': 'of',
 	'content.pagination.items': 'items',
 	'content.pagination.go_to': 'Go to',
+
+	'content.balance': 'Balance',
+	'content.total': 'Total',
 };
 
 const label = {
 	'label.username': 'Username',
 	'label.name': 'Name',
+	'label.budget': 'Budget',
+	'label.wallet': 'Wallet',
+	'label.category': 'Category',
+	'label.budget_items': 'Budget Items',
 
 	//button
 	'label.cancel': 'Cancel',
@@ -41,6 +52,10 @@ const label = {
 	'label.create.wallet': 'Create Wallet',
 	'label.create.category': 'Create Category',
 	'label.create.note': 'Create Note',
+	'label.create.note.wallet': 'Add Wallet to the Note',
+	'label.create.note.category': 'Add Category to the Note',
+	'label.create.note.budget': 'Add Budget',
+	'label.create.note.detail': 'Add to the Note',
 
 	'label.edit.my_profile': 'Edit My Profile',
 	'label.edit.wallet': 'Edit Wallet',
@@ -49,6 +64,13 @@ const label = {
 	'label.action': 'Action',
 	'label.year': 'Year',
 	'label.month': 'Month',
+	'label.all_year': 'All Year',
+	'label.balance': 'Balance',
+	'label.total': 'Total',
+	'label.budget.balance': 'Balance Budget',
+	'label.budget.total': 'Total Budget',
+	'label.spent': 'Spent',
+	'label.remains': 'Remains',
 
 	'label.no_data': 'No Data',
 	'label.page': 'Page',
@@ -60,6 +82,15 @@ const label = {
 	'form.label.password_confirmation': 'Password Confirmation',
 	'form.label.wallet_name': 'Wallet Name',
 	'form.label.category_name': 'Category Name',
+	'form.label.note_month': 'Note Month',
+	'form.label.note.wallet': 'Select Wallet you want to add to the Note',
+	'form.label.note.category': 'Select Category you want to add to the Note',
+	'form.label.note.wallet.budget': 'Add Wallet to create Budget',
+	'form.label.note.category.budget': 'Add Category to create Budget',
+	'form.label.wallet': 'Wallet',
+	'form.label.category': 'Category',
+	'form.label.total_budget': 'Total Budget',
+	'form.label.balance_budget': 'Balance Budget',
 
 	'form.placeholder.username': 'input your username',
 	'form.placeholder.password': 'input your password',
@@ -68,9 +99,22 @@ const label = {
 	'form.placeholder.password_confirmation': 're-input your password',
 	'form.placeholder.wallet_name': 'input wallet name',
 	'form.placeholder.category_name': 'input category name',
+	'form.placeholder.note_month': 'select note month',
+	'form.placeholder.wallet': 'select wallet',
+	'form.placeholder.category': 'select category',
+	'form.placeholder.total_budget': 'input total budget',
+	'form.placeholder.balance_budget': 'input balance budget',
+
+	'form.extra.wallet': 'Wallet cannot be changed',
+	'form.extra.category': 'Category cannot be changed',
 
 	'search.placeholder.management_wallet': 'Search Wallet Name',
 	'search.placeholder.management_category': 'Search Category Name',
+	'search.placeholder.note.detail.wallet_tab': 'Search Wallet Name',
+	'search.placeholder.note.detail.category_tab': 'Search Category Name',
+	'search.placeholder.note.detail.budget_tab': 'Search Budget Item Name',
+
+	'placeholder.select_year': 'Select year to show',
 };
 
 const menu = {
@@ -92,6 +136,21 @@ const titlepage = {
 	'title.management.category': 'Category - Management',
 	'title.management.category.create': 'Buat Kategori Baru - Manajemen',
 	'title.management.category.edit': 'Ubah Kategori - Manajemen',
+
+	'title.note.detail': 'Note',
+
+	'title.note.detail.budget_tab': 'Budgeting Note',
+	'title.note.detail.budget_tab.create': 'Add Budget Note',
+	'title.note.detail.budget_tab.edit.wallet': 'Edit Wallet Budget',
+	'title.note.detail.budget_tab.edit.category': 'Edit Category Budget',
+
+	'title.note.detail.wallet_tab': 'Wallet Note',
+	'title.note.detail.wallet_tab.create': 'Add Wallet to the Note',
+
+	'title.note.detail.category_tab': 'Category Note',
+	'title.note.detail.category_tab.create': 'Add Category to the Note',
+
+	'title.note.detail_note_not_found': 'Monthly Note',
 };
 
 const info = {
@@ -105,11 +164,18 @@ const error = {
 	'form.required.password_confirmation': 'Please re-input your password!',
 	'form.required.wallet_name': 'Please input wallet name!',
 	'form.required.category_name': 'Please input category name!',
+	'form.required.note_month': 'Please input note month!',
+	'form.required.note.detail': 'Please select at least 1!',
+	'form.required.wallet': 'Please select wallet!',
+	'form.required.category': 'Please select category!',
+	'form.required.total_budget': 'Please input total budget!',
+	'form.required.balance_budget': 'Please input balance budget!',
 
 	'form.validation.no_spaces': 'No spaces allowed!',
 	'form.validation.password_not_match': "Password doesn't match!",
 	'form.validation.upload_only_image': 'You can only upload JPG/PNG file!',
 	'form.validation.size_lower_than_2mb': 'Image must smaller than 2MB!',
+	'form.validation.only_number': 'Please input only number!',
 
 	'network.ERR_NETWORK': 'Network Error',
 
@@ -208,7 +274,7 @@ const backend = {
 	'categorynote.failed.get': 'Failed to get category note data',
 	'categorynote.failed.edit': 'Failed to edit category note data',
 	'categorynote.failed.edit_estimated':
-		'Failed to edit category note estimated total data',
+		'Failed to edit category note budget total data',
 
 	'walletnote.failed.create': 'Failed to create wallet note',
 	'walletnote.exception.001':
@@ -218,7 +284,7 @@ const backend = {
 	'walletnote.failed.get': 'Failed to get wallet note data',
 	'walletnote.failed.edit': 'Failed to edit wallet note data',
 	'walletnote.failed.edit_estimated':
-		'Failed to edit wallet note estimated total data',
+		'Failed to edit wallet note budget total data',
 
 	'noteitem.failed.create': 'Failed to create user note item',
 	'noteitem.exception.001': 'Income amount must be zero or positive number',

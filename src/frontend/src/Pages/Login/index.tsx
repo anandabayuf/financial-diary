@@ -34,19 +34,23 @@ const LoginPage: React.FC = () => {
 
 			const jwtDecoded: any = decodeJWT(res.data.token);
 
-			const responseGetUser = await getUserById(
-				jwtDecoded.id,
-				res.data.token
-			);
+			try {
+				const responseGetUser = await getUserById(
+					jwtDecoded.id,
+					res.data.token
+				);
 
-			const user = await responseGetUser.data.data;
+				const user = await responseGetUser.data.data;
 
-			dispatch(
-				setUserLoggedIn({
-					accessToken: res.data.token,
-					data: await user,
-				})
-			);
+				dispatch(
+					setUserLoggedIn({
+						accessToken: res.data.token,
+						data: await user,
+					})
+				);
+			} catch (error) {
+				errorHandling(error, I18n);
+			}
 		} catch (error) {
 			errorHandling(error, I18n);
 		}

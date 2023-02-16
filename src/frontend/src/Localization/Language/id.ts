@@ -15,7 +15,11 @@ const general = {
 	'management.category.edit': 'Ubah Kategori',
 
 	notes: 'Pencatatan',
-	'notes.create': 'Buat Pencatatan',
+	'notes.create': 'Buat Pencatatan Baru',
+
+	'notes.wallet': 'Pencatatan Dompet',
+	'notes.category': 'Pencatatan Kategori',
+	'notes.budget': 'Pencatatan Anggaran',
 };
 
 const content = {
@@ -26,11 +30,18 @@ const content = {
 	'content.pagination.of': 'dari',
 	'content.pagination.items': 'item',
 	'content.pagination.go_to': 'Loncat ke halaman',
+
+	'content.balance': 'Saldo',
+	'content.total': 'Total',
 };
 
 const label = {
 	'label.username': 'Nama Pengguna',
 	'label.name': 'Nama',
+	'label.budget': 'Anggaran',
+	'label.wallet': 'Dompet',
+	'label.category': 'Kategori',
+	'label.budget_items': 'Item Anggaran',
 
 	//button
 	'label.cancel': 'Batal',
@@ -41,6 +52,10 @@ const label = {
 	'label.create.wallet': 'Buat Dompet',
 	'label.create.category': 'Buat Kategori',
 	'label.create.note': 'Buat Pencatatan',
+	'label.create.note.wallet': 'Tambah Dompet',
+	'label.create.note.category': 'Tambah Kategori',
+	'label.create.note.budget': 'Tambah Anggaran',
+	'label.create.note.detail': 'Tambah ke Pencatatan',
 
 	'label.edit.my_profile': 'Ubah Profil Saya',
 	'label.edit.wallet': 'Ubah Dompet',
@@ -49,6 +64,13 @@ const label = {
 	'label.action': 'Aksi',
 	'label.year': 'Tahun',
 	'label.month': 'Bulan',
+	'label.all_year': 'Semua Tahun',
+	'label.balance': 'Saldo',
+	'label.total': 'Total',
+	'label.budget.balance': 'Anggaran Saldo',
+	'label.budget.total': 'Anggaran Total',
+	'label.spent': 'Terpakai',
+	'label.remains': 'Sisa',
 
 	'label.no_data': 'Tidak Ada Data',
 	'label.page': 'Halaman',
@@ -60,6 +82,17 @@ const label = {
 	'form.label.password_confirmation': 'Konfirmasi Kata Sandi',
 	'form.label.wallet_name': 'Nama Dompet',
 	'form.label.category_name': 'Nama Kategori',
+	'form.label.note_month': 'Bulan Pencatatan',
+	'form.label.note.wallet':
+		'Pilih Dompet yang ingin kamu tambahkan ke Pencatatan',
+	'form.label.note.category':
+		'Pilih Kategori yang ingin kamu tambahkan ke Pencatatan',
+	'form.label.note.wallet.budget': 'Tambah Dompet untuk membuat Anggaran',
+	'form.label.note.category.budget': 'Tambah Kategori untuk membuat Anggaran',
+	'form.label.wallet': 'Dompet',
+	'form.label.category': 'Kategori',
+	'form.label.total_budget': 'Anggaran Total',
+	'form.label.balance_budget': 'Anggaran Saldo',
 
 	'form.placeholder.username': 'masukkan nama pengguna anda',
 	'form.placeholder.password': 'masukkan kata sandi anda',
@@ -69,9 +102,22 @@ const label = {
 		'masukkan kembali kata sandi anda',
 	'form.placeholder.wallet_name': 'masukkan nama dompet',
 	'form.placeholder.category_name': 'masukkan nama kategori',
+	'form.placeholder.note_month': 'pilih bulan pencatatan',
+	'form.placeholder.wallet': 'pilih dompet',
+	'form.placeholder.category': 'pilih kategori',
+	'form.placeholder.total_budget': 'masukan anggaran total',
+	'form.placeholder.balance_budget': 'masukkan anggaran saldo',
+
+	'form.extra.wallet': 'Dompet tidak dapat diubah',
+	'form.extra.category': 'Kategori tidak dapat diubah',
 
 	'search.placeholder.management_wallet': 'Cari Nama Dompet',
 	'search.placeholder.management_category': 'Cari Nama Kategori',
+	'search.placeholder.note.detail.wallet_tab': 'Cari Nama Dompet',
+	'search.placeholder.note.detail.category_tab': 'Cari Nama Kategori',
+	'search.placeholder.note.detail.budget_tab': 'Cari Nama Item Anggaran',
+
+	'placeholder.select_year': 'Pilih tahun untuk ditampilkan',
 };
 
 const menu = {
@@ -93,6 +139,21 @@ const titlepage = {
 	'title.management.category': 'Kategori - Manajemen',
 	'title.management.category.create': 'Buat Kategori Baru - Manajemen',
 	'title.management.category.edit': 'Ubah Kategori - Manajemen',
+
+	'title.note.detail': 'Pencatatan',
+
+	'title.note.detail.budget_tab': 'Pencatatan Anggaran',
+	'title.note.detail.budget_tab.create': 'Tambah Anggaran Pencatatan',
+	'title.note.detail.budget_tab.edit.wallet': 'Ubah Anggaran Dompet',
+	'title.note.detail.budget_tab.edit.category': 'Ubah Anggaran Kategori',
+
+	'title.note.detail.wallet_tab': 'Pencatatan Dompet',
+	'title.note.detail.wallet_tab.create': 'Tambah Dompet ke Pencatatan',
+
+	'title.note.detail.category_tab': 'Pencatatan Kategori',
+	'title.note.detail.category_tab.create': 'Tambah Kategori ke Pencatatan',
+
+	'title.note.detail_note_not_found': 'Pencatatan Bulanan',
 };
 
 const info = {
@@ -107,12 +168,19 @@ const error = {
 		'Mohon masukkan kembali kata sandi anda!',
 	'form.required.wallet_name': 'Mohon masukkan nama dompet!',
 	'form.required.category_name': 'Mohon masukkan nama kategori!',
+	'form.required.note_month': 'Mohon pilih bulan pencatatan!',
+	'form.required.note.detail': 'Mohon pilih minimal 1!',
+	'form.required.wallet': 'Mohon pilih dompet!',
+	'form.required.category': 'Mohon pilih kategori!',
+	'form.required.total_budget': 'Mohon masukkan anggaran total!',
+	'form.required.balance_budget': 'Mohon masukkan anggaran saldo!',
 
 	'form.validation.no_spaces': 'Tidak boleh mengandung spasi!',
 	'form.validation.password_not_match': 'Kata sandi tidak sama!',
 	'form.validation.upload_only_image':
 		'Anda hanya dapat mengunggah berkas JPG/PNG!',
 	'form.validation.size_lower_than_2mb': 'Gambar harus kurang dari 2MB!',
+	'form.validation.only_number': 'Mohon hanya masukkan nomor saja!',
 
 	'network.ERR_NETWORK': 'Kesalahan Jaringan',
 

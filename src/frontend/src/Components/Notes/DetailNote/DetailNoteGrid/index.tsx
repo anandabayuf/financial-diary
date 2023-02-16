@@ -14,6 +14,7 @@ import AppTooltip from '../../../General/AppTooltip/index';
 const DetailNoteGrid: React.FC<DetailNoteGridProps> = ({
 	isWallet,
 	data,
+	I18n,
 	handleView,
 }) => {
 	const theme = useTheme();
@@ -87,7 +88,7 @@ const DetailNoteGrid: React.FC<DetailNoteGridProps> = ({
 											handleView && handleView(el)
 										}
 									>
-										View
+										{I18n?.t('label.view')}
 									</AppButton>
 								</div>
 							</StyledDetailNoteGridCard>

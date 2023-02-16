@@ -15,6 +15,8 @@ import {
 	getLongMonthFromDate,
 } from '../../../Utils/DateUtils';
 import { setActiveKeyNoteTab } from '../../../Store/Note/NoteSlice';
+import useLocale from '../../../Hooks/useLocale';
+import { errorHandling } from '../../../Api/errorHandling';
 
 const DetailNotePage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
@@ -22,6 +24,7 @@ const DetailNotePage: React.FC = () => {
 	const location = useLocation();
 	const params = useParams();
 	const dispatch = useAppDispatch();
+	const { I18n, language } = useLocale();
 
 	const { activeKeyNoteTab, selectedNote } = useAppSelector(
 		(state) => state.note
@@ -48,17 +51,15 @@ const DetailNotePage: React.FC = () => {
 		const getNote = async () => {
 			setIsLoading(true);
 			navigateIfLocationIsNotMatch();
-			const res = await getUserNoteByDate(
-				token,
-				`${selectedNote?.year}-${selectedNote?.month}`
-			);
-			if (res.request.status === 200) {
+			try {
+				const res = await getUserNoteByDate(
+					token,
+					`${selectedNote?.year}-${selectedNote?.month}`
+				);
 				const data = res.data.data;
 				setNote(data[0]);
-			} else {
-				const response = JSON.parse(res.request.response);
-
-				AppMessage({ content: response.message, type: 'error' });
+			} catch (error) {
+				errorHandling(error, I18n);
 			}
 
 			setIsLoading(false);
@@ -87,18 +88,21 @@ const DetailNotePage: React.FC = () => {
 	useEffect(() => {
 		if (note) {
 			document.title = `${getLongMonthFromDate(
-				note.date
+				note.date,
+				language
 			)} ${getFullYearFromDate(note.date)} - ${
-				activeKeyNoteTab === 'estimation-note-tab'
-					? 'Estimation'
+				activeKeyNoteTab === 'budget-note-tab'
+					? I18n.t('title.note.detail.budget_tab')
 					: activeKeyNoteTab === 'wallet-note-tab'
-					? 'Wallet'
-					: 'Category'
-			} Note - Financial Diary App`;
+					? I18n.t('title.note.detail.wallet_tab')
+					: I18n.t('title.note.detail.category_tab')
+			} - Financial Diary App`;
 		} else {
-			document.title = 'Monthly - Note - Financial Diary App';
+			document.title = `${I18n.t(
+				'title.note.detail_note_not_found'
+			)} - Financial Diary App`;
 		}
-	}, [note, activeKeyNoteTab]);
+	}, [note, activeKeyNoteTab, language, I18n]);
 
 	return (
 		<MainLayout>
@@ -109,8 +113,11 @@ const DetailNotePage: React.FC = () => {
 				<>
 					<div className='mb-5'>
 						<AppTitle
-							title={`Notes - ${getLongMonthFromDate(
-								note.date
+							title={`${I18n.t(
+								'title.note.detail'
+							)} - ${getLongMonthFromDate(
+								note.date,
+								language
 							)} - ${getFullYearFromDate(note.date)}`}
 							level={5}
 						/>
@@ -118,6 +125,7 @@ const DetailNotePage: React.FC = () => {
 					<AppTabs
 						items={DetailNoteTabs({
 							noteId: note._id,
+							I18n: I18n,
 						})}
 						onChange={handleChangeTab}
 						activeKey={activeKeyNoteTab}

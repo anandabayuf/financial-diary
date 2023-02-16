@@ -2,6 +2,7 @@ import { DetailNoteFormProps } from './interfaces/interfaces';
 import { useAppSelector } from '../../../../Hooks/useRedux';
 import { useState, useEffect } from 'react';
 import AppMessage from '../../../General/AppMessage/index';
+import { errorHandling } from '../../../../Api/errorHandling';
 import {
 	getAvailableUserCategory,
 	addCategoryToTheNote,
@@ -13,6 +14,7 @@ const withCategoryNoteForm = (
 	const NewComponent: React.FC<DetailNoteFormProps> = ({
 		noteId,
 		handleCancel,
+		I18n,
 		...rest
 	}) => {
 		const token = useAppSelector((state) => state.user.accessToken);
@@ -27,15 +29,17 @@ const withCategoryNoteForm = (
 				noteId,
 			};
 
-			const res = await addCategoryToTheNote(token, payload);
-
-			if (res.request.status === 201) {
-				AppMessage({ content: res.data.message, type: 'success' });
+			try {
+				const res = await addCategoryToTheNote(token, payload);
+				AppMessage({
+					content: I18n?.t(res.data.message),
+					type: 'success',
+				});
 				if (handleCancel) {
 					handleCancel();
 				}
-			} else {
-				AppMessage({ content: res.data.message, type: 'error' });
+			} catch (error) {
+				errorHandling(error, I18n!);
 			}
 
 			setIsLoading(false);
@@ -45,13 +49,11 @@ const withCategoryNoteForm = (
 			const getAvailableCategory = async () => {
 				setIsFetching(true);
 
-				const res = await getAvailableUserCategory(token, noteId);
-				if (res.request.status === 200) {
+				try {
+					const res = await getAvailableUserCategory(token, noteId);
 					setAvailableCategory(res.data.data);
-				} else {
-					const response = JSON.parse(res.request.response);
-
-					AppMessage({ content: response.message, type: 'error' });
+				} catch (error) {
+					errorHandling(error, I18n!);
 				}
 
 				setIsFetching(false);
@@ -68,6 +70,7 @@ const withCategoryNoteForm = (
 				isLoading={isLoading}
 				isFetching={isFetching}
 				handleCancel={handleCancel}
+				I18n={I18n}
 				{...rest}
 			/>
 		);

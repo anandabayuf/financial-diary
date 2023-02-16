@@ -6,7 +6,8 @@ import { formatIDR } from '../../../../Utils/CurrencyUtils';
 const DetailNoteColumns: DetailNoteColumnsType = ({
 	isWallet,
 	isCategory,
-	isEstimation,
+	isBudget,
+	I18n,
 	handleView,
 	handleEdit,
 }) => {
@@ -15,7 +16,11 @@ const DetailNoteColumns: DetailNoteColumnsType = ({
 				{
 					title: (
 						<AppText
-							text={isWallet ? 'Wallet' : 'Category'}
+							text={
+								isWallet
+									? I18n?.t('label.wallet')
+									: I18n?.t('label.category')
+							}
 							strong
 						/>
 					),
@@ -41,7 +46,11 @@ const DetailNoteColumns: DetailNoteColumnsType = ({
 				{
 					title: (
 						<AppText
-							text={isWallet ? 'Balance' : 'Total'}
+							text={
+								isWallet
+									? I18n?.t('label.balance')
+									: I18n?.t('label.total')
+							}
 							strong
 						/>
 					),
@@ -65,7 +74,7 @@ const DetailNoteColumns: DetailNoteColumnsType = ({
 				{
 					title: (
 						<AppText
-							text='Action'
+							text={I18n?.t('label.action')}
 							strong
 						/>
 					),
@@ -77,7 +86,7 @@ const DetailNoteColumns: DetailNoteColumnsType = ({
 								type='text'
 								onClick={() => handleView && handleView(record)}
 							>
-								View
+								{I18n?.t('label.view')}
 							</AppButton>
 						);
 					},
@@ -87,7 +96,7 @@ const DetailNoteColumns: DetailNoteColumnsType = ({
 				{
 					title: (
 						<AppText
-							text={'Estimation Items'}
+							text={I18n?.t('label.budget_items')}
 							strong
 						/>
 					),
@@ -98,7 +107,7 @@ const DetailNoteColumns: DetailNoteColumnsType = ({
 				{
 					title: (
 						<AppText
-							text='Debit'
+							text={I18n?.t('label.budget.balance')}
 							strong
 						/>
 					),
@@ -112,7 +121,7 @@ const DetailNoteColumns: DetailNoteColumnsType = ({
 				{
 					title: (
 						<AppText
-							text='Credit'
+							text={I18n?.t('label.budget.total')}
 							strong
 						/>
 					),
@@ -126,7 +135,7 @@ const DetailNoteColumns: DetailNoteColumnsType = ({
 				{
 					title: (
 						<AppText
-							text='Spent'
+							text={I18n?.t('label.spent')}
 							strong
 						/>
 					),
@@ -140,7 +149,7 @@ const DetailNoteColumns: DetailNoteColumnsType = ({
 				{
 					title: (
 						<AppText
-							text='Remains'
+							text={I18n?.t('label.remains')}
 							strong
 						/>
 					),
@@ -157,7 +166,7 @@ const DetailNoteColumns: DetailNoteColumnsType = ({
 				{
 					title: (
 						<AppText
-							text='Action'
+							text={I18n?.t('label.action')}
 							strong
 						/>
 					),
@@ -169,7 +178,7 @@ const DetailNoteColumns: DetailNoteColumnsType = ({
 								type='text'
 								onClick={() => handleEdit && handleEdit(record)}
 							>
-								Edit
+								{I18n?.t('label.edit')}
 							</AppButton>
 						);
 					},

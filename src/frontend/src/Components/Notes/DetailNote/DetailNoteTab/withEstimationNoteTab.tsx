@@ -1,7 +1,6 @@
 import { DetailNoteTabProps } from './interfaces/interfaces';
 import { useState, useEffect } from 'react';
 import { getAllUserWalletNote } from '../../../../Api/Wallet-Note';
-import AppMessage from '../../../General/AppMessage/index';
 import { useAppSelector, useAppDispatch } from '../../../../Hooks/useRedux';
 import AppModal from '../../../General/AppModal';
 import AppTitle from '../../../General/AppTitle';
@@ -11,24 +10,24 @@ import EstimationNoteForm from '../EstimationNoteForm/index';
 import withEditEstimationNoteForm from '../EstimationNoteForm/withEditEstimationNoteForm';
 import { setNotePaginationSize } from '../../../../Store/Note/NoteSlice';
 import { TableProps } from 'antd';
+import { errorHandling } from '../../../../Api/errorHandling';
 
 const withEstimationNoteTab = (
 	Component: React.ComponentType<DetailNoteTabProps>
 ) => {
 	const NewComponent: React.FC<DetailNoteTabProps> = ({
 		noteId,
+		I18n,
 		...rest
 	}) => {
 		const token = useAppSelector((state) => state.user.accessToken);
 		const dispatch = useAppDispatch();
-		// const navigate = useNavigate();
-		// const location = useLocation();
 		const pageSize = useAppSelector(
 			(state) => state.note.paginationSize?.estimation
 		);
 
-		const [estimations, setEstimations] = useState<any[]>([]);
-		const [estimationsList, setEstimationsList] = useState<any[]>([]);
+		const [budgets, setBudgets] = useState<any[]>([]);
+		const [budgetsList, setBudgetsList] = useState<any[]>([]);
 
 		const [isLoading, setIsLoading] = useState<boolean>(false);
 		const [isSearching, setIsSearching] = useState<boolean>(false);
@@ -43,16 +42,20 @@ const withEstimationNoteTab = (
 			const getWalletAndCategory = async () => {
 				setIsLoading(true);
 
-				const resWalletNote = await getAllUserWalletNote(token, noteId);
-				if (resWalletNote.request.status === 200) {
-					const walletNote = await resWalletNote.data.data;
-
-					const resCatNote = await getAllUserCategoryNote(
+				try {
+					const resWalletNote = await getAllUserWalletNote(
 						token,
 						noteId
 					);
 
-					if (resCatNote.request.status === 200) {
+					const walletNote = await resWalletNote.data.data;
+
+					try {
+						const resCatNote = await getAllUserCategoryNote(
+							token,
+							noteId
+						);
+
 						const catNote = await resCatNote.data.data;
 						const data = [...walletNote, ...catNote].map(
 							(el, index) => {
@@ -67,24 +70,14 @@ const withEstimationNoteTab = (
 								};
 							}
 						);
-						// console.log(data);
 
-						setEstimations(data);
-						setEstimationsList(data);
-					} else {
-						const response = JSON.parse(
-							resCatNote.request.response
-						);
-
-						AppMessage({
-							content: response.message,
-							type: 'error',
-						});
+						setBudgets(data);
+						setBudgetsList(data);
+					} catch (error) {
+						errorHandling(error, I18n!);
 					}
-				} else {
-					const response = JSON.parse(resWalletNote.request.response);
-
-					AppMessage({ content: response.message, type: 'error' });
+				} catch (error) {
+					errorHandling(error, I18n!);
 				}
 
 				setIsLoading(false);
@@ -112,7 +105,7 @@ const withEstimationNoteTab = (
 
 		const handleChangeSearch = (e: any) => {
 			if (e.target.value === '') {
-				setEstimationsList(estimations);
+				setBudgetsList(budgets);
 			}
 		};
 
@@ -123,8 +116,8 @@ const withEstimationNoteTab = (
 				if (searchQuery !== '' && searchQuery !== ' ') {
 					setIsSearching(true);
 					const regex = new RegExp(`${searchQuery}`, 'gi');
-					setEstimationsList(
-						estimations.filter((el) => el.name.match(regex))
+					setBudgetsList(
+						budgets.filter((el) => el.name.match(regex))
 					);
 					setIsSearching(false);
 				}
@@ -154,7 +147,9 @@ const withEstimationNoteTab = (
 				<AppModal
 					title={
 						<AppTitle
-							title='Add Wallet or Category to The Note'
+							title={I18n?.t(
+								'title.note.detail.budget_tab.create'
+							)}
 							level={4}
 						/>
 					}
@@ -163,6 +158,7 @@ const withEstimationNoteTab = (
 					<AddEstimationNoteForm
 						noteId={noteId}
 						handleCancel={handleCancelAdd}
+						I18n={I18n}
 					/>
 				</AppModal>
 				{recordEdit && (
@@ -171,8 +167,12 @@ const withEstimationNoteTab = (
 							<AppTitle
 								title={
 									recordEdit.estimated.balance
-										? 'Edit Wallet Estimation'
-										: 'Edit Category Estimation'
+										? I18n?.t(
+												'title.note.detail.budget_tab.edit.wallet'
+										  )
+										: I18n?.t(
+												'title.note.detail.budget_tab.edit.category'
+										  )
 								}
 								level={4}
 							/>
@@ -183,6 +183,7 @@ const withEstimationNoteTab = (
 							noteId={noteId}
 							data={recordEdit}
 							handleCancel={handleCancelEdit}
+							I18n={I18n}
 						/>
 					</AppModal>
 				)}
@@ -202,13 +203,14 @@ const withEstimationNoteTab = (
 
 		return (
 			<Component
-				isEstimation
-				data={estimations}
-				dataList={estimationsList}
+				isBudget
+				data={budgets}
+				dataList={budgetsList}
 				isLoading={isLoading}
 				isSearching={isSearching}
 				modalAdd={ModalAdd}
 				pagination={pagination}
+				I18n={I18n}
 				handleClickAdd={handleClickAdd}
 				handleClickEdit={handleClickEdit}
 				handleChangeSearch={handleChangeSearch}
