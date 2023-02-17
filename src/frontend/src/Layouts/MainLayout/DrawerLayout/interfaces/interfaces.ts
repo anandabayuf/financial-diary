@@ -1,5 +1,6 @@
 import { MenuProps } from 'antd';
 import { ColorState } from '../../../../Constants/Colors';
+import { i18n } from 'i18next';
 
 export interface DrawerLayoutProps {
 	theme?: ColorState;
@@ -10,6 +11,7 @@ export interface DrawerLayoutProps {
 		opensKeys?: string[];
 		onOpenChange?: MenuProps['onOpenChange'];
 	};
+	I18n?: i18n;
 }
 
 export interface StyledDrawerProps {

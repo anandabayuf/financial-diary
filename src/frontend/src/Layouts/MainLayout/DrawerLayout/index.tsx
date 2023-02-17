@@ -9,6 +9,7 @@ const DrawerLayout: React.FC<DrawerLayoutProps> = ({
 	handleClose,
 	isOpen,
 	menu,
+	I18n,
 }) => {
 	return (
 		<StyledDrawer
@@ -27,7 +28,7 @@ const DrawerLayout: React.FC<DrawerLayoutProps> = ({
 				openKeys={menu?.opensKeys}
 				onOpenChange={menu?.onOpenChange}
 				style={{ height: '100%', borderRight: 0 }}
-				items={MenuItems()}
+				items={MenuItems({ I18n: I18n })}
 				theme={theme}
 			/>
 		</StyledDrawer>

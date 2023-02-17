@@ -1,17 +1,14 @@
 import { ColumnsType } from 'antd/es/table';
+import { i18n } from 'i18next';
 
 export interface DetailNoteColumnsProps {
 	isWallet?: boolean;
 	isCategory?: boolean;
-	isEstimation?: boolean;
+	isBudget?: boolean;
+	I18n?: i18n;
 	handleView?: (record: any) => void;
 	handleEdit?: (record: any) => void;
 }
 
-export type DetailNoteColumnsType = ({
-	isWallet,
-	isCategory,
-	isEstimation,
-	handleView,
-	handleEdit,
-}: DetailNoteColumnsProps) => ColumnsType<any>;
+export type DetailNoteColumnsType =
+	({}: DetailNoteColumnsProps) => ColumnsType<any>;

@@ -1,4 +1,5 @@
 import { UploadFile, UploadProps, RcFile } from 'antd/es/upload';
+import { i18n } from 'i18next';
 
 export interface MyProfileFormProps {
 	user?: any;
@@ -20,4 +21,5 @@ export interface MyProfileFormProps {
 		};
 		handleCancelViewProfilePic?: () => void;
 	};
+	I18n?: i18n;
 }

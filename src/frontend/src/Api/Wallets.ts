@@ -1,35 +1,23 @@
 import instance from './index';
 
 export const getAllUserWallet = async (token?: string): Promise<any> => {
-	try {
-		const response = await instance({
-			url: `/wallet`,
-			method: 'GET',
-			headers: { Authorization: `Bearer ${token}` },
-		});
-
-		return response;
-	} catch (err) {
-		return err;
-	}
+	return await instance({
+		url: `/wallet`,
+		method: 'GET',
+		headers: { Authorization: `Bearer ${token}` },
+	});
 };
 
 export const createUserWallet = async (
 	token?: string,
 	data?: any
 ): Promise<any> => {
-	try {
-		const response = await instance({
-			url: `/wallet`,
-			method: 'POST',
-			headers: { Authorization: `Bearer ${token}` },
-			data: data,
-		});
-
-		return response;
-	} catch (err) {
-		return err;
-	}
+	return await instance({
+		url: `/wallet`,
+		method: 'POST',
+		headers: { Authorization: `Bearer ${token}` },
+		data: data,
+	});
 };
 
 export const editUserWallet = async (
@@ -37,16 +25,10 @@ export const editUserWallet = async (
 	id?: string,
 	data?: any
 ): Promise<any> => {
-	try {
-		const response = await instance({
-			url: `/wallet/${id}`,
-			method: 'PUT',
-			headers: { Authorization: `Bearer ${token}` },
-			data: data,
-		});
-
-		return response;
-	} catch (err) {
-		return err;
-	}
+	return await instance({
+		url: `/wallet/${id}`,
+		method: 'PUT',
+		headers: { Authorization: `Bearer ${token}` },
+		data: data,
+	});
 };

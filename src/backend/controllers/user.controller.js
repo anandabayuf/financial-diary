@@ -3,6 +3,7 @@ const router = express.Router();
 const crypto = require("crypto");
 const multer = require("multer");
 const userModel = require("../models/user.model");
+const message = require("../constants/message");
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -21,13 +22,13 @@ router.get("", async (req, res) => {
 
 		res.status(200).json({
 			status: 200,
-			message: "Successfully get all users data",
+			message: message["user.success.get_all"],
 			data: users,
 		});
 	} catch (err) {
 		res.status(404).json({
 			status: 404,
-			message: "Failed to get all users data",
+			message: message["user.failed.get_all"],
 			detail: err,
 		});
 	}
@@ -41,13 +42,13 @@ router.get("/:id", async (req, res) => {
 
 		res.status(200).json({
 			status: 200,
-			message: "Successfully get user data",
+			message: message["user.success.get"],
 			data: rest,
 		});
 	} catch (err) {
 		res.status(404).json({
 			status: 404,
-			message: "Failed to get user data",
+			message: message["user.failed.get"],
 			detail: err,
 		});
 	}
@@ -75,13 +76,13 @@ router.post("/", upload.single("picture"), async (req, res) => {
 		// console.log(rest);
 		res.status(201).json({
 			status: 201,
-			message: "Successfully create user",
+			message: message["user.success.create"],
 			data: rest,
 		});
 	} catch (err) {
 		res.status(404).json({
 			status: 404,
-			message: "Failed to create user",
+			message: message["user.failed.create"],
 			detail: err,
 		});
 	}
@@ -111,13 +112,13 @@ router.put("/:id", upload.single("picture"), async (req, res) => {
 
 		res.status(201).json({
 			status: 201,
-			message: "Successfully edit user data",
+			message: message["user.success.edit"],
 			data: rest,
 		});
 	} catch (err) {
 		res.status(404).json({
 			status: 404,
-			message: "Failed to edit user data",
+			message: message["user.failed.edit"],
 			detail: err,
 		});
 	}
@@ -128,12 +129,12 @@ router.delete("/:id", async (req, res) => {
 		await userModel.delete(req.params.id);
 		res.status(200).json({
 			status: 204,
-			message: "Successfully delete user data",
+			message: message["user.success.delete"],
 		});
 	} catch (err) {
 		res.status(404).json({
 			status: 404,
-			message: "Failed to delete user data",
+			message: message["user.failed.delete"],
 			detail: err,
 		});
 	}

@@ -1,4 +1,5 @@
 import { MenuProps } from 'antd';
+import { i18n } from 'i18next';
 export interface MainLayoutProps {
 	children?: React.ReactNode;
 }
@@ -16,9 +17,16 @@ export interface ProfileMenuItemsProps {
 	backgroundcolor?: string;
 }
 
-export type ProfileMenuItemsType = (
-	textColor?: string,
-	isLight?: boolean,
-	handleChangeTheme?: (e: any) => void,
-	backgroundcolor?: string
-) => MenuProps['items'];
+export interface ProfileMenuItemsProps {
+	textColor?: string;
+	isLight?: boolean;
+	I18n?: i18n;
+	isEnglish?: boolean;
+	isDropdownLangOpen?: boolean;
+	setIsDropdownLangOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+	handleChangeTheme?: (e: any) => void;
+	handleChangeLang?: (e: any) => void;
+}
+
+export type ProfileMenuItemsType =
+	({}: ProfileMenuItemsProps) => MenuProps['items'];

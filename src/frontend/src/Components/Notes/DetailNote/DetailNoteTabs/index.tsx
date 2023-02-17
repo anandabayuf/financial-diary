@@ -1,6 +1,7 @@
 import AppText from '../../../General/AppText';
 import { IoWalletOutline } from 'react-icons/io5';
-import { BsCreditCard2Front, BsClock } from 'react-icons/bs';
+import { BsCreditCard2Front } from 'react-icons/bs';
+import { FaRegMoneyBillAlt } from 'react-icons/fa';
 import { DetailNoteTabsType } from './interfaces/interfaces';
 import withWalletNoteTab from '../DetailNoteTab/withWalletNoteTab';
 import DetailNoteTab from '../DetailNoteTab';
@@ -11,36 +12,51 @@ const EstimationNoteTab = withEstimationNoteTab(DetailNoteTab);
 const WalletNoteTab = withWalletNoteTab(DetailNoteTab);
 const CategoryNoteTab = withCategoryNoteTab(DetailNoteTab);
 
-const DetailNoteTabs: DetailNoteTabsType = ({ noteId }) => [
+const DetailNoteTabs: DetailNoteTabsType = ({ noteId, I18n }) => [
 	{
-		key: 'estimation-note-tab',
+		key: 'budget-note-tab',
 		label: (
 			<div className='flex justify-center items-center gap-x-2'>
-				<BsClock />
-				<AppText text='Estimation' />
+				<FaRegMoneyBillAlt />
+				<AppText text={I18n?.t('label.budget')} />
 			</div>
 		),
-		children: <EstimationNoteTab noteId={noteId} />,
+		children: (
+			<EstimationNoteTab
+				noteId={noteId}
+				I18n={I18n}
+			/>
+		),
 	},
 	{
 		key: 'wallet-note-tab',
 		label: (
 			<div className='flex justify-center items-center gap-x-2'>
 				<IoWalletOutline />
-				<AppText text='Wallet' />
+				<AppText text={I18n?.t('label.wallet')} />
 			</div>
 		),
-		children: <WalletNoteTab noteId={noteId} />,
+		children: (
+			<WalletNoteTab
+				noteId={noteId}
+				I18n={I18n}
+			/>
+		),
 	},
 	{
 		key: 'category-note-tab',
 		label: (
 			<div className='flex justify-center items-center gap-x-2'>
 				<BsCreditCard2Front />
-				<AppText text='Category' />
+				<AppText text={I18n?.t('label.category')} />
 			</div>
 		),
-		children: <CategoryNoteTab noteId={noteId} />,
+		children: (
+			<CategoryNoteTab
+				noteId={noteId}
+				I18n={I18n}
+			/>
+		),
 	},
 ];
 

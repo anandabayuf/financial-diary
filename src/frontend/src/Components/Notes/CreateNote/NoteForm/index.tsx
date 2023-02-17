@@ -10,6 +10,7 @@ const NoteForm: React.FC<NoteFormProps> = ({
 	handleSubmit,
 	isLoading,
 	handleChangeDatePicker,
+	I18n,
 }) => {
 	const navigate = useNavigate();
 
@@ -20,14 +21,17 @@ const NoteForm: React.FC<NoteFormProps> = ({
 			onFinish={handleSubmit}
 		>
 			<AppFormItem
-				label='Note Month'
+				label={I18n?.t('form.label.note_month')}
 				name='date'
 				rules={[
-					{ required: true, message: 'Please input note month!' },
+					{
+						required: true,
+						message: I18n?.t('form.required.note_month')!,
+					},
 				]}
 			>
 				<AppDatePicker
-					placeholder='Select month...'
+					placeholder={I18n?.t('form.placeholder.note_month')!}
 					picker='month'
 					onChange={handleChangeDatePicker}
 				/>
@@ -43,13 +47,13 @@ const NoteForm: React.FC<NoteFormProps> = ({
 								type='text'
 								onClick={() => navigate(-1)}
 							>
-								Cancel
+								{I18n?.t('label.cancel')}
 							</AppButton>
 							<AppButton
 								htmlType='submit'
 								type='primary'
 							>
-								Create Note
+								{I18n?.t('label.create.note')}
 							</AppButton>
 						</>
 					)}

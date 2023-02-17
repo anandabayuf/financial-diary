@@ -46,3 +46,9 @@ export interface ManagementState {
 		category?: number;
 	};
 }
+
+export type LocaleType = 'en' | 'id';
+
+export interface LocalizationState {
+	locale?: LocaleType;
+}

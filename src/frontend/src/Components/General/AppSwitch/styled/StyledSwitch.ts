@@ -5,8 +5,8 @@ import { StyledSwitchProps } from '../interfaces/interfaces';
 const StyledSwitch = styled(Switch)<StyledSwitchProps>`
 	background-color: ${(props) =>
 		props.checked
-			? props.backgroundcolor
-			: props.backgroundcolor} !important;
+			? props.switchtheme?.bg
+			: props.switchtheme?.bg} !important;
 
 	.ant-switch-inner-checked {
 		margin-top: 5px !important;

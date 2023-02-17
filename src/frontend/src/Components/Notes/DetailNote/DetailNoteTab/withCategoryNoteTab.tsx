@@ -1,6 +1,5 @@
 import { DetailNoteTabProps } from './interfaces/interfaces';
 import { useState, useEffect } from 'react';
-import AppMessage from '../../../General/AppMessage/index';
 import { useAppSelector, useAppDispatch } from '../../../../Hooks/useRedux';
 import { getAllUserCategoryNote } from '../../../../Api/Category-Note';
 import withCategoryNoteForm from '../DetailNoteForm/withCategoryNoteForm';
@@ -21,6 +20,7 @@ const withCategoryNoteTab = (
 ) => {
 	const NewComponent: React.FC<DetailNoteTabProps> = ({
 		noteId,
+		I18n,
 		...rest
 	}) => {
 		const token = useAppSelector((state) => state.user.accessToken);
@@ -47,8 +47,9 @@ const withCategoryNoteTab = (
 			const getCategoryNote = async () => {
 				setIsLoading(true);
 
-				const res = await getAllUserCategoryNote(token, noteId);
-				if (res.request.status === 200) {
+				try {
+					const res = await getAllUserCategoryNote(token, noteId);
+
 					const data = res.data.data.map((el: any, index: number) => {
 						return {
 							...el,
@@ -57,11 +58,7 @@ const withCategoryNoteTab = (
 					});
 					setCategoryNote(data);
 					setCategoryNoteList(data);
-				} else {
-					const response = JSON.parse(res.request.response);
-
-					AppMessage({ content: response.message, type: 'error' });
-				}
+				} catch (error) {}
 
 				setIsLoading(false);
 			};
@@ -123,7 +120,7 @@ const withCategoryNoteTab = (
 			<AppModal
 				title={
 					<AppTitle
-						title='Add Category to The Note'
+						title={I18n?.t('title.note.detail.category_tab.create')}
 						level={4}
 					/>
 				}
@@ -132,6 +129,7 @@ const withCategoryNoteTab = (
 				<CategoryNoteForm
 					noteId={noteId}
 					handleCancel={handleCancelAdd}
+					I18n={I18n}
 				/>
 			</AppModal>
 		);
@@ -157,6 +155,7 @@ const withCategoryNoteTab = (
 				dataViewType={dataViewType}
 				modalAdd={ModalAdd}
 				pagination={pagination}
+				I18n={I18n}
 				handleClickAdd={handleClickAdd}
 				handleClickView={handleClickView}
 				handleChangeDataViewType={handleChangeDataViewType}

@@ -19,12 +19,13 @@ const DetailNoteTab: React.FC<DetailNoteTabProps> = ({
 	dataList,
 	isWallet = false,
 	isCategory = false,
-	isEstimation = false,
+	isBudget = false,
 	isLoading,
 	isSearching,
 	dataViewType = DataViewTypeNames.LIST,
 	modalAdd,
 	pagination,
+	I18n,
 	handleClickAdd,
 	handleClickView,
 	handleClickEdit,
@@ -38,10 +39,10 @@ const DetailNoteTab: React.FC<DetailNoteTabProps> = ({
 				<AppTitle
 					title={
 						isWallet
-							? 'Wallet Note'
+							? I18n?.t('notes.wallet')
 							: isCategory
-							? 'Category Note'
-							: 'Estimation Note'
+							? I18n?.t('notes.category')
+							: I18n?.t('notes.budget')
 					}
 					level={5}
 				/>
@@ -54,10 +55,10 @@ const DetailNoteTab: React.FC<DetailNoteTabProps> = ({
 							<BsPlusLg />
 						</div>
 						{isWallet
-							? 'Add Wallet to Note'
+							? I18n?.t('label.create.note.wallet')
 							: isCategory
-							? 'Add Category to Note'
-							: 'Add Wallet or Category'}
+							? I18n?.t('label.create.note.category')
+							: I18n?.t('label.create.note.budget')}
 					</Space>
 				</AppButton>
 			</div>
@@ -72,18 +73,26 @@ const DetailNoteTab: React.FC<DetailNoteTabProps> = ({
 							<AppSearchInput
 								placeholder={
 									isWallet
-										? 'Search Wallet Name...'
+										? I18n?.t(
+												'search.placeholder.note.detail.wallet_tab'
+										  )
 										: isCategory
-										? 'Search Category Name...'
-										: 'Search Wallet or Category Name...'
+										? I18n?.t(
+												'search.placeholder.note.detail.category_tab'
+										  )
+										: I18n?.t(
+												'search.placeholder.note.detail.budget_tab'
+										  )
 								}
 								onSearch={handleSearch}
 								onChange={handleChangeSearch}
 								loading={isSearching}
 							/>
-							{isEstimation ? (
+							{isBudget ? (
 								<div>
-									<AppText text='Balance: ' />
+									<AppText
+										text={`${I18n?.t('content.balance')}: `}
+									/>
 									<AppText
 										text={formatIDR(
 											data[0].note.estimated.balance || 0
@@ -95,7 +104,7 @@ const DetailNoteTab: React.FC<DetailNoteTabProps> = ({
 								<div className='flex items-center gap-x-3'>
 									<div className='max-sm:hidden'>
 										<AppText
-											text='Show:'
+											text={`${I18n?.t('content.show')}:`}
 											className='text-sm'
 										/>
 									</div>
@@ -112,7 +121,8 @@ const DetailNoteTab: React.FC<DetailNoteTabProps> = ({
 								columns={DetailNoteColumns({
 									isWallet: isWallet,
 									isCategory: isCategory,
-									isEstimation: isEstimation,
+									isBudget: isBudget,
+									I18n: I18n,
 									handleView: handleClickView,
 									handleEdit: handleClickEdit,
 								})}
@@ -122,6 +132,7 @@ const DetailNoteTab: React.FC<DetailNoteTabProps> = ({
 							<DetailNoteGrid
 								isWallet={isWallet}
 								data={dataList}
+								I18n={I18n}
 								handleView={handleClickView}
 							/>
 						)}

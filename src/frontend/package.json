@@ -27,6 +27,7 @@
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.6.0",
     "react-scripts": "5.0.1",
+    "react-world-flags": "^1.5.1",
     "redux": "^4.2.0",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.2",
@@ -59,6 +60,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-world-flags": "^1.4.2",
     "@types/styled-components": "^5.1.26",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.20",

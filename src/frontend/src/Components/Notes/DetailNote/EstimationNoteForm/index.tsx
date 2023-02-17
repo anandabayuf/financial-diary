@@ -21,6 +21,7 @@ const EstimationNoteForm: React.FC<EstimationNoteFormProps> = ({
 	isEdit = false,
 	isFetching,
 	isLoading,
+	I18n,
 	handleCancel,
 	handleSubmit,
 }) => {
@@ -121,14 +122,16 @@ const EstimationNoteForm: React.FC<EstimationNoteFormProps> = ({
 								label: (
 									<div className='flex justify-center items-center gap-x-2'>
 										<IoWalletOutline />
-										<AppText text='Wallet' />
+										<AppText
+											text={I18n?.t('label.wallet')}
+										/>
 									</div>
 								),
 								children: (
 									<AppFormItem
-										label={
-											'Select Wallet you want to add to the note'
-										}
+										label={I18n?.t(
+											'form.label.note.wallet.budget'
+										)}
 									>
 										<Form.List name='wallets'>
 											{(fields, { add, remove }) => (
@@ -155,7 +158,9 @@ const EstimationNoteForm: React.FC<EstimationNoteFormProps> = ({
 																			required:
 																				true,
 																			message:
-																				'Please select wallet',
+																				I18n?.t(
+																					'form.required.wallet'
+																				)!,
 																		},
 																	]}
 																	className='w-[200px]'
@@ -163,7 +168,9 @@ const EstimationNoteForm: React.FC<EstimationNoteFormProps> = ({
 																	<AppSelect
 																		allowClear
 																		labelInValue
-																		placeholder='Select Wallet'
+																		placeholder={I18n?.t(
+																			'form.placeholder.wallet'
+																		)}
 																		options={
 																			filteredWalletOptions
 																		}
@@ -180,17 +187,25 @@ const EstimationNoteForm: React.FC<EstimationNoteFormProps> = ({
 																			required:
 																				true,
 																			message:
-																				'Estimated balance must be filled',
+																				I18n?.t(
+																					'form.required.balance_budget'
+																				)!,
 																		},
 																		{
 																			pattern:
 																				/^[0-9]*$/,
 																			message:
-																				'Please input only number',
+																				I18n?.t(
+																					'form.validation.only_number'
+																				)!,
 																		},
 																	]}
 																>
-																	<AppInput placeholder='Input balance estimation' />
+																	<AppInput
+																		placeholder={I18n?.t(
+																			'form.placeholder.balance_budget'
+																		)}
+																	/>
 																</AppFormItem>
 																<AppButton
 																	type='text'
@@ -213,7 +228,9 @@ const EstimationNoteForm: React.FC<EstimationNoteFormProps> = ({
 														block
 														onClick={() => add()}
 													>
-														Add Wallet
+														{I18n?.t(
+															'label.create.note.wallet'
+														)}
 													</AppButton>
 												</>
 											)}
@@ -226,14 +243,16 @@ const EstimationNoteForm: React.FC<EstimationNoteFormProps> = ({
 								label: (
 									<div className='flex justify-center items-center gap-x-2'>
 										<BsCreditCard2Front />
-										<AppText text='Category' />
+										<AppText
+											text={I18n?.t('label.category')}
+										/>
 									</div>
 								),
 								children: (
 									<AppFormItem
-										label={
-											'Select Category you want to add to the note'
-										}
+										label={I18n?.t(
+											'form.label.note.category.budget'
+										)}
 									>
 										<Form.List name='categories'>
 											{(fields, { add, remove }) => (
@@ -260,7 +279,9 @@ const EstimationNoteForm: React.FC<EstimationNoteFormProps> = ({
 																			required:
 																				true,
 																			message:
-																				'Please select category',
+																				I18n?.t(
+																					'form.required.category'
+																				)!,
 																		},
 																	]}
 																	className='w-[200px]'
@@ -268,7 +289,9 @@ const EstimationNoteForm: React.FC<EstimationNoteFormProps> = ({
 																	<AppSelect
 																		allowClear
 																		labelInValue
-																		placeholder='Select Category'
+																		placeholder={I18n?.t(
+																			'form.placeholder.category'
+																		)}
 																		options={
 																			filteredCategoryOptions
 																		}
@@ -285,17 +308,25 @@ const EstimationNoteForm: React.FC<EstimationNoteFormProps> = ({
 																			required:
 																				true,
 																			message:
-																				'Estimated total must be filled',
+																				I18n?.t(
+																					'form.required.total_budget'
+																				)!,
 																		},
 																		{
 																			pattern:
 																				/^[0-9]*$/,
 																			message:
-																				'Please input only number',
+																				I18n?.t(
+																					'form.validation.only_number'
+																				)!,
 																		},
 																	]}
 																>
-																	<AppInput placeholder='Input total estimation' />
+																	<AppInput
+																		placeholder={I18n?.t(
+																			'form.placeholder.total_budget'
+																		)}
+																	/>
 																</AppFormItem>
 																<AppButton
 																	type='text'
@@ -318,7 +349,9 @@ const EstimationNoteForm: React.FC<EstimationNoteFormProps> = ({
 														block
 														onClick={() => add()}
 													>
-														Add Category
+														{I18n?.t(
+															'label.create.note.category'
+														)}
 													</AppButton>
 												</>
 											)}
@@ -337,59 +370,69 @@ const EstimationNoteForm: React.FC<EstimationNoteFormProps> = ({
 					<>
 						{data.estimated.balance !== undefined ? (
 							<AppFormItem
-								label={'Wallet Name'}
+								label={I18n?.t('form.label.wallet')}
 								name={'walletName'}
-								extra='Wallet cannot be changed'
+								extra={I18n?.t('form.extra.wallet')}
 							>
 								<AppSelect disabled />
 							</AppFormItem>
 						) : (
 							<AppFormItem
-								label={'Category Name'}
+								label={I18n?.t('form.label.category')}
 								name={'categoryName'}
-								extra='Category cannot be changed'
+								extra={I18n?.t('form.extra.category')}
 							>
 								<AppSelect disabled />
 							</AppFormItem>
 						)}
 						{data.estimated.balance !== undefined ? (
 							<AppFormItem
-								label={'Estimated Balance'}
+								label={I18n?.t('form.label.balance_budget')}
 								name={'estimatedBalance'}
 								rules={[
 									{
 										required: true,
-										message:
-											'Estimated balance must be filled',
+										message: I18n?.t(
+											'form.required.balance_budget'
+										)!,
 									},
 									{
 										pattern: /^[0-9]*$/,
-										message: 'Please input only number',
+										message: I18n?.t(
+											'form.validation.only_number'
+										)!,
 									},
 								]}
 							>
 								<AppInput
-									placeholder={'Input balance estimation'}
+									placeholder={I18n?.t(
+										'form.placeholder.balance_budget'
+									)}
 								/>
 							</AppFormItem>
 						) : (
 							<AppFormItem
-								label={'Estimated Total'}
+								label={I18n?.t('form.label.total_budget')}
 								name={'estimatedTotal'}
 								rules={[
 									{
 										required: true,
-										message:
-											'Estimated total must be filled',
+										message: I18n?.t(
+											'form.required.total_budget'
+										)!,
 									},
 									{
 										pattern: /^[0-9]*$/,
-										message: 'Please input only number',
+										message: I18n?.t(
+											'form.validation.only_number'
+										)!,
 									},
 								]}
 							>
 								<AppInput
-									placeholder={'Input total estimation'}
+									placeholder={I18n?.t(
+										'form.placeholder.total_budget'
+									)}
 								/>
 							</AppFormItem>
 						)}
@@ -406,7 +449,7 @@ const EstimationNoteForm: React.FC<EstimationNoteFormProps> = ({
 						htmlType='button'
 						onClick={handleCancel}
 					>
-						Cancel
+						{I18n?.t('label.cancel')}
 					</AppButton>
 					{((walletData && walletData.length > 0) ||
 						(categoryData && categoryData.length > 0) ||
@@ -415,7 +458,9 @@ const EstimationNoteForm: React.FC<EstimationNoteFormProps> = ({
 							type='primary'
 							htmlType='submit'
 						>
-							{isAdd ? 'Add to the note' : 'Save'}
+							{isAdd
+								? I18n?.t('label.create.note.budget')
+								: I18n?.t('label.save')}
 						</AppButton>
 					)}
 				</div>

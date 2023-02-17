@@ -1,0 +1,46 @@
+@import '../../../../Styles/Library.scss';
+
+body {
+    .ant-notification .ant-notification-notice {
+        .ant-notification-notice-message, .ant-notification-notice-description {
+            font-family: 'Comfortaa', cursive !important;
+            font-weight: 400 !important;
+        }
+    }
+}
+
+body.dark {
+    .ant-notification .ant-notification-notice {
+        background-color: $dark-container !important;
+
+        .ant-notification-notice-message {
+            color: $dark-title;
+        }
+
+        .ant-notification-notice-description {
+            color: $dark-text;
+        }
+
+        .ant-notification-notice-close {
+            color: $dark-text;
+        }
+    }
+}
+
+body.light {
+    .ant-notification .ant-notification-notice {
+        background-color: $light-container !important;
+
+        .ant-notification-notice-message {
+            color: $light-title;
+        }
+
+        .ant-notification-notice-description {
+            color: $light-text;
+        }
+
+        .ant-notification-notice-close {
+            color: $light-text;
+        }
+    }
+}

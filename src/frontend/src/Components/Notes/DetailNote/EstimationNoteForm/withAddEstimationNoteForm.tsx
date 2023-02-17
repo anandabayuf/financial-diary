@@ -8,6 +8,7 @@ import {
 } from '../../../../Api/Category-Note';
 import { addWalletNoteEstimated } from '../../../../Api/Wallet-Note';
 import { EstimationNoteFormProps } from './interfaces/interfaces';
+import { errorHandling } from '../../../../Api/errorHandling';
 
 const withAddEstimationNoteForm = (
 	Component: React.ComponentType<EstimationNoteFormProps>
@@ -15,6 +16,7 @@ const withAddEstimationNoteForm = (
 	const NewComponent: React.FC<EstimationNoteFormProps> = ({
 		noteId,
 		handleCancel,
+		I18n,
 		...rest
 	}) => {
 		const token = useAppSelector((state) => state.user.accessToken);
@@ -27,27 +29,22 @@ const withAddEstimationNoteForm = (
 			const getAvailableWalletAndCategory = async () => {
 				setIsFetching(true);
 
-				const resWallet = await getAvailableUserWallet(token, noteId);
-				if (resWallet.request.status === 200) {
-					const resCat = await getAvailableUserCategory(
+				try {
+					const resWallet = await getAvailableUserWallet(
 						token,
 						noteId
 					);
-					if (resCat.request.status === 200) {
+					try {
+						const resCat = await getAvailableUserCategory(
+							token,
+							noteId
+						);
+
 						setAvailableWallet(resWallet.data.data);
 						setAvailableCategory(resCat.data.data);
-					} else {
-						const response = JSON.parse(resCat.request.response);
-
-						AppMessage({
-							content: response.message,
-							type: 'error',
-						});
-					}
-				} else {
-					const response = JSON.parse(resWallet.request.response);
-
-					AppMessage({ content: response.message, type: 'error' });
+					} catch (error) {}
+				} catch (error) {
+					errorHandling(error, I18n!);
 				}
 
 				setIsFetching(false);
@@ -69,25 +66,22 @@ const withAddEstimationNoteForm = (
 							},
 						};
 					});
-					// console.log(walletsPayload);
-					const res = await addWalletNoteEstimated(
-						token,
-						walletsPayload
-					);
 
-					if (res.request.status === 201) {
+					try {
+						const res = await addWalletNoteEstimated(
+							token,
+							walletsPayload
+						);
+
 						AppMessage({
-							content: res.data.message,
+							content: I18n?.t(res.data.message),
 							type: 'success',
 						});
 						if (handleCancel) {
 							handleCancel();
 						}
-					} else {
-						AppMessage({
-							content: res.data.message,
-							type: 'error',
-						});
+					} catch (error) {
+						errorHandling(error, I18n!);
 					}
 				}
 
@@ -103,25 +97,22 @@ const withAddEstimationNoteForm = (
 							};
 						}
 					);
-					// console.log(categoriesPayload);
-					const res = await addCategoryNoteEstimated(
-						token,
-						categoriesPayload
-					);
 
-					if (res.request.status === 201) {
+					try {
+						const res = await addCategoryNoteEstimated(
+							token,
+							categoriesPayload
+						);
+
 						AppMessage({
-							content: res.data.message,
+							content: I18n?.t(res.data.message),
 							type: 'success',
 						});
 						if (handleCancel) {
 							handleCancel();
 						}
-					} else {
-						AppMessage({
-							content: res.data.message,
-							type: 'error',
-						});
+					} catch (error) {
+						errorHandling(error, I18n!);
 					}
 				}
 			}
@@ -138,6 +129,7 @@ const withAddEstimationNoteForm = (
 				isLoading={isLoading}
 				isFetching={isFetching}
 				handleCancel={handleCancel}
+				I18n={I18n}
 				{...rest}
 			/>
 		);

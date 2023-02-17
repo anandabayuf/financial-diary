@@ -4,6 +4,7 @@ import { useAppSelector } from '../../../../Hooks/useRedux';
 import AppMessage from '../../../General/AppMessage/index';
 import { editCategoryNoteEstimated } from '../../../../Api/Category-Note';
 import { EstimationNoteFormProps } from './interfaces/interfaces';
+import { errorHandling } from '../../../../Api/errorHandling';
 
 const withEditEstimationNoteForm = (
 	Component: React.ComponentType<EstimationNoteFormProps>
@@ -12,6 +13,7 @@ const withEditEstimationNoteForm = (
 		noteId,
 		data,
 		handleCancel,
+		I18n,
 		...rest
 	}) => {
 		const token = useAppSelector((state) => state.user.accessToken);
@@ -29,8 +31,6 @@ const withEditEstimationNoteForm = (
 						parseInt(values.estimatedTotal) !==
 							data.estimated.total))
 			) {
-				let res: any;
-
 				if (values.estimatedBalance !== undefined) {
 					const payload = {
 						noteId: noteId,
@@ -38,11 +38,24 @@ const withEditEstimationNoteForm = (
 							balance: parseInt(values.estimatedBalance),
 						},
 					};
-					res = await editWalletNoteEstimated(
-						token,
-						data._id,
-						payload
-					);
+
+					try {
+						const res = await editWalletNoteEstimated(
+							token,
+							data._id,
+							payload
+						);
+
+						AppMessage({
+							content: I18n?.t(res.data.message),
+							type: 'success',
+						});
+						if (handleCancel) {
+							handleCancel();
+						}
+					} catch (error) {
+						errorHandling(error, I18n!);
+					}
 				} else if (values.estimatedTotal !== undefined) {
 					const payload = {
 						noteId: noteId,
@@ -50,26 +63,23 @@ const withEditEstimationNoteForm = (
 							total: parseInt(values.estimatedTotal),
 						},
 					};
-					res = await editCategoryNoteEstimated(
-						token,
-						data._id,
-						payload
-					);
-				}
+					try {
+						const res = await editCategoryNoteEstimated(
+							token,
+							data._id,
+							payload
+						);
 
-				if (res.request.status === 201) {
-					AppMessage({
-						content: res.data.message,
-						type: 'success',
-					});
-					if (handleCancel) {
-						handleCancel();
+						AppMessage({
+							content: I18n?.t(res.data.message),
+							type: 'success',
+						});
+						if (handleCancel) {
+							handleCancel();
+						}
+					} catch (error) {
+						errorHandling(error, I18n!);
 					}
-				} else {
-					AppMessage({
-						content: res.response.data.message,
-						type: 'error',
-					});
 				}
 			} else {
 				if (handleCancel) {
@@ -87,6 +97,7 @@ const withEditEstimationNoteForm = (
 				isLoading={isLoading}
 				handleSubmit={handleSubmit}
 				handleCancel={handleCancel}
+				I18n={I18n}
 				{...rest}
 			/>
 		);

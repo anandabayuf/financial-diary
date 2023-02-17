@@ -1,6 +1,7 @@
 import { AppSelectProps } from './interfaces/interfaces';
 import StyledSelect from './styled/StyledSelect';
 import useTheme from '../../../Hooks/useTheme';
+import AppEmpty from '../AppEmpty/index';
 
 const AppSelect: React.FC<AppSelectProps> = ({
 	options,
@@ -14,6 +15,11 @@ const AppSelect: React.FC<AppSelectProps> = ({
 
 	return (
 		<StyledSelect
+			notFoundContent={
+				<div className='flex justify-center'>
+					<AppEmpty />
+				</div>
+			}
 			themeselect={theme}
 			options={options}
 			value={value}

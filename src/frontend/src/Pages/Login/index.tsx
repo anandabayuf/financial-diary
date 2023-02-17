@@ -12,43 +12,47 @@ import { useState, useEffect } from 'react';
 import { useAppDispatch } from '../../Hooks/useRedux';
 import { setUserLoggedIn } from '../../Store/User/UserSlice';
 import { decodeJWT } from '../../Utils/AuthUtils';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { getUserById } from '../../Api/User';
-import AppMessage from '../../Components/General/AppMessage/index';
 import AppTitle from '../../Components/General/AppTitle/index';
 import AppLogo from '../../Components/General/AppLogo';
+import useLocale from '../../Hooks/useLocale';
+import { errorHandling } from '../../Api/errorHandling';
 
 const LoginPage: React.FC = () => {
-	const [loading, setLoading] = useState(false);
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
-	const location = useLocation();
+
+	const [loading, setLoading] = useState(false);
+	const { I18n, language } = useLocale();
 
 	const handleLogin = async (values: string) => {
 		setLoading(true);
 
-		const res = await login(values);
+		try {
+			const res = await login(values);
 
-		if (res.request.status === 401) {
-			AppMessage({ content: res.response.data.detail, type: 'error' });
-		} else if (res.request.status === 200) {
 			const jwtDecoded: any = decodeJWT(res.data.token);
 
-			const responseGetUser = await getUserById(
-				jwtDecoded.id,
-				res.data.token
-			);
+			try {
+				const responseGetUser = await getUserById(
+					jwtDecoded.id,
+					res.data.token
+				);
 
-			const user = await responseGetUser.data.data;
+				const user = await responseGetUser.data.data;
 
-			dispatch(
-				setUserLoggedIn({
-					accessToken: res.data.token,
-					data: await user,
-				})
-			);
-		} else {
-			AppMessage({ content: res.message, type: 'error' });
+				dispatch(
+					setUserLoggedIn({
+						accessToken: res.data.token,
+						data: await user,
+					})
+				);
+			} catch (error) {
+				errorHandling(error, I18n);
+			}
+		} catch (error) {
+			errorHandling(error, I18n);
 		}
 
 		setLoading(false);
@@ -61,19 +65,8 @@ const LoginPage: React.FC = () => {
 	};
 
 	useEffect(() => {
-		const stateReceiveAction = () => {
-			if (location.state) {
-				AppMessage({ content: location.state.message, type: 'info' });
-				window.history.replaceState({}, document.title);
-			}
-		};
-
-		stateReceiveAction(); // eslint-disable-next-line
-	}, [location.state]);
-
-	useEffect(() => {
-		document.title = 'Login - Financial Diary App';
-	}, []);
+		document.title = `${I18n.t('login')} - Financial Diary App`;
+	}, [language, I18n]);
 
 	return (
 		<FrontLayout>
@@ -92,12 +85,17 @@ const LoginPage: React.FC = () => {
 						/>
 					</Col>
 					<Col className='login-form-container'>
+						<div className='min-[426px]:hidden flex justify-center mb-3'>
+							<AppLogo width='128px' />
+						</div>
 						<div className='flex justify-between items-baseline mb-5'>
 							<AppTitle
 								level={4}
-								title='Login'
+								title={I18n.t('login')!}
 							/>
-							<AppLogo width='128px' />
+							<div className='max-[425px]:hidden'>
+								<AppLogo width='128px' />
+							</div>
 						</div>
 						<LoginForm
 							handleFinish={handleLogin}
@@ -106,14 +104,14 @@ const LoginPage: React.FC = () => {
 						/>
 						<StyledRegisterContainer>
 							<AppText
-								text="Don't have an account?"
+								text={I18n.t('content.dont_have_an_account?')}
 								className='text-xs'
 							/>
 							<AppButton
 								type='link'
 								onClick={handleClickRegister}
 							>
-								Register
+								{I18n.t('register')}
 							</AppButton>
 						</StyledRegisterContainer>
 					</Col>

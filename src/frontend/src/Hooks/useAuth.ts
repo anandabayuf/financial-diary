@@ -2,7 +2,8 @@ import { checkToken } from '../Api/Auth';
 import { useAppSelector, useAppDispatch } from './useRedux';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { setUserLoggedOut } from '../Store/User/UserSlice';
+import { errorHandling } from '../Api/errorHandling';
+import I18n from 'i18next';
 
 const useAuth = () => {
 	const user = useAppSelector((state) => state.user);
@@ -12,16 +13,10 @@ const useAuth = () => {
 	useMemo(() => {
 		const checkTokenValidation = async () => {
 			if (user.accessToken) {
-				const res = await checkToken(`${user.accessToken}`);
-				if (res.request.status === 401) {
-					dispatch(setUserLoggedOut());
-
-					navigate('/login', {
-						state: {
-							message: 'Session has expired, please log in again',
-						},
-						replace: true,
-					});
+				try {
+					await checkToken(`${user.accessToken}`);
+				} catch (error) {
+					errorHandling(error, I18n, dispatch, navigate);
 				}
 			}
 		};

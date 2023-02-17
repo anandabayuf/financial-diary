@@ -17,7 +17,7 @@ const initialState: NoteState = {
 		name: '',
 	},
 	showYear: 'all-year',
-	activeKeyNoteTab: 'estimation-note-tab',
+	activeKeyNoteTab: 'budget-note-tab',
 	dataViewType: {
 		category: DataViewTypeNames.LIST,
 		wallet: DataViewTypeNames.LIST,

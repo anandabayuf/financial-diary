@@ -8,6 +8,7 @@ import UserReducer from './User/UserSlice';
 import MenuReducer from './Menu/MenuSlice';
 import NoteReducer from './Note/NoteSlice';
 import ManagementReducer from './Management/ManagementSlice';
+import LocalizationReducer from './Localization/LocalizationSlice';
 
 const reducers = combineReducers({
 	theme: ThemeReducer,
@@ -15,6 +16,7 @@ const reducers = combineReducers({
 	menu: MenuReducer,
 	note: NoteReducer,
 	management: ManagementReducer,
+	localization: LocalizationReducer,
 });
 
 const persistConfig: persistConfigType = {

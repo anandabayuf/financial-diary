@@ -18,20 +18,29 @@ import { Link } from 'react-router-dom';
 import { getRouteNames } from '../../../Utils/RouteUtils';
 import RouteNames from '../../../Constants/RouteNames';
 import AppLogo from '../../../Components/General/AppLogo';
+import { setLocalization } from '../../../Store/Localization/LocalizationSlice';
 
 const HeaderLayout: React.FC<HeaderLayoutProps> = ({
 	user,
 	theme,
 	handleOpenDrawer,
+	I18n,
+	language,
 }) => {
+	const dispatch = useAppDispatch();
 	const themeMode = useAppSelector((state) => state.theme);
 	const [isOpen, setIsOpen] = useState(false);
-	const dispatch = useAppDispatch();
+	const [isDropdownLangOpen, setIsDropdownLangOpen] = useState(false);
 
 	const handleClickProfileMenu = (e: any) => {
 		if (e.key === 'logout') {
 			dispatch(setUserLoggedOut());
-		} else if (e.key !== 'theme-switcher') {
+		} else if (
+			e.key === 'theme-switcher' ||
+			e.key === 'language-switcher'
+		) {
+			setIsOpen(true);
+		} else {
 			setIsOpen(false);
 		}
 	};
@@ -42,6 +51,11 @@ const HeaderLayout: React.FC<HeaderLayoutProps> = ({
 		} else {
 			dispatch(setDarkMode());
 		}
+	};
+
+	const handleChangeLanguage = (e: any) => {
+		dispatch(setLocalization({ locale: e.key }));
+		setIsDropdownLangOpen(false);
 	};
 
 	return (
@@ -66,14 +80,20 @@ const HeaderLayout: React.FC<HeaderLayoutProps> = ({
 			</div>
 			<Dropdown
 				menu={{
-					items: ProfileMenuItems(
-						theme?.text,
-						themeMode === ThemeModeNames.LIGHT,
-						handleChangeTheme,
-						theme?.container
-					),
+					items: ProfileMenuItems({
+						textColor: theme?.text,
+						isLight: themeMode === ThemeModeNames.LIGHT,
+						handleChangeTheme: handleChangeTheme,
+						I18n: I18n,
+						isEnglish: language === 'en',
+						handleChangeLang: handleChangeLanguage,
+						backgroundcolor: theme?.container,
+						isDropdownLangOpen: isDropdownLangOpen,
+						setIsDropdownLangOpen: setIsDropdownLangOpen,
+					}),
 					style: {
 						backgroundColor: theme?.button,
+						width: '180px',
 					},
 					onClick: handleClickProfileMenu,
 				}}
@@ -104,7 +124,10 @@ const HeaderLayout: React.FC<HeaderLayoutProps> = ({
 							/>
 						)}
 						{user && (
-							<StyledUsernameContainer className='text-ellipsis overflow-hidden ...'>
+							<StyledUsernameContainer
+								className='text-ellipsis overflow-hidden ...'
+								themecontainer={theme}
+							>
 								<AppText text={user.username} />
 							</StyledUsernameContainer>
 						)}

@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const message = require("../constants/message");
 
 exports.isAuthenticated = (req, res, next) => {
 	const authHeader = req.headers.authorization;
@@ -8,8 +9,7 @@ exports.isAuthenticated = (req, res, next) => {
 		if (err) {
 			return res.status(401).json({
 				status: 401,
-				message:
-					"A client is forbidden from accessing a valid resource",
+				message: message["auth.token_is_not_valid"],
 			});
 		} else {
 			req.user = user;

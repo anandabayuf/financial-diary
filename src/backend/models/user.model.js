@@ -1,12 +1,16 @@
 const schema = require("./schema");
+const message = require("../constants/message");
 
 exports.create = (data) => {
 	return new Promise((resolve, reject) => {
 		new schema.UserSchema(data).save((err, response) => {
 			if (err) {
-				reject(err);
+				if (err.code === 11000) {
+					reject(message["user.username_taken"]);
+				} else {
+					reject(err);
+				}
 			} else {
-				// console.log(response);
 				resolve(response.toObject());
 			}
 		});
@@ -48,12 +52,11 @@ exports.edit = (id, data) => {
 	return new Promise((resolve, reject) => {
 		schema.UserSchema.findByIdAndUpdate(id, data, (err, result) => {
 			if (err) {
-				if (err.codeName === "DuplicateKey")
-					reject({
-						message:
-							"Username is already exist, Please input unique username!",
-					});
-				else reject(err);
+				if (err.code === 11000) {
+					reject(message["user.username_taken"]);
+				} else {
+					reject(err);
+				}
 			} else {
 				this.getById(id)
 					.then((res) => resolve(res))

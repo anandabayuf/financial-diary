@@ -6,12 +6,12 @@ import {
 import { GiNotebook } from 'react-icons/gi';
 import { IoWalletOutline } from 'react-icons/io5';
 import { BsCreditCard2Front } from 'react-icons/bs';
-import { MenuProps } from 'antd';
 import { Link } from 'react-router-dom';
 import { getRouteNames } from '../../../Utils/RouteUtils';
 import RouteNames from '../../../Constants/RouteNames';
+import { MenuItemsType } from './interfaces/interfaces';
 
-const MenuItems: () => MenuProps['items'] = () => {
+const MenuItems: MenuItemsType = ({ I18n }) => {
 	return [
 		// {
 		// 	key: 'dashboard',
@@ -24,14 +24,14 @@ const MenuItems: () => MenuProps['items'] = () => {
 		// },
 		{
 			key: 'management',
-			label: <AppText text='Management' />,
+			label: <AppText text={I18n?.t('menu.management')} />,
 			icon: <MdOutlineManageAccounts />,
 			children: [
 				{
 					key: 'wallets',
 					label: (
 						<Link to={getRouteNames(RouteNames.MANAGEMENT_WALLETS)}>
-							<AppText text='Wallets' />
+							<AppText text={I18n?.t('menu.management.wallet')} />
 						</Link>
 					),
 					icon: <IoWalletOutline />,
@@ -42,7 +42,9 @@ const MenuItems: () => MenuProps['items'] = () => {
 						<Link
 							to={getRouteNames(RouteNames.MANAGEMENT_CATEGORY)}
 						>
-							<AppText text='Category' />
+							<AppText
+								text={I18n?.t('menu.management.category')}
+							/>
 						</Link>
 					),
 					icon: <BsCreditCard2Front />,
@@ -53,7 +55,7 @@ const MenuItems: () => MenuProps['items'] = () => {
 			key: 'notes',
 			label: (
 				<Link to={getRouteNames(RouteNames.NOTES)}>
-					<AppText text='Notes' />
+					<AppText text={I18n?.t('menu.notes')} />
 				</Link>
 			),
 			icon: <GiNotebook />,

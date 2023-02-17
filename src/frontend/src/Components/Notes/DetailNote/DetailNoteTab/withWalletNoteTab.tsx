@@ -1,7 +1,6 @@
 import { DetailNoteTabProps } from './interfaces/interfaces';
 import { useState, useEffect } from 'react';
 import { getAllUserWalletNote } from '../../../../Api/Wallet-Note';
-import AppMessage from '../../../General/AppMessage/index';
 import { useAppSelector, useAppDispatch } from '../../../../Hooks/useRedux';
 import AppModal from '../../../General/AppModal';
 import withWalletNoteForm from '../DetailNoteForm/withWalletNoteForm';
@@ -15,12 +14,14 @@ import {
 } from '../../../../Store/Note/NoteSlice';
 import { useNavigate } from 'react-router-dom';
 import { TableProps } from 'antd';
+import { errorHandling } from '../../../../Api/errorHandling';
 
 const withWalletNoteTab = (
 	Component: React.ComponentType<DetailNoteTabProps>
 ) => {
 	const NewComponent: React.FC<DetailNoteTabProps> = ({
 		noteId,
+		I18n,
 		...rest
 	}) => {
 		const token = useAppSelector((state) => state.user.accessToken);
@@ -46,8 +47,9 @@ const withWalletNoteTab = (
 			const getWalletNote = async () => {
 				setIsLoading(true);
 
-				const res = await getAllUserWalletNote(token, noteId);
-				if (res.request.status === 200) {
+				try {
+					const res = await getAllUserWalletNote(token, noteId);
+
 					const data = res.data.data.map((el: any, index: number) => {
 						return {
 							...el,
@@ -56,10 +58,8 @@ const withWalletNoteTab = (
 					});
 					setWalletNote(data);
 					setWalletNoteList(data);
-				} else {
-					const response = JSON.parse(res.request.response);
-
-					AppMessage({ content: response.message, type: 'error' });
+				} catch (error) {
+					errorHandling(error, I18n!);
 				}
 
 				setIsLoading(false);
@@ -118,7 +118,7 @@ const withWalletNoteTab = (
 			<AppModal
 				title={
 					<AppTitle
-						title='Add Wallet to The Note'
+						title={I18n?.t('title.note.detail.wallet_tab.create')}
 						level={4}
 					/>
 				}
@@ -127,6 +127,7 @@ const withWalletNoteTab = (
 				<WalletNoteForm
 					noteId={noteId}
 					handleCancel={handleCancelAdd}
+					I18n={I18n}
 				/>
 			</AppModal>
 		);
@@ -152,6 +153,7 @@ const withWalletNoteTab = (
 				dataViewType={dataViewType}
 				modalAdd={ModalAdd}
 				pagination={pagination}
+				I18n={I18n}
 				handleClickAdd={handleClickAdd}
 				handleClickView={handleClickView}
 				handleChangeDataViewType={handleChangeDataViewType}

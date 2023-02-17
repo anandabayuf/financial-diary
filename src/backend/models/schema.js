@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const { config } = require("dotenv");
-const { ITEM_TYPE } = require("../constants/enum");
 
 config();
 

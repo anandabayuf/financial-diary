@@ -1,22 +1,23 @@
-import { ColumnsType } from 'antd/es/table';
 import AppButton from '../../../General/AppButton';
 import AppText from '../../../General/AppText';
-import { NoteColumnsProps } from './interfaces/interfaces';
+import { NoteColumnsType } from './interfaces/interfaces';
 import {
 	getFullYearFromDate,
 	getLongMonthFromDate,
 } from '../../../../Utils/DateUtils';
 
-const NotesColumns: ({
-	showYear,
+const NotesColumns: NoteColumnsType = ({
 	handleView,
-}: NoteColumnsProps) => ColumnsType<any> = ({ handleView, showYear }) => {
+	showYear,
+	I18n,
+	language,
+}) => {
 	return showYear === 'all-year'
 		? [
 				{
 					title: (
 						<AppText
-							text='Year'
+							text={I18n?.t('label.year')}
 							strong
 						/>
 					),
@@ -29,7 +30,7 @@ const NotesColumns: ({
 				{
 					title: (
 						<AppText
-							text='Month'
+							text={I18n?.t('label.month')}
 							strong
 						/>
 					),
@@ -38,13 +39,15 @@ const NotesColumns: ({
 					sorter: (a, b) =>
 						new Date(a.date).getTime() - new Date(b.date).getTime(),
 					render: (_, record) => (
-						<AppText text={getLongMonthFromDate(record.date)} />
+						<AppText
+							text={getLongMonthFromDate(record.date, language)}
+						/>
 					),
 				},
 				{
 					title: (
 						<AppText
-							text='Action'
+							text={I18n?.t('label.action')}
 							strong
 						/>
 					),
@@ -56,7 +59,7 @@ const NotesColumns: ({
 								type='text'
 								onClick={() => handleView && handleView(record)}
 							>
-								View
+								{I18n?.t('label.view')}
 							</AppButton>
 						);
 					},
@@ -66,7 +69,7 @@ const NotesColumns: ({
 				{
 					title: (
 						<AppText
-							text='Month'
+							text={I18n?.t('label.month')}
 							strong
 						/>
 					),
@@ -81,7 +84,7 @@ const NotesColumns: ({
 				{
 					title: (
 						<AppText
-							text='Action'
+							text={I18n?.t('label.action')}
 							strong
 						/>
 					),
@@ -93,7 +96,7 @@ const NotesColumns: ({
 								type='text'
 								onClick={() => handleView && handleView(record)}
 							>
-								View
+								{I18n?.t('label.view')}
 							</AppButton>
 						);
 					},
