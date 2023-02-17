@@ -20,6 +20,10 @@ const general = {
 	'notes.wallet': 'Wallet Note',
 	'notes.category': 'Category Note',
 	'notes.budget': 'Budget Note',
+
+	'notes.items': 'Note Items',
+	'notes.items.create': 'Create New Note Item',
+	'notes.items.edit': 'Edit Note Item',
 };
 
 const content = {
@@ -33,6 +37,23 @@ const content = {
 
 	'content.balance': 'Balance',
 	'content.total': 'Total',
+	'content.date': 'Date',
+	'content.description': 'Description',
+	'content.debit': 'Debit',
+	'content.credit': 'Credit',
+
+	'content.note_item_delete_confirmation':
+		'Are you sure you want to delete this item?',
+
+	'content.what_is': 'What is',
+	'content.what_is.Income':
+		'Income is a type of note item to record income/value added.',
+	'content.what_is.Spend':
+		'Spend is a type of note item for recording expenses.',
+	'content.what_is.Spend Only In Wallet':
+		'Spend Only In Wallet is a type of note item to record expenses only in the wallet.',
+	'content.what_is.Transfer or Withdraw':
+		'Transfer or Withdraw is a type of note item to record the transfer of money to the selected wallet.',
 };
 
 const label = {
@@ -48,6 +69,7 @@ const label = {
 	'label.save': 'Save',
 	'label.view': 'View',
 	'label.edit': 'Edit',
+	'label.delete': 'Delete',
 
 	'label.create.wallet': 'Create Wallet',
 	'label.create.category': 'Create Category',
@@ -56,6 +78,7 @@ const label = {
 	'label.create.note.category': 'Add Category to the Note',
 	'label.create.note.budget': 'Add Budget',
 	'label.create.note.detail': 'Add to the Note',
+	'label.create.note.item': 'Create Item',
 
 	'label.edit.my_profile': 'Edit My Profile',
 	'label.edit.wallet': 'Edit Wallet',
@@ -71,9 +94,18 @@ const label = {
 	'label.budget.total': 'Total Budget',
 	'label.spent': 'Spent',
 	'label.remains': 'Remains',
+	'label.date': 'Date',
+	'label.description': 'Description',
+	'label.debit': 'Debit',
+	'label.credit': 'Credit',
 
 	'label.no_data': 'No Data',
 	'label.page': 'Page',
+
+	'label.Income': 'Income',
+	'label.Spend Only In Wallet': 'Spend only in Wallet',
+	'label.Transfer or Withdraw': 'Transfer or Withdraw',
+	'label.Spend': 'Spend',
 
 	'form.label.username': 'Username',
 	'form.label.password': 'Password',
@@ -91,6 +123,15 @@ const label = {
 	'form.label.category': 'Category',
 	'form.label.total_budget': 'Total Budget',
 	'form.label.balance_budget': 'Balance Budget',
+	'form.label.date': 'Date',
+	'form.label.description': 'Description',
+	'form.label.item_type': 'Item Type',
+	'form.label.income_amount': 'Income Amount',
+	'form.label.spend_amount': 'Spend Amount',
+	'form.label.transfer_amount': 'Transfer or Withdraw Amount',
+	'form.label.transfer_to': 'Transfer or Withdraw to Wallet',
+	'form.label.transfer_from': 'Transfer or Withdraw from Wallet',
+	'form.label.spend_wallet': 'Spend from Wallet',
 
 	'form.placeholder.username': 'input your username',
 	'form.placeholder.password': 'input your password',
@@ -104,6 +145,13 @@ const label = {
 	'form.placeholder.category': 'select category',
 	'form.placeholder.total_budget': 'input total budget',
 	'form.placeholder.balance_budget': 'input balance budget',
+	'form.placeholder.date': 'select date',
+	'form.placeholder.description': 'input description',
+	'form.placeholder.item_type': 'select item type',
+	'form.placeholder.income_amount': 'input income amount',
+	'form.placeholder.spend_amount': 'input spend amount',
+	'form.placeholder.transfer_amount': 'input transfer or withdraw amount',
+	'form.placeholder.transfer_to': 'select destination wallet',
 
 	'form.extra.wallet': 'Wallet cannot be changed',
 	'form.extra.category': 'Category cannot be changed',
@@ -113,6 +161,7 @@ const label = {
 	'search.placeholder.note.detail.wallet_tab': 'Search Wallet Name',
 	'search.placeholder.note.detail.category_tab': 'Search Category Name',
 	'search.placeholder.note.detail.budget_tab': 'Search Budget Item Name',
+	'search.placeholder.note.items': 'Search item description',
 
 	'placeholder.select_year': 'Select year to show',
 };
@@ -151,6 +200,8 @@ const titlepage = {
 	'title.note.detail.category_tab.create': 'Add Category to the Note',
 
 	'title.note.detail_note_not_found': 'Monthly Note',
+
+	'title.note.item.delete': 'Delete Item',
 };
 
 const info = {
@@ -170,6 +221,14 @@ const error = {
 	'form.required.category': 'Please select category!',
 	'form.required.total_budget': 'Please input total budget!',
 	'form.required.balance_budget': 'Please input balance budget!',
+	'form.required.date': 'Please select date!',
+	'form.required.description': 'Please input description!',
+	'form.required.item_type': 'Please select item type!',
+	'form.required.income_amount': 'Please input income amount!',
+	'form.required.spend_amount': 'Please input spend amount!',
+	'form.required.transfer_amount':
+		'Please input transfer or withdraw amount!',
+	'form.required.transfer_to': 'Please select destination wallet!',
 
 	'form.validation.no_spaces': 'No spaces allowed!',
 	'form.validation.password_not_match': "Password doesn't match!",
@@ -290,9 +349,8 @@ const backend = {
 	'noteitem.exception.001': 'Income amount must be zero or positive number',
 	'noteitem.exception.002': 'Transfer amount must be zero or positive number',
 	'noteitem.exception.003': 'Total amount must be zero or positive number',
-	'noteitem.exception.004': 'Cannot add item. Invalid type item',
-	'noteitem.exception.005':
-		'Cannot add item. The range of note is from 26-XX-XXXX to 25-XX-XXXX',
+	'noteitem.exception.004': 'Invalid type of note item',
+	'noteitem.exception.005': 'The date does not match the note date range',
 	'noteitem.failed.get_all': 'Failed to get user note item',
 	'noteitem.failed.get': 'Failed to get user note item data',
 	'noteitem.failed.edit': 'Failed to edit user note item data',

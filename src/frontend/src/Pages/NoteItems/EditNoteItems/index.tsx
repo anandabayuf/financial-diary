@@ -5,6 +5,7 @@ import { useAppSelector } from '../../../Hooks/useRedux';
 import NoteItemsForm from '../../../Components/NoteItems/NoteItemsForm/index';
 import { useNavigate, useLocation } from 'react-router-dom';
 import withEditNoteItemsForm from '../../../Components/NoteItems/NoteItemsForm/withEditNoteItemsForm';
+import useLocale from '../../../Hooks/useLocale';
 
 const EditNoteItemsForm = withEditNoteItemsForm(NoteItemsForm);
 
@@ -14,6 +15,8 @@ const EditNoteItemsPage: React.FC = () => {
 		useAppSelector((state) => state.note);
 	const location = useLocation();
 
+	const { I18n } = useLocale();
+
 	const handleCancel = () => navigate(-1);
 
 	return (
@@ -21,7 +24,7 @@ const EditNoteItemsPage: React.FC = () => {
 			<AppBreadcrumb />
 			<div className='mb-5'>
 				<AppTitle
-					title={'Create Note Items'}
+					title={I18n.t('notes.items.edit')!}
 					level={5}
 				/>
 			</div>
@@ -31,6 +34,7 @@ const EditNoteItemsPage: React.FC = () => {
 				isWallet={selectedWalletNote?.id !== ''}
 				handleCancel={handleCancel}
 				data={location.state}
+                I18n={I18n}
 			/>
 		</MainLayout>
 	);

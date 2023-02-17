@@ -25,12 +25,17 @@ import { formatIDR } from '../../../Utils/CurrencyUtils';
 import NoteItemsDeleteModal from '../../../Components/NoteItems/NoteItemsDeleteModal';
 import { deleteUserNoteItem } from '../../../Api/NoteItems';
 import { setNotePaginationSize } from '../../../Store/Note/NoteSlice';
+import { errorHandling } from '../../../Api/errorHandling';
+import useLocale from '../../../Hooks/useLocale';
+import AppTooltip from '../../../Components/General/AppTooltip';
 
 const NoteItemsPage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
 	const params = useParams();
 	const navigate = useNavigate();
 	const dispatch = useAppDispatch();
+
+	const { I18n } = useLocale();
 
 	const { selectedNote, selectedCategoryNote, selectedWalletNote } =
 		useAppSelector((state) => state.note);
@@ -74,26 +79,25 @@ const NoteItemsPage: React.FC = () => {
 			setIsLoading(true);
 			navigateIfLocationIsNotMatch();
 			if (selectedNote?.id !== '' && selectedWalletNote?.id !== '') {
-				let res = await getUserWalletNoteById(
-					token,
-					selectedWalletNote?.id
-				);
+				try {
+					const res = await getUserWalletNoteById(
+						token,
+						selectedWalletNote?.id
+					);
 
-				if (res.request.status === 200) {
 					const data = res.data.data;
 
 					setWalletNote(data);
-				} else {
-					AppMessage({ type: 'error', content: '' });
+				} catch (error) {
+					errorHandling(error, I18n);
 				}
 
-				res = await getAllUserWalletNoteItemsByNoteId(
-					token,
-					selectedNote?.id,
-					selectedWalletNote?.id
-				);
-				// console.log(res);
-				if (res.request.status === 200) {
+				try {
+					const res = await getAllUserWalletNoteItemsByNoteId(
+						token,
+						selectedNote?.id,
+						selectedWalletNote?.id
+					);
 					const data = res.data.data.map((el: any, index: number) => {
 						return {
 							...el,
@@ -102,32 +106,31 @@ const NoteItemsPage: React.FC = () => {
 					});
 					setData(data);
 					setDataList(data);
-				} else {
-					AppMessage({ type: 'error', content: '' });
+				} catch (error) {
+					errorHandling(error, I18n);
 				}
 			}
 
 			if (selectedNote?.id !== '' && selectedCategoryNote?.id !== '') {
-				let res = await getUserCategoryNoteById(
-					token,
-					selectedCategoryNote?.id
-				);
-
-				if (res.request.status === 200) {
+				try {
+					const res = await getUserCategoryNoteById(
+						token,
+						selectedCategoryNote?.id
+					);
 					const data = res.data.data;
 
 					setCategoryNote(data);
-				} else {
-					AppMessage({ type: 'error', content: '' });
+				} catch (error) {
+					errorHandling(error, I18n);
 				}
 
-				res = await getAllUserCategoryNoteItemsByNoteId(
-					token,
-					selectedNote?.id,
-					selectedCategoryNote?.id
-				);
-				// console.log(res);
-				if (res.request.status === 200) {
+				try {
+					const res = await getAllUserCategoryNoteItemsByNoteId(
+						token,
+						selectedNote?.id,
+						selectedCategoryNote?.id
+					);
+
 					const data = res.data.data.map((el: any, index: number) => {
 						return {
 							...el,
@@ -136,8 +139,8 @@ const NoteItemsPage: React.FC = () => {
 					});
 					setData(data);
 					setDataList(data);
-				} else {
-					AppMessage({ type: 'error', content: '' });
+				} catch (error) {
+					errorHandling(error, I18n);
 				}
 			}
 			setIsLoading(false);
@@ -167,13 +170,14 @@ const NoteItemsPage: React.FC = () => {
 
 	const handleDelete = async () => {
 		setIsDeleting(true);
-		const res = await deleteUserNoteItem(token, deletedData._id);
-		console.log(res);
-		if (res.request.status === 200) {
-			AppMessage({ content: res.data.message, type: 'success' });
-		} else {
-			AppMessage({ content: '', type: 'error' });
+
+		try {
+			const res = await deleteUserNoteItem(token, deletedData._id);
+			AppMessage({ content: I18n.t(res.data.message), type: 'success' });
+		} catch (error) {
+			errorHandling(error, I18n);
 		}
+
 		handleCancelDelete();
 		setIsDeleting(false);
 	};
@@ -225,14 +229,35 @@ const NoteItemsPage: React.FC = () => {
 	return (
 		<MainLayout>
 			<AppBreadcrumb />
-			<div className='flex justify-between items-center mb-5'>
+			<div className='flex justify-between items-center mb-5 gap-x-1'>
+				<AppTooltip
+					className='min-[426px]:hidden'
+					title={`${I18n.t('notes.items')} - ${
+						selectedCategoryNote?.name === ''
+							? selectedWalletNote?.name
+							: selectedCategoryNote?.name
+					}`}
+				>
+					<div className='max-[425px]:max-w-[250px] max-[375px]:max-w-[180px]'>
+						<AppTitle
+							title={`${I18n.t('notes.items')} - ${
+								selectedCategoryNote?.name === ''
+									? selectedWalletNote?.name
+									: selectedCategoryNote?.name
+							}`}
+							level={5}
+							className='truncate ...'
+						/>
+					</div>
+				</AppTooltip>
 				<AppTitle
-					title={`Note Items - ${
+					title={`${I18n.t('notes.items')} - ${
 						selectedCategoryNote?.name === ''
 							? selectedWalletNote?.name
 							: selectedCategoryNote?.name
 					}`}
 					level={5}
+					className='max-[425px]:hidden'
 				/>
 				<AppButton
 					type='primary'
@@ -242,7 +267,7 @@ const NoteItemsPage: React.FC = () => {
 						<div className='flex justify-center'>
 							<BsPlusLg />
 						</div>
-						Create Item
+						{I18n.t('label.create.note.item')}
 					</Space>
 				</AppButton>
 			</div>
@@ -250,9 +275,11 @@ const NoteItemsPage: React.FC = () => {
 				<AppLoader />
 			) : data.length > 0 ? (
 				<>
-					<div className='flex justify-between items-center mb-5'>
+					<div className='flex justify-between items-center mb-5 gap-x-3'>
 						<AppSearchInput
-							placeholder={`Search item description...`}
+							placeholder={
+								I18n.t('search.placeholder.note.items')!
+							}
 							onSearch={handleSearch}
 							onChange={handleChangeSearch}
 						/>
@@ -261,8 +288,8 @@ const NoteItemsPage: React.FC = () => {
 								<AppText
 									text={
 										selectedCategoryNote?.id === ''
-											? 'Balance: '
-											: 'Total: '
+											? `${I18n.t('content.balance')}: `
+											: `${I18n.t('content.total')}: `
 									}
 									className='text-sm'
 								/>
@@ -288,6 +315,7 @@ const NoteItemsPage: React.FC = () => {
 							walletNoteId: selectedWalletNote?.id,
 							isCategory: selectedCategoryNote?.id !== '',
 							isWallet: selectedWalletNote?.id !== '',
+							I18n: I18n,
 							handleEdit: handleClickEdit,
 							handleDelete: handleClickDelete,
 						})}
@@ -305,6 +333,7 @@ const NoteItemsPage: React.FC = () => {
 					isLoading={isDeleting}
 					isModalDeleteOpen={isModalDeleteOpen}
 					handleDelete={handleDelete}
+					I18n={I18n}
 				/>
 			)}
 		</MainLayout>

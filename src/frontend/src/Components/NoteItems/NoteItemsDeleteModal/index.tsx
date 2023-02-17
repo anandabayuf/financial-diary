@@ -14,6 +14,7 @@ const NoteItemsDeleteModal: React.FC<NoteItemsDeleteModalProps> = ({
 	isCategory,
 	isLoading,
 	isModalDeleteOpen,
+	I18n,
 	handleCancelDelete,
 	handleDelete,
 }) => {
@@ -25,7 +26,7 @@ const NoteItemsDeleteModal: React.FC<NoteItemsDeleteModalProps> = ({
 		<AppModal
 			title={
 				<AppTitle
-					title='Delete Item'
+					title={I18n?.t('title.note.item.delete')}
 					level={4}
 				/>
 			}
@@ -36,26 +37,30 @@ const NoteItemsDeleteModal: React.FC<NoteItemsDeleteModalProps> = ({
 			<div>
 				<div className='mb-3'>
 					<AppText
-						text={`Are you sure you want to delete this item?`}
+						text={I18n?.t('content.note_item_delete_confirmation')}
 					/>
 				</div>
 				<div className='flex justify-center'>
 					<div className='w-[400px]'>
 						<div className='flex justify-between gap-x-3 mb-2'>
-							<AppText text='Date: ' />
+							<AppText text={`${I18n?.t('content.date')}: `} />
 							<AppText
 								text={dayjs(deletedData.date).format(
-									'YYYY-MM-DD'
+									'DD-MMM-YYYY'
 								)}
 							/>
 						</div>
 						<div className='flex justify-between gap-x-3 mb-2'>
-							<AppText text='Description: ' />
+							<AppText
+								text={`${I18n?.t('content.description')}: `}
+							/>
 							<AppText text={deletedData.description} />
 						</div>
 						{!isCategory && (
 							<div className='flex justify-between gap-x-3 mb-2'>
-								<AppText text='Debit: ' />
+								<AppText
+									text={`${I18n?.t('content.debit')}: `}
+								/>
 								<AppText
 									text={formatIDR(
 										ITEM_TYPE[deletedData.type] ===
@@ -70,7 +75,7 @@ const NoteItemsDeleteModal: React.FC<NoteItemsDeleteModalProps> = ({
 							</div>
 						)}
 						<div className='flex justify-between gap-x-3'>
-							<AppText text='Credit: ' />
+							<AppText text={`${I18n?.t('content.credit')}: `} />
 							<AppText
 								text={formatIDR(
 									ITEM_TYPE[deletedData.type] ===
@@ -91,14 +96,14 @@ const NoteItemsDeleteModal: React.FC<NoteItemsDeleteModalProps> = ({
 									type='text'
 									onClick={handleCancelDelete}
 								>
-									Cancel
+									{I18n?.t('label.cancel')}
 								</AppButton>
 								<AppButton
 									danger
 									type='text'
 									onClick={handleDelete}
 								>
-									Delete
+									{I18n?.t('label.delete')}
 								</AppButton>
 							</div>
 						)}

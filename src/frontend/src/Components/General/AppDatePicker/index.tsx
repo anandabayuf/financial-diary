@@ -14,6 +14,7 @@ const AppDatePicker: React.FC<AppDatePickerProps> = ({
 	suffixIcon = <AiOutlineCalendar />,
 	placeholder,
 	value,
+	disabledDate,
 }) => {
 	const theme = useTheme();
 	const { language } = useLocale();
@@ -27,6 +28,7 @@ const AppDatePicker: React.FC<AppDatePickerProps> = ({
 			placeholder={placeholder}
 			value={value}
 			locale={language === 'en' ? localeEn : localeId}
+			disabledDate={disabledDate}
 		/>
 	);
 };

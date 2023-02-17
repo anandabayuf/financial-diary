@@ -20,6 +20,10 @@ const general = {
 	'notes.wallet': 'Pencatatan Dompet',
 	'notes.category': 'Pencatatan Kategori',
 	'notes.budget': 'Pencatatan Anggaran',
+
+	'notes.items': 'Item Pencatatan',
+	'notes.items.create': 'Buat Item Pencatatan Baru',
+	'notes.items.edit': 'Ubah Item Pencatatan',
 };
 
 const content = {
@@ -33,6 +37,23 @@ const content = {
 
 	'content.balance': 'Saldo',
 	'content.total': 'Total',
+	'content.date': 'Tanggal',
+	'content.description': 'Deskripsi',
+	'content.debit': 'Debit',
+	'content.credit': 'Kredit',
+
+	'content.note_item_delete_confirmation':
+		'Apakah kamu yakin ingin menghapus item ini?',
+
+	'content.what_is': 'Apa itu',
+	'content.what_is.Income':
+		'Pemasukan adalah jenis item pencatatan untuk mencatat pendapatan/nilai tambah.',
+	'content.what_is.Spend':
+		'Pengeluaran adalah jenis item pencatatan untuk mencatat pengeluaran.',
+	'content.what_is.Spend Only In Wallet':
+		'Pengeluaran hanya pada Dompet adalah jenis item pencatatan untuk mencatat pengeluaran hanya di dompet.',
+	'content.what_is.Transfer or Withdraw':
+		'Transfer atau Tarik Tunai adalah jenis item pencatatan untuk mencatat transfer uang ke dompet yang dipilih.',
 };
 
 const label = {
@@ -48,6 +69,7 @@ const label = {
 	'label.save': 'Simpan',
 	'label.view': 'Lihat',
 	'label.edit': 'Ubah',
+	'label.delete': 'Hapus',
 
 	'label.create.wallet': 'Buat Dompet',
 	'label.create.category': 'Buat Kategori',
@@ -56,6 +78,7 @@ const label = {
 	'label.create.note.category': 'Tambah Kategori',
 	'label.create.note.budget': 'Tambah Anggaran',
 	'label.create.note.detail': 'Tambah ke Pencatatan',
+	'label.create.note.item': 'Buat Item',
 
 	'label.edit.my_profile': 'Ubah Profil Saya',
 	'label.edit.wallet': 'Ubah Dompet',
@@ -71,9 +94,18 @@ const label = {
 	'label.budget.total': 'Anggaran Total',
 	'label.spent': 'Terpakai',
 	'label.remains': 'Sisa',
+	'label.date': 'Tanggal',
+	'label.description': 'Deskripsi',
+	'label.debit': 'Debit',
+	'label.credit': 'Kredit',
 
 	'label.no_data': 'Tidak Ada Data',
 	'label.page': 'Halaman',
+
+	'label.Income': 'Pemasukan',
+	'label.Spend Only In Wallet': 'Pengeluaran hanya pada Dompet',
+	'label.Transfer or Withdraw': 'Transfer atau Tarik Tunai',
+	'label.Spend': 'Pengeluaran',
 
 	'form.label.username': 'Nama Pengguna',
 	'form.label.password': 'Kata Sandi',
@@ -93,13 +125,22 @@ const label = {
 	'form.label.category': 'Kategori',
 	'form.label.total_budget': 'Anggaran Total',
 	'form.label.balance_budget': 'Anggaran Saldo',
+	'form.label.date': 'Tanggal',
+	'form.label.description': 'Deskripsi',
+	'form.label.item_type': 'Jenis Item',
+	'form.label.income_amount': 'Jumlah Pemasukan',
+	'form.label.spend_amount': 'Jumlah Pengeluaran',
+	'form.label.transfer_amount': 'Jumlah Transfer atau Tarik Tunai',
+	'form.label.transfer_to': 'Transfer atau Tarik Tunai ke Dompet',
+	'form.label.transfer_from': 'Transfer atau Tarik Tunai dari Dompet',
+	'form.label.spend_wallet': 'Pengeluaran dari Dompet',
 
-	'form.placeholder.username': 'masukkan nama pengguna anda',
-	'form.placeholder.password': 'masukkan kata sandi anda',
+	'form.placeholder.username': 'masukkan nama pengguna kamu',
+	'form.placeholder.password': 'masukkan kata sandi kamu',
 	'form.placeholder.profile_picture': 'Unggah Gambar',
-	'form.placeholder.name': 'masukkan nama anda',
+	'form.placeholder.name': 'masukkan nama kamu',
 	'form.placeholder.password_confirmation':
-		'masukkan kembali kata sandi anda',
+		'masukkan kembali kata sandi kamu',
 	'form.placeholder.wallet_name': 'masukkan nama dompet',
 	'form.placeholder.category_name': 'masukkan nama kategori',
 	'form.placeholder.note_month': 'pilih bulan pencatatan',
@@ -107,6 +148,14 @@ const label = {
 	'form.placeholder.category': 'pilih kategori',
 	'form.placeholder.total_budget': 'masukan anggaran total',
 	'form.placeholder.balance_budget': 'masukkan anggaran saldo',
+	'form.placeholder.date': 'pilih tanggal',
+	'form.placeholder.description': 'masukkan deskripsi',
+	'form.placeholder.item_type': 'pilih jenis item',
+	'form.placeholder.income_amount': 'masukkan jumlah pemasukan',
+	'form.placeholder.spend_amount': 'masukkan jumlah pengeluaran',
+	'form.placeholder.transfer_amount':
+		'masukkan jumlah transfer atau tarik tunai',
+	'form.placeholder.transfer_to': 'pilih dompet tujuan',
 
 	'form.extra.wallet': 'Dompet tidak dapat diubah',
 	'form.extra.category': 'Kategori tidak dapat diubah',
@@ -116,6 +165,7 @@ const label = {
 	'search.placeholder.note.detail.wallet_tab': 'Cari Nama Dompet',
 	'search.placeholder.note.detail.category_tab': 'Cari Nama Kategori',
 	'search.placeholder.note.detail.budget_tab': 'Cari Nama Item Anggaran',
+	'search.placeholder.note.items': 'Cari deskripsi item',
 
 	'placeholder.select_year': 'Pilih tahun untuk ditampilkan',
 };
@@ -154,6 +204,8 @@ const titlepage = {
 	'title.note.detail.category_tab.create': 'Tambah Kategori ke Pencatatan',
 
 	'title.note.detail_note_not_found': 'Pencatatan Bulanan',
+
+	'title.note.item.delete': 'Hapus Item',
 };
 
 const info = {
@@ -161,11 +213,11 @@ const info = {
 };
 
 const error = {
-	'form.required.username': 'Mohon masukkan nama pengguna anda!',
-	'form.required.password': 'Mohon masukkan kata sandi anda!',
-	'form.required.name': 'Mohon masukkan nama anda!',
+	'form.required.username': 'Mohon masukkan nama pengguna kamu!',
+	'form.required.password': 'Mohon masukkan kata sandi kamu!',
+	'form.required.name': 'Mohon masukkan nama kamu!',
 	'form.required.password_confirmation':
-		'Mohon masukkan kembali kata sandi anda!',
+		'Mohon masukkan kembali kata sandi kamu!',
 	'form.required.wallet_name': 'Mohon masukkan nama dompet!',
 	'form.required.category_name': 'Mohon masukkan nama kategori!',
 	'form.required.note_month': 'Mohon pilih bulan pencatatan!',
@@ -174,11 +226,19 @@ const error = {
 	'form.required.category': 'Mohon pilih kategori!',
 	'form.required.total_budget': 'Mohon masukkan anggaran total!',
 	'form.required.balance_budget': 'Mohon masukkan anggaran saldo!',
+	'form.required.date': 'Mohon pilih tanggal!',
+	'form.required.description': 'Mohon masukkan deskripsi!',
+	'form.required.item_type': 'Mohon pilih jenis item!',
+	'form.required.income_amount': 'Mohon masukkan jumlah pemasukan!',
+	'form.required.spend_amount': 'Mohon masukkan jumlah pengeluaran!',
+	'form.required.transfer_amount':
+		'Mohon masukkan jumlah transfer atau tarik tunai!',
+	'form.required.transfer_to': 'Mohon pilih dompet tujuan!',
 
 	'form.validation.no_spaces': 'Tidak boleh mengandung spasi!',
 	'form.validation.password_not_match': 'Kata sandi tidak sama!',
 	'form.validation.upload_only_image':
-		'Anda hanya dapat mengunggah berkas JPG/PNG!',
+		'Kamu hanya dapat mengunggah berkas JPG/PNG!',
 	'form.validation.size_lower_than_2mb': 'Gambar harus kurang dari 2MB!',
 	'form.validation.only_number': 'Mohon hanya masukkan nomor saja!',
 
@@ -241,7 +301,7 @@ const backend = {
 	//failed
 	'login.failed': 'Gagal masuk',
 	'login.exception.001':
-		'Anda telah memasukkan nama pengguna atau kata sandi yang salah',
+		'Kamu telah memasukkan nama pengguna atau kata sandi yang salah',
 
 	'register.failed': 'Gagal mendaftar',
 	'register.exception.001': 'Nama pengguna sudah digunakan',
@@ -300,7 +360,7 @@ const backend = {
 	'noteitem.exception.003': 'Jumlah total harus nol atau angka positif',
 	'noteitem.exception.004': 'Jenis dari item pencatatan tidak valid',
 	'noteitem.exception.005':
-		'The range of note is from 26-XX-XXXX to 25-XX-XXXX',
+		'Tanggal tidak sesuai dengan rentang tanggal pencatatan',
 	'noteitem.failed.get_all': 'Gagal mendapatkan item pencatatan',
 	'noteitem.failed.get': 'Gagal mendapatkan data item pencatatan',
 	'noteitem.failed.edit': 'Gagal mengubah data item pencatatan',

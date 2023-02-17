@@ -7,6 +7,7 @@ import { getAllUserWalletNote } from '../../../Api/Wallet-Note';
 import { getAllUserCategoryNote } from '../../../Api/Category-Note';
 import { ITEM_TYPE } from '../../../Constants/Constants';
 import { DatePickerProps } from 'antd';
+import { errorHandling } from '../../../Api/errorHandling';
 
 const withCreateNoteItemsForm = (
 	Component: React.ComponentType<NoteItemsFormProps>
@@ -16,6 +17,7 @@ const withCreateNoteItemsForm = (
 		isWallet,
 		isCategory,
 		handleCancel,
+		I18n,
 		...rest
 	}) => {
 		const token = useAppSelector((state) => state.user.accessToken);
@@ -33,18 +35,16 @@ const withCreateNoteItemsForm = (
 			const getData = async () => {
 				setIsFetching(true);
 
-				let res = await getAllUserWalletNote(token, noteId);
-				if (res.request.status === 200) {
+				try {
+					const res = await getAllUserWalletNote(token, noteId);
 					setWalletNote(res.data.data);
-				} else {
-					AppMessage({ content: '', type: 'error' });
-				}
+				} catch (error) {}
 
-				res = await getAllUserCategoryNote(token, noteId);
-				if (res.request.status === 200) {
+				try {
+					const res = await getAllUserCategoryNote(token, noteId);
 					setCategoryNote(res.data.data);
-				} else {
-					AppMessage({ content: '', type: 'error' });
+				} catch (error) {
+					errorHandling(error, I18n!);
 				}
 
 				setIsFetching(false);
@@ -88,23 +88,21 @@ const withCreateNoteItemsForm = (
 			}
 
 			// console.log(payload);
-
-			const res = await createUserNoteItemByNoteId(
-				token,
-				noteId,
-				payload
-			);
-			// console.log(res);
-			if (res.request.status === 201) {
-				AppMessage({ content: res.data.message, type: 'success' });
+			try {
+				const res = await createUserNoteItemByNoteId(
+					token,
+					noteId,
+					payload
+				);
+				AppMessage({
+					content: I18n?.t(res.data.message),
+					type: 'success',
+				});
 				if (handleCancel) {
 					handleCancel();
 				}
-			} else {
-				AppMessage({
-					content: `${res.response.data.message} - ${res.response.data.detail}`,
-					type: 'error',
-				});
+			} catch (error) {
+				errorHandling(error, I18n!);
 			}
 
 			setIsLoading(false);
@@ -122,6 +120,7 @@ const withCreateNoteItemsForm = (
 				handleChangeDatePicker={handleChangeDatePicker}
 				handleCancel={handleCancel}
 				handleSubmit={handleSubmit}
+				I18n={I18n}
 				{...rest}
 			/>
 		);
