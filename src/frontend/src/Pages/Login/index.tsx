@@ -11,7 +11,7 @@ import { login } from '../../Api/Auth';
 import { useState, useEffect } from 'react';
 import { useAppDispatch } from '../../Hooks/useRedux';
 import { setUserLoggedIn } from '../../Store/User/UserSlice';
-import { decodeJWT } from '../../Utils/AuthUtils';
+import { decodeJWT, encryptPassword } from '../../Utils/AuthUtils';
 import { useNavigate } from 'react-router-dom';
 import { getUserById } from '../../Api/User';
 import AppTitle from '../../Components/General/AppTitle/index';
@@ -26,11 +26,16 @@ const LoginPage: React.FC = () => {
 	const [loading, setLoading] = useState(false);
 	const { I18n, language } = useLocale();
 
-	const handleLogin = async (values: string) => {
+	const handleLogin = async (values: any) => {
 		setLoading(true);
 
 		try {
-			const res = await login(values);
+			const encryptedPass = await encryptPassword(values.password);
+
+			const res = await login({
+				username: values.username,
+				password: encryptedPass,
+			});
 
 			const jwtDecoded: any = decodeJWT(res.data.token);
 
