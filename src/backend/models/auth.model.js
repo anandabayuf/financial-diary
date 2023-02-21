@@ -57,7 +57,19 @@ exports.authenticate = (data) => {
 };
 
 exports.register = (data) => {
-	return new Promise((resolve, reject) => {
+	return new Promise(async (resolve, reject) => {
+		let decryptedPassword;
+		try {
+			decryptedPassword = await PublicModel.decrypt(data.password);
+		} catch (error) {
+			reject(error);
+		}
+
+		data.salt = crypto.randomBytes(16).toString("hex");
+		data.password = crypto
+			.pbkdf2Sync(decryptedPassword, data.salt, 1000, 64, `sha512`)
+			.toString(`hex`);
+
 		new schema.UserSchema(data).save((err, response) => {
 			if (err) {
 				if (err.code === 11000) {
