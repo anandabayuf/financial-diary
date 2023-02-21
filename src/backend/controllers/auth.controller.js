@@ -34,11 +34,6 @@ router.post("/register", upload.single("picture"), async (req, res) => {
 		};
 	}
 
-	payload.salt = crypto.randomBytes(16).toString("hex");
-	payload.password = crypto
-		.pbkdf2Sync(payload.password, payload.salt, 1000, 64, `sha512`)
-		.toString(`hex`);
-
 	try {
 		const response = await authModel.register(payload);
 		// console.log(response);

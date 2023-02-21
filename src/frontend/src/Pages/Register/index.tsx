@@ -15,6 +15,7 @@ import AppTitle from '../../Components/General/AppTitle/index';
 import useLocale from '../../Hooks/useLocale';
 import AppModal from '../../Components/General/AppModal/index';
 import { errorHandling } from '../../Api/errorHandling';
+import { encryptPassword } from '../../Utils/AuthUtils';
 
 const RegisterPage: React.FC = () => {
 	const [loading, setLoading] = useState(false);
@@ -30,7 +31,13 @@ const RegisterPage: React.FC = () => {
 
 	const handleRegister = async (values: any) => {
 		setLoading(true);
-		const { picture, passwordconfirm, ...data } = values;
+		let { picture, passwordconfirm, password, ...data } = values;
+
+		try {
+			data['password'] = await encryptPassword(password);
+		} catch (error) {
+			errorHandling(error, I18n);
+		}
 
 		const payload = new FormData();
 		if (picture && picture.fileList.length !== 0) {
