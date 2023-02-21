@@ -24,6 +24,8 @@ const general = {
 	'notes.items': 'Item Pencatatan',
 	'notes.items.create': 'Buat Item Pencatatan Baru',
 	'notes.items.edit': 'Ubah Item Pencatatan',
+
+	about_us: 'Tentang Kami',
 };
 
 const content = {
@@ -54,6 +56,14 @@ const content = {
 		'Pengeluaran hanya pada Dompet adalah jenis item pencatatan untuk mencatat pengeluaran hanya di dompet.',
 	'content.what_is.Transfer or Withdraw':
 		'Transfer atau Tarik Tunai adalah jenis item pencatatan untuk mencatat transfer uang ke dompet yang dipilih.',
+
+	'content.our_team': 'Tim Kami',
+	'content.developer': 'Pengembang',
+	'content.owner': 'Pemilik',
+	'content.user': 'Pengguna',
+
+	'content.about_app': 'Tentang Aplikasi',
+	'content.version': 'Versi',
 };
 
 const label = {
@@ -176,6 +186,7 @@ const menu = {
 	'menu.management.category': 'Kategori',
 	'menu.notes': 'Pencatatan',
 	'menu.my_profile': 'Profil Saya',
+	'menu.about_us': 'Tentang Kami',
 	'menu.theme_switcher.light': 'Terang',
 	'menu.theme_switcher.dark': 'Gelap',
 	'menu.logout': 'Keluar',

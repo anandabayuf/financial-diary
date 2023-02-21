@@ -12,6 +12,7 @@ import { createUserCategory } from '../../../../Api/Category';
 import AppMessage from '../../../../Components/General/AppMessage/index';
 import { errorHandling } from '../../../../Api/errorHandling';
 import useLocale from '../../../../Hooks/useLocale';
+import { APP_NAME } from '../../../../Constants/Constants';
 
 const CreateForm = withCreateCategory(CategoryForm);
 
@@ -44,7 +45,7 @@ const CreateCategoryPage: React.FC = () => {
 	useEffect(() => {
 		document.title = `${I18n.t(
 			'title.management.category.create'
-		)} - Financial Diary App`;
+		)} - ${APP_NAME}`;
 	}, [I18n, language]);
 
 	return (

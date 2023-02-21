@@ -18,6 +18,7 @@ import AppSearchInput from '../../../../Components/General/AppSearchInput';
 import { setManagementPaginationSize } from '../../../../Store/Management/ManagementSlice';
 import useLocale from '../../../../Hooks/useLocale';
 import { errorHandling } from '../../../../Api/errorHandling';
+import { APP_NAME } from '../../../../Constants/Constants';
 
 const ManagementWalletPage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
@@ -98,9 +99,7 @@ const ManagementWalletPage: React.FC = () => {
 	};
 
 	useEffect(() => {
-		document.title = `${I18n.t(
-			'title.management.wallet'
-		)} - Financial Diary App`;
+		document.title = `${I18n.t('title.management.wallet')} - ${APP_NAME}`;
 	}, [language, I18n]);
 
 	return (

@@ -34,6 +34,8 @@ export const getRouteNames = (route: string): string => {
 			return '/notes/:year/:month/:name/edit';
 		case RouteNames.MY_PROFILE:
 			return '/my-profile';
+		case RouteNames.ABOUT_US:
+			return '/about-us';
 		default:
 			return '/';
 	}

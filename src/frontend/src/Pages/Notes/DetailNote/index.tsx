@@ -17,6 +17,7 @@ import {
 import { setActiveKeyNoteTab } from '../../../Store/Note/NoteSlice';
 import useLocale from '../../../Hooks/useLocale';
 import { errorHandling } from '../../../Api/errorHandling';
+import { APP_NAME } from '../../../Constants/Constants';
 
 const DetailNotePage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
@@ -96,11 +97,11 @@ const DetailNotePage: React.FC = () => {
 					: activeKeyNoteTab === 'wallet-note-tab'
 					? I18n.t('title.note.detail.wallet_tab')
 					: I18n.t('title.note.detail.category_tab')
-			} - Financial Diary App`;
+			} - ${APP_NAME}`;
 		} else {
 			document.title = `${I18n.t(
 				'title.note.detail_note_not_found'
-			)} - Financial Diary App`;
+			)} - ${APP_NAME}`;
 		}
 	}, [note, activeKeyNoteTab, language, I18n]);
 

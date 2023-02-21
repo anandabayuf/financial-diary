@@ -12,6 +12,7 @@ import RouteNames from '../../../Constants/RouteNames';
 import AppMessage from '../../../Components/General/AppMessage/index';
 import useLocale from '../../../Hooks/useLocale';
 import { errorHandling } from '../../../Api/errorHandling';
+import { APP_NAME } from '../../../Constants/Constants';
 
 const CreateNotePage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
@@ -52,7 +53,7 @@ const CreateNotePage: React.FC = () => {
 	};
 
 	useEffect(() => {
-		document.title = `${I18n.t('notes.create')}  - Financial Diary App`;
+		document.title = `${I18n.t('notes.create')}  - ${APP_NAME}`;
 	}, [language, I18n]);
 
 	return (

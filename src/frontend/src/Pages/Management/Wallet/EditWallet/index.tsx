@@ -12,6 +12,7 @@ import withEditWallet from '../../../../Components/Management/Wallets/WalletForm
 import AppMessage from '../../../../Components/General/AppMessage/index';
 import useLocale from '../../../../Hooks/useLocale';
 import { errorHandling } from '../../../../Api/errorHandling';
+import { APP_NAME } from '../../../../Constants/Constants';
 
 const EditForm = withEditWallet(WalletForm);
 
@@ -48,7 +49,7 @@ const EditWalletPage: React.FC = () => {
 	useEffect(() => {
 		document.title = `${I18n.t(
 			'title.management.wallet.edit'
-		)} - Financial Diary App`;
+		)} - ${APP_NAME}`;
 	}, [language, I18n]);
 
 	return (

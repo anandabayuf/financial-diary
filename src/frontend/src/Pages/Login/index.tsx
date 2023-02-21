@@ -18,6 +18,7 @@ import AppTitle from '../../Components/General/AppTitle/index';
 import AppLogo from '../../Components/General/AppLogo';
 import useLocale from '../../Hooks/useLocale';
 import { errorHandling } from '../../Api/errorHandling';
+import { APP_NAME } from '../../Constants/Constants';
 
 const LoginPage: React.FC = () => {
 	const dispatch = useAppDispatch();
@@ -70,7 +71,7 @@ const LoginPage: React.FC = () => {
 	};
 
 	useEffect(() => {
-		document.title = `${I18n.t('login')} - Financial Diary App`;
+		document.title = `${I18n.t('login')} - ${APP_NAME}`;
 	}, [language, I18n]);
 
 	return (
