@@ -8,3 +8,5 @@ export const ITEM_TYPE = [
 ];
 
 export const PUBLIC_KEY = process.env.REACT_APP_PUBLIC_KEY || '';
+export const APP_NAME = process.env.REACT_APP_APP_NAME || '';
+export const APP_VERSION = process.env.REACT_APP_APP_VERSION || '';

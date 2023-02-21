@@ -12,6 +12,7 @@ import RouteNames from '../../../../Constants/RouteNames';
 import AppMessage from '../../../../Components/General/AppMessage/index';
 import useLocale from '../../../../Hooks/useLocale';
 import { errorHandling } from '../../../../Api/errorHandling';
+import { APP_NAME } from '../../../../Constants/Constants';
 
 const CreateForm = withCreateWallet(WalletForm);
 
@@ -45,7 +46,7 @@ const CreateWalletPage: React.FC = () => {
 	useEffect(() => {
 		document.title = `${I18n.t(
 			'title.management.wallet.create'
-		)} - Financial Diary App`;
+		)} - ${APP_NAME}`;
 	}, [language, I18n]);
 
 	return (

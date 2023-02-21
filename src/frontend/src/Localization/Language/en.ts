@@ -24,6 +24,8 @@ const general = {
 	'notes.items': 'Note Items',
 	'notes.items.create': 'Create New Note Item',
 	'notes.items.edit': 'Edit Note Item',
+
+	about_us: 'About Us',
 };
 
 const content = {
@@ -54,6 +56,14 @@ const content = {
 		'Spend Only In Wallet is a type of note item to record expenses only in the wallet.',
 	'content.what_is.Transfer or Withdraw':
 		'Transfer or Withdraw is a type of note item to record the transfer of money to the selected wallet.',
+
+	'content.our_team': 'Our Team',
+	'content.developer': 'Developer',
+	'content.owner': 'Owner',
+	'content.user': 'User',
+
+	'content.about_app': 'About App',
+	'content.version': 'Version',
 };
 
 const label = {
@@ -172,6 +182,7 @@ const menu = {
 	'menu.management.category': 'Category',
 	'menu.notes': 'Notes',
 	'menu.my_profile': 'My Profile',
+	'menu.about_us': 'Tentang Kami',
 	'menu.theme_switcher.light': 'Light',
 	'menu.theme_switcher.dark': 'Dark',
 	'menu.logout': 'Logout',

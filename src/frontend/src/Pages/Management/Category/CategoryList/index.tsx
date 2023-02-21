@@ -18,6 +18,7 @@ import AppSearchInput from '../../../../Components/General/AppSearchInput/index'
 import { setManagementPaginationSize } from '../../../../Store/Management/ManagementSlice';
 import { errorHandling } from '../../../../Api/errorHandling';
 import useLocale from '../../../../Hooks/useLocale';
+import { APP_NAME } from '../../../../Constants/Constants';
 
 const ManagementCategoryPage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
@@ -98,9 +99,7 @@ const ManagementCategoryPage: React.FC = () => {
 	};
 
 	useEffect(() => {
-		document.title = `${I18n.t(
-			'title.management.category'
-		)} - Financial Diary App`;
+		document.title = `${I18n.t('title.management.category')} - ${APP_NAME}`;
 	}, [I18n, language]);
 
 	return (

@@ -16,6 +16,7 @@ import MyProfilePage from '../Pages/MyProfile';
 import NoteItemsPage from '../Pages/NoteItems/NoteItemsList/index';
 import CreateNoteItemsPage from '../Pages/NoteItems/CreateNoteItems/index';
 import EditNoteItemsPage from '../Pages/NoteItems/EditNoteItems/index';
+import AboutPage from '../Pages/About';
 
 const ProtectedRoute = () => {
 	const isLoggedIn = useAuth();
@@ -94,6 +95,10 @@ const SecuredRoutes: RouteObject[] = [
 			{
 				path: getRouteNames(RouteNames.MY_PROFILE),
 				element: <MyProfilePage />,
+			},
+			{
+				path: getRouteNames(RouteNames.ABOUT_US),
+				element: <AboutPage />,
 			},
 		],
 	},

@@ -16,6 +16,7 @@ import useLocale from '../../Hooks/useLocale';
 import AppModal from '../../Components/General/AppModal/index';
 import { errorHandling } from '../../Api/errorHandling';
 import { encryptPassword } from '../../Utils/AuthUtils';
+import { APP_NAME } from '../../Constants/Constants';
 
 const RegisterPage: React.FC = () => {
 	const [loading, setLoading] = useState(false);
@@ -120,7 +121,7 @@ const RegisterPage: React.FC = () => {
 	};
 
 	useEffect(() => {
-		document.title = `${I18n.t('register')} - Financial Diary App`;
+		document.title = `${I18n.t('register')} - ${APP_NAME}`;
 	}, [language, I18n]);
 
 	return (

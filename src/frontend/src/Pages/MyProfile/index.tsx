@@ -15,6 +15,7 @@ import { editUserById } from '../../Api/User';
 import { updateUserData } from '../../Store/User/UserSlice';
 import useLocale from '../../Hooks/useLocale';
 import { errorHandling } from '../../Api/errorHandling';
+import { APP_NAME } from '../../Constants/Constants';
 
 const MyProfilePage: React.FC = () => {
 	const { data, accessToken } = useAppSelector((state) => state.user);
@@ -167,11 +168,9 @@ const MyProfilePage: React.FC = () => {
 
 	useEffect(() => {
 		if (isEdit) {
-			document.title = `${I18n.t(
-				'edit_my_profile'
-			)} - Financial Diary App`;
+			document.title = `${I18n.t('edit_my_profile')} - ${APP_NAME}`;
 		} else {
-			document.title = `${I18n.t('my_profile')} - Financial Diary App`;
+			document.title = `${I18n.t('my_profile')} - ${APP_NAME}`;
 		}
 	}, [isEdit, language, I18n]);
 

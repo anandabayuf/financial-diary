@@ -33,6 +33,7 @@ import {
 	setNoteShowYear,
 	setSelectedNote,
 } from '../../../Store/Note/NoteSlice';
+import { APP_NAME } from '../../../Constants/Constants';
 
 const NotesListPage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
@@ -149,7 +150,7 @@ const NotesListPage: React.FC = () => {
 	};
 
 	useEffect(() => {
-		document.title = `${I18n.t('notes')} - Financial Diary App`;
+		document.title = `${I18n.t('notes')} - ${APP_NAME}`;
 	}, [I18n, language]);
 
 	return (

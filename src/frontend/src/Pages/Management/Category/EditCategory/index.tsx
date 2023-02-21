@@ -12,6 +12,7 @@ import { editUserCategory } from '../../../../Api/Category';
 import AppMessage from '../../../../Components/General/AppMessage/index';
 import useLocale from '../../../../Hooks/useLocale';
 import { errorHandling } from '../../../../Api/errorHandling';
+import { APP_NAME } from '../../../../Constants/Constants';
 
 const EditForm = withEditCategory(CategoryForm);
 
@@ -52,7 +53,7 @@ const EditCategoryPage: React.FC = () => {
 	useEffect(() => {
 		document.title = `${I18n.t(
 			'title.management.category.edit'
-		)} - Financial Diary App`;
+		)} - ${APP_NAME}`;
 	}, [I18n, language]);
 
 	return (

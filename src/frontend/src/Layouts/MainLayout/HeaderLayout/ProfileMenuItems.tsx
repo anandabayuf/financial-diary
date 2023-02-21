@@ -1,5 +1,6 @@
 import { FiLogOut } from 'react-icons/fi';
 import {
+	AiOutlineInfoCircle,
 	AiOutlineUser,
 	// AiOutlineSetting
 } from 'react-icons/ai';
@@ -34,6 +35,18 @@ const ProfileMenuItems: ProfileMenuItemsType = ({
 			),
 			key: 'my-profile',
 			icon: <AiOutlineUser />,
+			style: {
+				color: textColor,
+			},
+		},
+		{
+			label: (
+				<Link to={getRouteNames(RouteNames.ABOUT_US)}>
+					<AppText text={I18n?.t('menu.about_us')} />
+				</Link>
+			),
+			key: 'about-us',
+			icon: <AiOutlineInfoCircle />,
 			style: {
 				color: textColor,
 			},
