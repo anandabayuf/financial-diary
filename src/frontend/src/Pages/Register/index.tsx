@@ -35,7 +35,7 @@ const RegisterPage: React.FC = () => {
 		let { picture, passwordconfirm, password, ...data } = values;
 
 		try {
-			data['password'] = await encryptPassword(password);
+			data['password'] = encryptPassword(password);
 		} catch (error) {
 			errorHandling(error, I18n);
 		}

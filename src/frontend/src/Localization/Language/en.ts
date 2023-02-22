@@ -26,6 +26,8 @@ const general = {
 	'notes.items.edit': 'Edit Note Item',
 
 	about_us: 'About Us',
+
+	change_password: 'Change Password',
 };
 
 const content = {
@@ -94,6 +96,8 @@ const label = {
 	'label.edit.wallet': 'Edit Wallet',
 	'label.edit.category': 'Edit Category',
 
+	'label.change_password': 'Change Password',
+
 	'label.action': 'Action',
 	'label.year': 'Year',
 	'label.month': 'Month',
@@ -142,6 +146,9 @@ const label = {
 	'form.label.transfer_to': 'Transfer or Withdraw to Wallet',
 	'form.label.transfer_from': 'Transfer or Withdraw from Wallet',
 	'form.label.spend_wallet': 'Spend from Wallet',
+	'form.label.old_password': 'Old Password',
+	'form.label.new_password': 'New Password',
+	'form.label.new_password_confirmation': 'New Password Confirmation',
 
 	'form.placeholder.username': 'input your username',
 	'form.placeholder.password': 'input your password',
@@ -162,6 +169,9 @@ const label = {
 	'form.placeholder.spend_amount': 'input spend amount',
 	'form.placeholder.transfer_amount': 'input transfer or withdraw amount',
 	'form.placeholder.transfer_to': 'select destination wallet',
+	'form.placeholder.old_password': 'input your old password',
+	'form.placeholder.new_password': 'input your new password',
+	'form.placeholder.new_password_confirmation': 're-input your new password',
 
 	'form.extra.wallet': 'Wallet cannot be changed',
 	'form.extra.category': 'Category cannot be changed',
@@ -182,6 +192,7 @@ const menu = {
 	'menu.management.category': 'Category',
 	'menu.notes': 'Notes',
 	'menu.my_profile': 'My Profile',
+	'menu.change_password': 'Change Password',
 	'menu.about_us': 'Tentang Kami',
 	'menu.theme_switcher.light': 'Light',
 	'menu.theme_switcher.dark': 'Dark',
@@ -240,6 +251,10 @@ const error = {
 	'form.required.transfer_amount':
 		'Please input transfer or withdraw amount!',
 	'form.required.transfer_to': 'Please select destination wallet!',
+	'form.required.old_password': 'Please input your old password!',
+	'form.required.new_password': 'Please input your new password!',
+	'form.required.new_password_confirmation':
+		'Please re-input your new password!',
 
 	'form.validation.no_spaces': 'No spaces allowed!',
 	'form.validation.password_not_match': "Password doesn't match!",
@@ -263,6 +278,8 @@ const backend = {
 	'user.success.get': 'Successfully get user data',
 	'user.success.edit': 'Successfully edit user data',
 	'user.succcess.delete': 'Successfully delete user data',
+
+	'change_password.success': 'Successfully change password',
 
 	'category.success.create': 'Successfully create category',
 	'category.success.get_all': 'Successfully get categories',
@@ -319,6 +336,11 @@ const backend = {
 	'user.failed.get': 'Failed to get user data',
 	'user.failed.edit': 'Failed to edit user data',
 	'user.failed.delete': 'Failed to delete user data',
+
+	'change_password.failed': 'Failed to change password',
+	'change_password.exception.001': 'Incorrect password',
+	'change_password.exception.002':
+		'You have entered the same password as before. If you want to change the password, please enter a new password',
 
 	'category.failed.create': 'Failed to create user category',
 	'category.failed.get_all': 'Failed to get user category',

@@ -142,8 +142,7 @@ exports.changePassword = (oldPassword, newPassword, userId) => {
 					} else {
 						this.edit(userId, { password: newPasswordSalted })
 							.then((res) => {
-								const { password, salt, ...rest } = res;
-								resolve(rest);
+								resolve(true);
 							})
 							.catch((err) => reject(err));
 					}

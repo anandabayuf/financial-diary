@@ -5,6 +5,7 @@ import {
 	// AiOutlineSetting
 } from 'react-icons/ai';
 import { BsSun, BsMoon } from 'react-icons/bs';
+import { RiLockPasswordLine } from 'react-icons/ri';
 import AppText from '../../../Components/General/AppText';
 import { ProfileMenuItemsType } from '../interfaces/interfaces';
 import { Link } from 'react-router-dom';
@@ -35,6 +36,18 @@ const ProfileMenuItems: ProfileMenuItemsType = ({
 			),
 			key: 'my-profile',
 			icon: <AiOutlineUser />,
+			style: {
+				color: textColor,
+			},
+		},
+		{
+			label: (
+				<Link to={getRouteNames(RouteNames.CHANGE_PASSWORD)}>
+					<AppText text={I18n?.t('menu.change_password')} />
+				</Link>
+			),
+			key: 'change-password',
+			icon: <RiLockPasswordLine />,
 			style: {
 				color: textColor,
 			},
