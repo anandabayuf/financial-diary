@@ -89,6 +89,16 @@ const StyledTable = styled(Table)<StyledTableProps>`
 		}
 	}
 
+	.ant-pagination-item-link .ant-pagination-item-container {
+		.ant-pagination-item-link-icon {
+			color: ${(props) => props.tabletheme?.button} !important;
+		}
+
+		.ant-pagination-item-ellipsis {
+			color: ${(props) => props.tabletheme?.button} !important;
+		}
+	}
+
 	.ant-pagination-options-size-changer {
 		.ant-select-selector {
 			background-color: ${(props) => props.tabletheme?.container};
