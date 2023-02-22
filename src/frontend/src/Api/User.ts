@@ -26,3 +26,17 @@ export const editUserById = async (
 		data: data,
 	});
 };
+
+export const changePassword = async (
+	token?: string,
+	data?: any
+): Promise<any> => {
+	return await instance({
+		url: '/user/change-password',
+		method: 'PUT',
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+		data: data,
+	});
+};

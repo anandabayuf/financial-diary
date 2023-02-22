@@ -6,7 +6,7 @@ export const decodeJWT = (jwt: string, options?: any) => {
 	return jwt_decode(jwt, options);
 };
 
-export const encryptPassword = async (password: string): Promise<any> => {
+export const encryptPassword = (password: string): string => {
 	try {
 		const encryptedData = crypto.publicEncrypt(
 			PUBLIC_KEY,

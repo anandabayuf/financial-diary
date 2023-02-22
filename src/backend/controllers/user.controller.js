@@ -88,6 +88,29 @@ router.post("/", upload.single("picture"), async (req, res) => {
 	}
 });
 
+router.put("/change-password", async (req, res) => {
+	let payload = req.body;
+	try {
+		const response = await userModel.changePassword(
+			payload.oldPassword,
+			payload.newPassword,
+			req.user.id
+		);
+
+		res.status(201).json({
+			status: 201,
+			message: message["change_password.success"],
+			data: response,
+		});
+	} catch (err) {
+		res.status(404).json({
+			status: 404,
+			message: message["change_password.failed"],
+			detail: err,
+		});
+	}
+});
+
 router.put("/:id", upload.single("picture"), async (req, res) => {
 	let payload = JSON.parse(req.body.data);
 

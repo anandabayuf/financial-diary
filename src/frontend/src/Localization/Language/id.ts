@@ -26,6 +26,8 @@ const general = {
 	'notes.items.edit': 'Ubah Item Pencatatan',
 
 	about_us: 'Tentang Kami',
+
+	change_password: 'Ubah Kata Sandi',
 };
 
 const content = {
@@ -94,6 +96,8 @@ const label = {
 	'label.edit.wallet': 'Ubah Dompet',
 	'label.edit.category': 'Ubah Kategori',
 
+	'label.change_password': 'Ubah Kata Sandi',
+
 	'label.action': 'Aksi',
 	'label.year': 'Tahun',
 	'label.month': 'Bulan',
@@ -144,6 +148,9 @@ const label = {
 	'form.label.transfer_to': 'Transfer atau Tarik Tunai ke Dompet',
 	'form.label.transfer_from': 'Transfer atau Tarik Tunai dari Dompet',
 	'form.label.spend_wallet': 'Pengeluaran dari Dompet',
+	'form.label.old_password': 'Kata Sandi Lama',
+	'form.label.new_password': 'Kata Sandi Baru',
+	'form.label.new_password_confirmation': 'Konfirmasi Kata Sandi Baru',
 
 	'form.placeholder.username': 'masukkan nama pengguna kamu',
 	'form.placeholder.password': 'masukkan kata sandi kamu',
@@ -166,6 +173,10 @@ const label = {
 	'form.placeholder.transfer_amount':
 		'masukkan jumlah transfer atau tarik tunai',
 	'form.placeholder.transfer_to': 'pilih dompet tujuan',
+	'form.placeholder.old_password': 'masukkan kata sandi lama kamu',
+	'form.placeholder.new_password': 'masukkan kata sandi baru kamu',
+	'form.placeholder.new_password_confirmation':
+		'masukkan kembali kata sandi baru kamu',
 
 	'form.extra.wallet': 'Dompet tidak dapat diubah',
 	'form.extra.category': 'Kategori tidak dapat diubah',
@@ -186,6 +197,7 @@ const menu = {
 	'menu.management.category': 'Kategori',
 	'menu.notes': 'Pencatatan',
 	'menu.my_profile': 'Profil Saya',
+	'menu.change_password': 'Ubah Kata Sandi',
 	'menu.about_us': 'Tentang Kami',
 	'menu.theme_switcher.light': 'Terang',
 	'menu.theme_switcher.dark': 'Gelap',
@@ -245,6 +257,10 @@ const error = {
 	'form.required.transfer_amount':
 		'Mohon masukkan jumlah transfer atau tarik tunai!',
 	'form.required.transfer_to': 'Mohon pilih dompet tujuan!',
+	'form.required.old_password': 'Mohon masukkan kata sandi lama kamu!',
+	'form.required.new_password': 'Mohon masukkan kata sandi baru kamu!',
+	'form.required.new_password_confirmation':
+		'Mohon masukkan kembali kata sandi baru kamu!',
 
 	'form.validation.no_spaces': 'Tidak boleh mengandung spasi!',
 	'form.validation.password_not_match': 'Kata sandi tidak sama!',
@@ -269,6 +285,8 @@ const backend = {
 	'user.success.get': 'Berhasil mendapatkan data pengguna',
 	'user.success.edit': 'Berhasil mengubah data pengguna',
 	'user.succcess.delete': 'Berhasil menghapus data pengguna',
+
+	'change_password.success': 'Berhasil mengubah kata sandi',
 
 	'category.success.create': 'Berhasil membuat kategori',
 	'category.success.get_all': 'Berhasil mendapatkan kategori',
@@ -326,6 +344,11 @@ const backend = {
 	'user.failed.get': 'Gagal mendapatkan data pengguna',
 	'user.failed.edit': 'Gagal mengubah data pengguna',
 	'user.failed.delete': 'Gagal menghapus data pengguna',
+
+	'change_password.failed': 'Gagal mengubah kata sandi',
+	'change_password.exception.001': 'Kata sandi salah',
+	'change_password.exception.002':
+		'Kamu telah memasukkan kata sandi yang sama dengan sebelumnya. Jika ingin mengubah kata sandi, mohon masukkan kata sandi yang baru',
 
 	'category.failed.create': 'Gagal membuat kategori',
 	'category.failed.get_all': 'Gagal mendapatkan kategori',

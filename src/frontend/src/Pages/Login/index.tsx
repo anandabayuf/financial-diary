@@ -31,7 +31,7 @@ const LoginPage: React.FC = () => {
 		setLoading(true);
 
 		try {
-			const encryptedPass = await encryptPassword(values.password);
+			const encryptedPass = encryptPassword(values.password);
 
 			const res = await login({
 				username: values.username,

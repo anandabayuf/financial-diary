@@ -15,6 +15,10 @@ const exception = {
 	"user.failed.edit": "user.failed.edit", // "Failed to edit user data"
 	"user.failed.delete": "user.failed.delete", // "Failed to delete user data"
 
+	"change_password.failed": "change_password.failed", //"Failed to change password"
+	"change_password.incorrect_password": "change_password.exception.001", //"Incorrect password"
+	"change_password.same_password": "change_password.exception.002", //"You have entered the same password, if you want to change the password, please change it to new one"
+
 	"category.failed.create": "category.failed.create", // "Failed to create user category"
 	"category.failed.get_all": "category.failed.get_all", // "Failed to get user category"
 	"category.failed.get": "category.failed.get", // "Failed to get user category data"
@@ -68,6 +72,8 @@ const success = {
 	"user.success.get": "user.success.get", //"Successfully get user data"
 	"user.success.edit": "user.success.edit", //"Successfully edit user data"
 	"user.success.delete": "user.succcess.delete", //"Successfully delete user data"
+
+	"change_password.success": "change_password.success", //"Successfully change password"
 
 	"category.success.create": "category.success.create", // "Successfully create user category"
 	"category.success.get_all": "category.success.get_all", // "Successfully get user category"
