@@ -1,5 +1,7 @@
 const schema = require("./schema");
 const message = require("../constants/message");
+const publicModel = require("./public.model");
+const crypto = require("crypto");
 
 exports.create = (data) => {
 	return new Promise((resolve, reject) => {
@@ -75,5 +77,82 @@ exports.delete = (id) => {
 				resolve(result);
 			}
 		}).lean();
+	});
+};
+
+exports.verifyPassword = (password, userId) => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const decryptedPassword = await publicModel.decrypt(password);
+
+			this.getById(userId)
+				.then((user) => {
+					const password = crypto
+						.pbkdf2Sync(
+							decryptedPassword,
+							user.salt,
+							1000,
+							64,
+							`sha512`
+						)
+						.toString(`hex`);
+
+					if (user.password === password) {
+						resolve({
+							isVerified: true,
+							user: user,
+						});
+					} else {
+						reject(message["change_password.incorrect_password"]);
+					}
+				})
+				.catch((error) => reject(error));
+		} catch (error) {
+			reject(error);
+		}
+	});
+};
+
+exports.changePassword = (oldPassword, newPassword, userId) => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const { isVerified, user } = await this.verifyPassword(
+				oldPassword,
+				userId
+			);
+
+			if (isVerified) {
+				try {
+					const decryptedNewPassword = await publicModel.decrypt(
+						newPassword
+					);
+
+					const newPasswordSalted = crypto
+						.pbkdf2Sync(
+							decryptedNewPassword,
+							user.salt,
+							1000,
+							64,
+							`sha512`
+						)
+						.toString(`hex`);
+
+					if (newPasswordSalted === user.password) {
+						reject(message["change_password.same_password"]);
+					} else {
+						this.edit(userId, { password: newPasswordSalted })
+							.then((res) => {
+								const { password, salt, ...rest } = res;
+								resolve(rest);
+							})
+							.catch((err) => reject(err));
+					}
+				} catch (error) {
+					reject(error);
+				}
+			}
+		} catch (error) {
+			reject(error);
+		}
 	});
 };

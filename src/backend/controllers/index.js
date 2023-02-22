@@ -7,11 +7,11 @@ const noteController = require("./note.controller");
 const noteItemController = require("./noteitem.controller");
 const categoryNoteController = require("./categorynote.controller");
 const walletNoteController = require("./walletnote.controller");
-// const publicController = require("./public.controller");
+const publicController = require("./public.controller");
 
 module.exports = (app) => {
 	app.use("/api/auth", authController);
-	// app.use("/api/public", publicController);
+	app.use("/api/public", publicController);
 	app.use("/api/user", [isAuthenticated], userController);
 	app.use("/api/category", [isAuthenticated], categoryController);
 	app.use("/api/wallet", [isAuthenticated], walletController);
