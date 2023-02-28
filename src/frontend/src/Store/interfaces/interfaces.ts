@@ -8,6 +8,7 @@ export interface UserState {
 	isLoggedIn?: boolean;
 	accessToken?: string;
 	data?: any;
+	isEmailVerificationSend?: boolean;
 }
 
 export interface NoteState {

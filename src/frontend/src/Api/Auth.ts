@@ -15,8 +15,15 @@ export const register = async (user: any): Promise<any> => {
 
 export const checkToken = async (token?: string): Promise<any> => {
 	return await instance({
-		url: '/auth/authToken',
+		url: '/auth/auth-token',
 		method: 'GET',
 		headers: { Authorization: `Bearer ${token}` },
+	});
+};
+
+export const verifyEmail = async (token?: string): Promise<any> => {
+	return await instance({
+		url: `/auth/verify-email?token=${token}`,
+		method: 'POST',
 	});
 };

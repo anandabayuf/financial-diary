@@ -15,7 +15,7 @@ export const errorHandling = (
 	if (error instanceof AxiosError) {
 		if (error.code === 'ERR_NETWORK') {
 			AppMessage({
-				content: I18n.t(`network.${error.code}`),
+				content: I18n.t(`network.ERR_NETWORK`),
 				type: 'error',
 			});
 		} else if (error.request.status === 401 && dispatch && navigate) {

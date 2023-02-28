@@ -4,6 +4,7 @@ import RouteNames from '../Constants/RouteNames';
 import LoginPage from '../Pages/Login';
 import useAuth from '../Hooks/useAuth';
 import RegisterPage from '../Pages/Register';
+import VerifyEmailPage from '../Pages/VerifyEmail';
 
 const LoginRoute = () => {
 	const isLoggedIn = useAuth();
@@ -24,6 +25,10 @@ const PublicRoutes: RouteObject[] = [
 				element: <RegisterPage />,
 			},
 		],
+	},
+	{
+		path: getRouteNames(RouteNames.VERIFY_EMAIL),
+		element: <VerifyEmailPage />,
 	},
 	{
 		path: '*',

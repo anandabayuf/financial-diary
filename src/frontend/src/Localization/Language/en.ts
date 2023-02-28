@@ -28,6 +28,8 @@ const general = {
 	about_us: 'About Us',
 
 	change_password: 'Change Password',
+
+	email_verification: 'Email Verification',
 };
 
 const content = {
@@ -66,11 +68,13 @@ const content = {
 
 	'content.about_app': 'About App',
 	'content.version': 'Version',
+	'content.or': 'atau',
 };
 
 const label = {
 	'label.username': 'Username',
 	'label.name': 'Name',
+	'label.email': 'Email',
 	'label.budget': 'Budget',
 	'label.wallet': 'Wallet',
 	'label.category': 'Category',
@@ -98,6 +102,8 @@ const label = {
 
 	'label.change_password': 'Change Password',
 
+	'label.go_to_home': 'Go to Home Page',
+
 	'label.action': 'Action',
 	'label.year': 'Year',
 	'label.month': 'Month',
@@ -122,6 +128,7 @@ const label = {
 	'label.Spend': 'Spend',
 
 	'form.label.username': 'Username',
+	'form.label.email': 'Email',
 	'form.label.password': 'Password',
 	'form.label.profile_picture': 'Profile Picture',
 	'form.label.name': 'Name',
@@ -151,6 +158,7 @@ const label = {
 	'form.label.new_password_confirmation': 'New Password Confirmation',
 
 	'form.placeholder.username': 'input your username',
+	'form.placeholder.email': 'input your email',
 	'form.placeholder.password': 'input your password',
 	'form.placeholder.profile_picture': 'Upload Image',
 	'form.placeholder.name': 'input your name',
@@ -193,7 +201,7 @@ const menu = {
 	'menu.notes': 'Notes',
 	'menu.my_profile': 'My Profile',
 	'menu.change_password': 'Change Password',
-	'menu.about_us': 'Tentang Kami',
+	'menu.about_us': 'About Us',
 	'menu.theme_switcher.light': 'Light',
 	'menu.theme_switcher.dark': 'Dark',
 	'menu.logout': 'Logout',
@@ -232,6 +240,7 @@ const info = {
 
 const error = {
 	'form.required.username': 'Please input your username!',
+	'form.required.email': 'Please input your email!',
 	'form.required.password': 'Please input your password!',
 	'form.required.name': 'Please input your name!',
 	'form.required.password_confirmation': 'Please re-input your password!',
@@ -261,6 +270,7 @@ const error = {
 	'form.validation.upload_only_image': 'You can only upload JPG/PNG file!',
 	'form.validation.size_lower_than_2mb': 'Image must smaller than 2MB!',
 	'form.validation.only_number': 'Please input only number!',
+	'form.validation.email': 'Please input valid email!',
 
 	'network.ERR_NETWORK': 'Network Error',
 
@@ -270,8 +280,10 @@ const error = {
 const backend = {
 	//success
 	'login.success': 'Successfully sign in',
-	'register.success': 'Successfully register',
+	'register.success':
+		'Successfully register. Please verify your email address to use Financial Diary App.',
 	'authtoken.success': 'Token is valid',
+	'verify_email.success': 'Sucessfully verify email',
 
 	'user.success.create': 'Successfully create user',
 	'user.success.get_all': 'Successfully get all users data',
@@ -322,13 +334,19 @@ const backend = {
 	//failed
 	'login.failed': 'Failed to sign in',
 	'login.exception.001': 'You have entered an invalid username or password',
+	'login.exception.002':
+		'Email has not been verified, please verify in order to use the Financial Diary App',
 
 	'register.failed': 'Failed to register',
-	'register.exception.001': 'Username is already taken',
+	'register.exception.001': 'Username or email is already taken',
 
 	'authtoken.failed': 'Token is not valid',
 	'auth.exception.001':
 		'A client is forbidden from accessing a valid resource',
+
+	'verify_email.failed': 'Failed to verify email',
+	'verify_email.exception.001': 'Email already verified',
+	'verify_email.exception.002': 'Invalid Token',
 
 	'user.failed.create': 'Failed to create user',
 	'user.exception.001': 'Username is already taken',

@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
 const { config } = require("dotenv");
+const { MONGO_URI } = require("../constants/constants");
 
 config();
 
 mongoose
-	.connect(process.env.MONGO_URI)
+	.connect(MONGO_URI)
 	.then(() => {
 		console.log("MongoDB connection has been established successfully.");
 	})
@@ -14,6 +15,12 @@ mongoose
 
 exports.UserSchema = mongoose.model("User", {
 	username: {
+		type: String,
+		unique: true,
+		required: true,
+		dropDups: true,
+	},
+	email: {
 		type: String,
 		unique: true,
 		required: true,
@@ -34,6 +41,10 @@ exports.UserSchema = mongoose.model("User", {
 	picture: {
 		data: Buffer,
 		contentType: String,
+	},
+	isEmailVerified: {
+		type: Boolean,
+		required: true,
 	},
 });
 

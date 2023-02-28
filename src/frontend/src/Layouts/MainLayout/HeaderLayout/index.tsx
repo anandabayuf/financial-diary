@@ -93,7 +93,7 @@ const HeaderLayout: React.FC<HeaderLayoutProps> = ({
 					}),
 					style: {
 						backgroundColor: theme?.button,
-						width: '180px',
+						width: '200px',
 					},
 					onClick: handleClickProfileMenu,
 				}}

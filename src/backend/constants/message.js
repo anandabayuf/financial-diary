@@ -1,12 +1,17 @@
 const exception = {
 	"login.failed": "login.failed", //"Failed to sign in"
 	"login.invalid_username_or_password": "login.exception.001", //"You have entered and invalid email or password"
+	"login.email_is_not_verified": "login.exception.002", //"Email has not been verified, please verify in order to use the Financial Diary App"
 
 	"register.failed": "register.failed", //"Failed to register"
 	"register.username_taken": "register.exception.001", // "Username is already taken"
 
 	"authtoken.failed": "authtoken.failed", //"Token is not valid"
 	"auth.token_is_not_valid": "auth.exception.001", //"A client is forbidden from accessing a valid resource"
+
+	"verify_email.failed": "verify_email.failed", //"Failed to verify email"
+	"verify_email.already_verified": "verify_email.exception.001", //"Email already verified"
+	"verify_email.invalid_token": "verify_email.exception.002", //"Invalid Token"
 
 	"user.failed.create": "user.failed.create", // "Failed to create user"
 	"user.username_taken": "user.exception.001", // "Username is already taken"
@@ -66,6 +71,8 @@ const success = {
 	"login.success": "login.success", //"Successfully sign in"
 	"register.success": "register.success", //"Successfully register"
 	"authtoken.success": "authtoken.success", //"Token is valid"
+
+	"verify_email.success": "verify_email.success", //"Sucessfully verify email"
 
 	"user.success.create": "user.success.create", // "Successfully create user"
 	"user.success.get_all": "user.success.get_all", //"Successfully get all users data"

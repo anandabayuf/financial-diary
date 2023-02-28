@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const crypto = require("crypto");
 const multer = require("multer");
 const authModel = require("../models/auth.model");
 const message = require("../constants/message");
@@ -35,14 +34,10 @@ router.post("/register", upload.single("picture"), async (req, res) => {
 	}
 
 	try {
-		const response = await authModel.register(payload);
-		// console.log(response);
-		const { password, salt, ...rest } = response;
-		// console.log(rest);
 		res.status(201).json({
 			status: 201,
 			message: message["register.success"],
-			data: rest,
+			data: await authModel.register(payload),
 		});
 	} catch (err) {
 		res.status(404).json({
@@ -53,7 +48,7 @@ router.post("/register", upload.single("picture"), async (req, res) => {
 	}
 });
 
-router.get("/authToken", async (req, res) => {
+router.get("/auth-token", async (req, res) => {
 	const authHeader = req.headers.authorization;
 	const token = authHeader && authHeader.split(" ")[1];
 
@@ -67,6 +62,23 @@ router.get("/authToken", async (req, res) => {
 		res.status(401).json({
 			status: 401,
 			message: message["authtoken.failed"],
+			detail: err,
+		});
+	}
+});
+
+router.post("/verify-email", async (req, res) => {
+	const token = req.query.token;
+	try {
+		res.status(201).json({
+			status: 201,
+			message: message["verify_email.success"],
+			data: await authModel.verifyEmail(token),
+		});
+	} catch (err) {
+		res.status(404).json({
+			status: 404,
+			message: message["verify_email.failed"],
 			detail: err,
 		});
 	}

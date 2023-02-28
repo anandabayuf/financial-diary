@@ -21,7 +21,7 @@ const AboutTheAppSection: React.FC<AboutTheAppProps> = ({ I18n }) => {
 					className='text-sm mb-2'
 				/>
 				<AppText
-					isMuted
+					muted
 					text={`${I18n?.t('content.version')} ${APP_VERSION}`}
 					className='text-xs'
 				/>

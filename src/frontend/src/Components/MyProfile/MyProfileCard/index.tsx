@@ -30,12 +30,19 @@ const MyProfileCard: React.FC<MyProfileCardProps> = ({ user, I18n }) => {
 				/>
 				<AppText text={user.username} />
 			</div>
-			<div className='grid grid-cols-1 gap-y-2'>
+			<div className='grid grid-cols-1 gap-y-2 mb-8'>
 				<AppTitle
 					title={I18n?.t('label.name')}
 					level={5}
 				/>
 				<AppText text={user.name} />
+			</div>
+			<div className='grid grid-cols-1 gap-y-2'>
+				<AppTitle
+					title={I18n?.t('label.email')}
+					level={5}
+				/>
+				<AppText text={user.email} />
 			</div>
 		</AppCard>
 	) : (

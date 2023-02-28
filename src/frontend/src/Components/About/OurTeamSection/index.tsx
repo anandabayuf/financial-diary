@@ -26,7 +26,7 @@ const OurTeamSection: React.FC<OurTeamSectionProps> = ({ I18n }) => {
 						className='text-center text-sm'
 					/>
 					<AppText
-						isMuted
+						muted
 						text={I18n?.t('content.developer')}
 						className='text-xs text-center'
 					/>
@@ -43,7 +43,7 @@ const OurTeamSection: React.FC<OurTeamSectionProps> = ({ I18n }) => {
 						className='text-center text-sm'
 					/>
 					<AppText
-						isMuted
+						muted
 						text={`${I18n?.t('content.owner')}/${I18n?.t(
 							'content.user'
 						)}`}

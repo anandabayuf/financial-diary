@@ -6,6 +6,8 @@ export const getRouteNames = (route: string): string => {
 			return '/login';
 		case RouteNames.REGISTER:
 			return '/register';
+		case RouteNames.VERIFY_EMAIL:
+			return '/email-verification';
 		// case RouteNames.DASHBOARD:
 		// 	return '/dashboard';
 		case RouteNames.MANAGEMENT_WALLETS:
