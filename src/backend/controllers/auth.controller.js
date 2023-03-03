@@ -68,7 +68,9 @@ router.get("/auth-token", async (req, res) => {
 });
 
 router.post("/verify-email", async (req, res) => {
-	const token = req.query.token;
+	const authHeader = req.headers.authorization;
+	const token = authHeader && authHeader.split(" ")[1];
+
 	try {
 		res.status(201).json({
 			status: 201,
@@ -79,6 +81,45 @@ router.post("/verify-email", async (req, res) => {
 		res.status(404).json({
 			status: 404,
 			message: message["verify_email.failed"],
+			detail: err,
+		});
+	}
+});
+
+router.post("/forgot-password", async (req, res) => {
+	const email = req.body.email;
+	const username = req.body.username;
+
+	try {
+		res.status(201).json({
+			status: 201,
+			message: message["forgot_password.success"],
+			data: await authModel.sendForgotPasswordEmail(email, username),
+		});
+	} catch (err) {
+		res.status(404).json({
+			status: 404,
+			message: message["forgot_password.failed"],
+			detail: err,
+		});
+	}
+});
+
+router.put("/reset-password", async (req, res) => {
+	const authHeader = req.headers.authorization;
+	const token = authHeader && authHeader.split(" ")[1];
+	const newPassword = req.body.newPassword;
+
+	try {
+		res.status(201).json({
+			status: 201,
+			message: message["reset_password.success"],
+			data: await authModel.resetPassword(token, newPassword),
+		});
+	} catch (err) {
+		res.status(404).json({
+			status: 404,
+			message: message["reset_password.failed"],
 			detail: err,
 		});
 	}

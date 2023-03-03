@@ -13,6 +13,13 @@ const exception = {
 	"verify_email.already_verified": "verify_email.exception.001", //"Email already verified"
 	"verify_email.invalid_token": "verify_email.exception.002", //"Invalid Token"
 
+	"forgot_password.failed": "forgot_password.failed", //"Failed to send forgot password email"
+	"forgot_password.email_is_not_verified": "forgot_password.exception.001", //"Email has not been verified, please verify in order to use the Financial Diary App"
+	"forgot_password.wrong_email_or_username": "forgot_password.exception.002", //"user with that email address or username not found"
+
+	"reset_password.failed": "reset_password.failed", //"Failed to reset password",
+	"reset_password.invalid_token": "reset_password.exception.001", //"Token is not valid or expired",
+
 	"user.failed.create": "user.failed.create", // "Failed to create user"
 	"user.username_taken": "user.exception.001", // "Username is already taken"
 	"user.failed.get_all": "user.failed.get_all", // "Failed to get all users data"
@@ -73,6 +80,11 @@ const success = {
 	"authtoken.success": "authtoken.success", //"Token is valid"
 
 	"verify_email.success": "verify_email.success", //"Sucessfully verify email"
+
+	"forgot_password.success": "forgot_password.success", //"Successfully sent forgot password email"
+	"forgot_password.send_email_success": "forgot_password.send_email_success", //"We have sent an email to the linked account to reset the password. Please check your email"
+
+	"reset_password.success": "reset_password.success", //"Successfully reset your password"
 
 	"user.success.create": "user.success.create", // "Successfully create user"
 	"user.success.get_all": "user.success.get_all", //"Successfully get all users data"

@@ -23,7 +23,28 @@ export const checkToken = async (token?: string): Promise<any> => {
 
 export const verifyEmail = async (token?: string): Promise<any> => {
 	return await instance({
-		url: `/auth/verify-email?token=${token}`,
+		url: `/auth/verify-email`,
+		headers: { Authorization: `Bearer ${token}` },
 		method: 'POST',
+	});
+};
+
+export const forgotPassword = async (data?: any): Promise<any> => {
+	return await instance({
+		url: `/auth/forgot-password`,
+		method: 'POST',
+		data: data,
+	});
+};
+
+export const resetPassword = async (
+	token?: string,
+	data?: any
+): Promise<any> => {
+	return await instance({
+		url: `/auth/reset-password`,
+		method: 'PUT',
+		headers: { Authorization: `Bearer ${token}` },
+		data: data,
 	});
 };

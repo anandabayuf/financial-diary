@@ -140,7 +140,20 @@ exports.changePassword = (oldPassword, newPassword, userId) => {
 					if (newPasswordSalted === user.password) {
 						reject(message["change_password.same_password"]);
 					} else {
-						this.edit(userId, { password: newPasswordSalted })
+						const newSalt = crypto.randomBytes(16).toString("hex");
+						const newPassword = crypto
+							.pbkdf2Sync(
+								decryptedNewPassword,
+								newSalt,
+								1000,
+								64,
+								`sha512`
+							)
+							.toString(`hex`);
+						this.edit(userId, {
+							password: newPassword,
+							salt: newSalt,
+						})
 							.then((res) => {
 								resolve(true);
 							})

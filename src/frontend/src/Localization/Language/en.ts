@@ -30,6 +30,9 @@ const general = {
 	change_password: 'Change Password',
 
 	email_verification: 'Email Verification',
+
+	forgot_password: 'Forgot Password',
+	reset_password: 'Reset Password',
 };
 
 const content = {
@@ -69,6 +72,9 @@ const content = {
 	'content.about_app': 'About App',
 	'content.version': 'Version',
 	'content.or': 'atau',
+
+	'content.forgot_password':
+		'We will send an email to the linked account to reset the password.',
 };
 
 const label = {
@@ -103,6 +109,11 @@ const label = {
 	'label.change_password': 'Change Password',
 
 	'label.go_to_home': 'Go to Home Page',
+
+	'label.forgot_password': 'Forgot Password?',
+	'label.send_email_reset_password': 'Send Reset Password Email',
+	'label.back_to_login': 'Back to Login',
+	'label.reset_password': 'Reset Password',
 
 	'label.action': 'Action',
 	'label.year': 'Year',
@@ -285,6 +296,12 @@ const backend = {
 	'authtoken.success': 'Token is valid',
 	'verify_email.success': 'Sucessfully verify email',
 
+	'forgot_password.success': 'Successfully sent reset password email',
+	'forgot_password.send_email_success':
+		'We have sent an email to the linked account to reset the password, please check your email',
+
+	'reset_password.success': 'Successfully reset password',
+
 	'user.success.create': 'Successfully create user',
 	'user.success.get_all': 'Successfully get all users data',
 	'user.success.get': 'Successfully get user data',
@@ -340,13 +357,22 @@ const backend = {
 	'register.failed': 'Failed to register',
 	'register.exception.001': 'Username or email is already taken',
 
-	'authtoken.failed': 'Token is not valid',
+	'authtoken.failed': 'Token is not valid or expired',
 	'auth.exception.001':
 		'A client is forbidden from accessing a valid resource',
 
 	'verify_email.failed': 'Failed to verify email',
 	'verify_email.exception.001': 'Email already verified',
-	'verify_email.exception.002': 'Invalid Token',
+	'verify_email.exception.002': 'Token is not valid or expired',
+
+	'forgot_password.failed': 'Failed to send forgot password email',
+	'forgot_password.exception.001':
+		'Email has not been verified, please verify in order to use the Financial Diary App',
+	'forgot_password.exception.002':
+		'User with that email address or username not found',
+
+	'reset_password.failed': 'Failed to reset password',
+	'reset_password.exception.001': 'Token is not valid or expired',
 
 	'user.failed.create': 'Failed to create user',
 	'user.exception.001': 'Username is already taken',

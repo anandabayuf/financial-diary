@@ -22,7 +22,11 @@ import ChangePasswordPage from '../Pages/ChangePassword/index';
 const ProtectedRoute = () => {
 	const isLoggedIn = useAuth();
 
-	return isLoggedIn ? <Outlet /> : <Navigate to='/login' />;
+	return isLoggedIn ? (
+		<Outlet />
+	) : (
+		<Navigate to={getRouteNames(RouteNames.LOGIN)} />
+	);
 };
 
 const SecuredRoutes: RouteObject[] = [

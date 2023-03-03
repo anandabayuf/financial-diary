@@ -1,4 +1,4 @@
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import FrontLayout from '../../Layouts/FrontLayout';
 import AppText from '../../Components/General/AppText/index';
 import { useState, useEffect } from 'react';
@@ -19,6 +19,7 @@ import AppButton from '../../Components/General/AppButton';
 const VerifyEmailPage: React.FC = () => {
 	const { I18n, language } = useLocale();
 	const theme = useTheme();
+	const navigate = useNavigate();
 
 	const [searchParams] = useSearchParams();
 
@@ -43,7 +44,7 @@ const VerifyEmailPage: React.FC = () => {
 					errorHandling(error, I18n);
 				}
 			} else {
-				setIsSuccessVerify(false);
+				navigate('/', { replace: true });
 			}
 
 			setIsloading(false);
