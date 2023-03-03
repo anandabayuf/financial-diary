@@ -10,11 +10,11 @@ const AppSwitch: React.FC<AppSwitchProps> = ({
 	onChange,
 	...rest
 }) => {
-	const theme = useTheme();
+	const { color } = useTheme();
 
 	return (
 		<StyledSwitch
-			switchtheme={theme}
+			switchtheme={color}
 			checkedChildren={checkedChildren}
 			unCheckedChildren={unCheckedChildren}
 			checked={checked}

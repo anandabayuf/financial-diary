@@ -7,14 +7,14 @@ const AppSearchInput: React.FC<AppSearchInputProps> = ({
 	onSearch,
 	...rest
 }) => {
-	const theme = useTheme();
+	const { color } = useTheme();
 
 	return (
 		<StyledSearchInput
 			placeholder={placeholder}
 			allowClear
 			onSearch={onSearch}
-			theme={theme}
+			theme={color}
 			enterButton
 			{...rest}
 		/>

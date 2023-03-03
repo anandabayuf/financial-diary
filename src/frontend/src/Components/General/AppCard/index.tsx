@@ -8,13 +8,13 @@ const AppCard: React.FC<AppCardProps> = ({
 	className,
 	...rest
 }) => {
-	const theme = useTheme();
+	const { color } = useTheme();
 
 	return (
 		<StyledCard
 			className={`rounded-2xl shadow-2xl ${className}`}
 			bordered={false}
-			backgroundcolor={theme?.container}
+			backgroundcolor={color?.container}
 			ismobileshowcard={isMobileShowCard}
 			{...rest}
 		>

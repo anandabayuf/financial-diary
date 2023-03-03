@@ -34,7 +34,7 @@ const NoteItemsForm: React.FC<NoteItemsFormProps> = ({
 	);
 	const { month, year } = useAppSelector((state) => state.note.selectedNote!);
 
-	const theme = useTheme();
+	const { color } = useTheme();
 
 	const ItemTypeOptions: SelectProps['options'] = ITEM_TYPE.filter((el) =>
 		isCategory
@@ -206,7 +206,7 @@ const NoteItemsForm: React.FC<NoteItemsFormProps> = ({
 										className='text-sm'
 									/>
 									<AiOutlineQuestionCircle
-										color={theme?.text}
+										color={color?.text}
 									/>
 								</div>
 							</AppTooltip>

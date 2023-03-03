@@ -20,7 +20,8 @@ const MyProfileForm: React.FC<MyProfileFormProps> = ({
 	previewModalProps,
 	I18n,
 }) => {
-	const theme = useTheme();
+	const { color } = useTheme();
+
 	return (
 		<>
 			<AppCard>
@@ -36,7 +37,7 @@ const MyProfileForm: React.FC<MyProfileFormProps> = ({
 					<AppFormItem name='picture'>
 						<StyledUpload
 							widthupload={150}
-							bordercolor={theme?.text}
+							bordercolor={color?.text}
 							listType='picture-card'
 							fileList={handleUploadImage?.fileList}
 							onPreview={
