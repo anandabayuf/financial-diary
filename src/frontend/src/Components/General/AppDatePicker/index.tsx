@@ -16,12 +16,12 @@ const AppDatePicker: React.FC<AppDatePickerProps> = ({
 	value,
 	disabledDate,
 }) => {
-	const theme = useTheme();
+	const { color } = useTheme();
 	const { language } = useLocale();
 
 	return (
 		<StyledDatePicker
-			theme={theme}
+			theme={color}
 			picker={picker}
 			onChange={onChange}
 			suffixIcon={suffixIcon}

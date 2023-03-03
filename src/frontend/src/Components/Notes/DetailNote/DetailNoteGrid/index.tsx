@@ -17,7 +17,7 @@ const DetailNoteGrid: React.FC<DetailNoteGridProps> = ({
 	I18n,
 	handleView,
 }) => {
-	const theme = useTheme();
+	const { color } = useTheme();
 
 	return (
 		<div className='flex justify-center'>
@@ -33,12 +33,12 @@ const DetailNoteGrid: React.FC<DetailNoteGridProps> = ({
 								<div className='flex justify-between items-center mb-5'>
 									{isWallet ? (
 										<IoWalletOutline
-											color={theme?.text}
+											color={color?.text}
 											size={32}
 										/>
 									) : (
 										<BsCreditCard2Front
-											color={theme?.text}
+											color={color?.text}
 											size={32}
 										/>
 									)}

@@ -4,14 +4,14 @@ import useTheme from '../../../Hooks/useTheme';
 import { LoadingOutlined } from '@ant-design/icons';
 
 const AppLoader: React.FC<AppLoaderProps> = ({ ...rest }) => {
-	const theme = useTheme();
+	const { color } = useTheme();
 
 	return (
 		<Spin
 			{...rest}
 			indicator={
 				<LoadingOutlined
-					style={{ color: theme?.title }}
+					style={{ color: color?.title }}
 					spin
 				/>
 			}

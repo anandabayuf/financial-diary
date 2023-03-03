@@ -14,7 +14,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
 	loading,
 	handleUploadImage,
 }) => {
-	const theme = useTheme();
+	const { color } = useTheme();
 	const { I18n } = useLocale();
 
 	return (
@@ -29,7 +29,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
 				name='picture'
 			>
 				<StyledUpload
-					bordercolor={theme?.text}
+					bordercolor={color?.text}
 					listType='picture-card'
 					fileList={handleUploadImage?.fileList}
 					onPreview={handleUploadImage?.handlePreviewProfilePic}

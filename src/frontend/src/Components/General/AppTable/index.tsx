@@ -11,7 +11,7 @@ const AppTable: React.FC<AppTableProps> = ({
 	pagination,
 	...rest
 }) => {
-	const theme = useTheme();
+	const { color } = useTheme();
 	const { I18n, language } = useLocale();
 	const [pageSize, setPageSize] = useState<number>(5);
 
@@ -19,7 +19,7 @@ const AppTable: React.FC<AppTableProps> = ({
 		<StyledTable
 			{...rest}
 			scroll={{ x: 800 }}
-			tabletheme={theme}
+			tabletheme={color}
 			locale={{ emptyText: <AppEmpty /> }}
 			showSorterTooltip={false}
 			pagination={

@@ -3,12 +3,12 @@ import StyledTitle from './styled/StyledTitle';
 import useTheme from '../../../Hooks/useTheme';
 
 const AppTitle: React.FC<AppTitleProps> = ({ title, level, ...rest }) => {
-	const theme = useTheme();
+	const { color } = useTheme();
 
 	return (
 		<StyledTitle
 			level={level}
-			titlecolor={theme?.title}
+			titlecolor={color?.title}
 			{...rest}
 		>
 			{title}

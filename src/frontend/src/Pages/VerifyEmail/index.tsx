@@ -18,7 +18,7 @@ import AppButton from '../../Components/General/AppButton';
 
 const VerifyEmailPage: React.FC = () => {
 	const { I18n, language } = useLocale();
-	const theme = useTheme();
+	const { color } = useTheme();
 	const navigate = useNavigate();
 
 	const [searchParams] = useSearchParams();
@@ -84,7 +84,7 @@ const VerifyEmailPage: React.FC = () => {
 							<div className='flex-col'>
 								<div className='flex justify-center mb-3'>
 									<RiMailCloseLine
-										color={theme?.button}
+										color={color?.button}
 										size={'128px'}
 									/>
 								</div>
@@ -94,7 +94,7 @@ const VerifyEmailPage: React.FC = () => {
 							<div className='flex-col'>
 								<div className='flex justify-center mb-3'>
 									<RiMailCheckLine
-										color={theme?.button}
+										color={color?.button}
 										size={'128px'}
 									/>
 								</div>

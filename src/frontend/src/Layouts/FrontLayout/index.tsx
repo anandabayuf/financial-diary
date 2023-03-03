@@ -12,13 +12,12 @@ import Flag from 'react-world-flags';
 import StyledSwitch from './styled/StyledSwitch';
 
 const FrontLayout: React.FC<FrontLayoutProps> = ({ children }) => {
-	const theme = useTheme();
-	const themeMode = useAppSelector((state) => state.theme);
+	const { color, mode } = useTheme();
 	const dispatch = useAppDispatch();
 	const language = useAppSelector((state) => state.localization.locale);
 
 	const handleChangeTheme = () => {
-		if (themeMode === ThemeModeNames.DARK) {
+		if (mode === ThemeModeNames.DARK) {
 			dispatch(setLightMode());
 		} else {
 			dispatch(setDarkMode());
@@ -37,7 +36,7 @@ const FrontLayout: React.FC<FrontLayoutProps> = ({ children }) => {
 		<StyledLayout>
 			<div className='fixed right-0 top-0 m-8 z-10 max-[320px]:m-3 max-[480px]:m-4'>
 				<StyledSwitch
-					switchtheme={theme}
+					switchtheme={color}
 					checkedChildren={
 						<div className='flex justify-center items-center'>
 							<Flag
@@ -59,7 +58,7 @@ const FrontLayout: React.FC<FrontLayoutProps> = ({ children }) => {
 					onChange={handleChangeLanguage}
 				/>
 			</div>
-			<StyledContent backgroundcolor={theme?.bg}>
+			<StyledContent backgroundcolor={color?.bg}>
 				{children}
 			</StyledContent>
 			<div className='fixed right-0 bottom-0 m-8 z-10 max-[320px]:m-5'>
@@ -70,7 +69,7 @@ const FrontLayout: React.FC<FrontLayoutProps> = ({ children }) => {
 					type='primary'
 					icon={
 						<div className='flex justify-center'>
-							{themeMode === ThemeModeNames.DARK ? (
+							{mode === ThemeModeNames.DARK ? (
 								<BsSun />
 							) : (
 								<BsMoon />

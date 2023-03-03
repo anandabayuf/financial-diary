@@ -3,11 +3,11 @@ import useTheme from '../../../Hooks/useTheme';
 import StyledText from './styled/StyledText';
 
 const AppText: React.FC<AppTextProps> = ({ text, muted = false, ...rest }) => {
-	const theme = useTheme();
+	const { color } = useTheme();
 
 	return (
 		<StyledText
-			textcolor={muted ? theme?.halfText : theme?.text}
+			textcolor={muted ? color?.halfText : color?.text}
 			{...rest}
 		>
 			{text}

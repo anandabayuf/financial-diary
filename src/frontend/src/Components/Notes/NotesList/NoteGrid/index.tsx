@@ -18,7 +18,7 @@ const NotesGrid: React.FC<NotesGridProps> = ({
 	I18n,
 	language,
 }) => {
-	const theme = useTheme();
+	const { color } = useTheme();
 
 	return (
 		<div className='flex justify-center'>
@@ -32,7 +32,7 @@ const NotesGrid: React.FC<NotesGridProps> = ({
 						>
 							<div className='flex justify-between items-center mb-5'>
 								<GiNotebook
-									color={theme?.text}
+									color={color?.text}
 									size={32}
 								/>
 								<div>

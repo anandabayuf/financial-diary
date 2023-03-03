@@ -11,7 +11,7 @@ const AppSelect: React.FC<AppSelectProps> = ({
 	onChange,
 	...rest
 }) => {
-	const theme = useTheme();
+	const { color } = useTheme();
 
 	return (
 		<StyledSelect
@@ -20,7 +20,7 @@ const AppSelect: React.FC<AppSelectProps> = ({
 					<AppEmpty />
 				</div>
 			}
-			themeselect={theme}
+			themeselect={color}
 			options={options}
 			value={value}
 			placeholder={placeholder}

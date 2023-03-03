@@ -5,11 +5,11 @@ import useTheme from '../../../Hooks/useTheme';
 import { DataViewTypeNames } from '../../../Constants/DataViewTypeNames';
 
 const AppSegmented: React.FC<AppSegmentedProps> = ({ value, handleChange }) => {
-	const theme = useTheme();
+	const { color } = useTheme();
 
 	return (
 		<StyledSegmented
-			theme={theme}
+			theme={color}
 			value={value}
 			onChange={handleChange}
 			options={[

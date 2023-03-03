@@ -10,7 +10,7 @@ import StyledUsernameContainer from './styled/StyledUsernameContainer';
 import StyledSpace from './styled/StyledSpace';
 import React from 'react';
 import ProfileMenuItems from './ProfileMenuItems';
-import { useAppDispatch, useAppSelector } from '../../../Hooks/useRedux';
+import { useAppDispatch } from '../../../Hooks/useRedux';
 import { setUserLoggedOut } from '../../../Store/User/UserSlice';
 import ThemeModeNames from '../../../Constants/ThemeModeNames';
 import { setDarkMode, setLightMode } from '../../../Store/Theme/ThemeSlice';
@@ -19,6 +19,7 @@ import { getRouteNames } from '../../../Utils/RouteUtils';
 import RouteNames from '../../../Constants/RouteNames';
 import AppLogo from '../../../Components/General/AppLogo';
 import { setLocalization } from '../../../Store/Localization/LocalizationSlice';
+import useTheme from '../../../Hooks/useTheme';
 
 const HeaderLayout: React.FC<HeaderLayoutProps> = ({
 	user,
@@ -28,7 +29,7 @@ const HeaderLayout: React.FC<HeaderLayoutProps> = ({
 	language,
 }) => {
 	const dispatch = useAppDispatch();
-	const themeMode = useAppSelector((state) => state.theme);
+	const { mode } = useTheme();
 	const [isOpen, setIsOpen] = useState(false);
 	const [isDropdownLangOpen, setIsDropdownLangOpen] = useState(false);
 
@@ -82,7 +83,7 @@ const HeaderLayout: React.FC<HeaderLayoutProps> = ({
 				menu={{
 					items: ProfileMenuItems({
 						textColor: theme?.text,
-						isLight: themeMode === ThemeModeNames.LIGHT,
+						isLight: mode === ThemeModeNames.LIGHT,
 						handleChangeTheme: handleChangeTheme,
 						I18n: I18n,
 						isEnglish: language === 'en',

@@ -15,7 +15,7 @@ import DrawerLayout from './DrawerLayout';
 import useLocale from '../../Hooks/useLocale';
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
-	const theme = useTheme();
+	const { color } = useTheme();
 	const user = useAppSelector((state) => state.user.data);
 	const location = useLocation();
 	const dispatch = useAppDispatch();
@@ -65,14 +65,14 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 		<StyledLayout>
 			<HeaderLayout
 				user={user}
-				theme={theme}
+				theme={color}
 				handleOpenDrawer={handleOpenDrawer}
 				I18n={I18n}
 				language={language}
 			/>
 			<Layout hasSider>
 				<SiderLayout
-					theme={theme}
+					theme={color}
 					menu={{
 						selectedKeys: selectedKeys,
 						opensKeys: openKeys,
@@ -80,12 +80,12 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 					}}
 					I18n={I18n}
 				/>
-				<StyledContent backgroundcolor={theme?.bg}>
+				<StyledContent backgroundcolor={color?.bg}>
 					{children}
 				</StyledContent>
 			</Layout>
 			<DrawerLayout
-				theme={theme}
+				theme={color}
 				handleClose={handleCloseDrawer}
 				isOpen={drawerState.isOpen}
 				menu={{
