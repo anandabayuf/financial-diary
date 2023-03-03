@@ -1,6 +1,6 @@
 import { checkToken } from '../Api/Auth';
 import { useAppSelector, useAppDispatch } from './useRedux';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { errorHandling } from '../Api/errorHandling';
 import I18n from 'i18next';
