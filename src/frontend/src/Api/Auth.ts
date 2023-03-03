@@ -15,8 +15,36 @@ export const register = async (user: any): Promise<any> => {
 
 export const checkToken = async (token?: string): Promise<any> => {
 	return await instance({
-		url: '/auth/authToken',
+		url: '/auth/auth-token',
 		method: 'GET',
 		headers: { Authorization: `Bearer ${token}` },
+	});
+};
+
+export const verifyEmail = async (token?: string): Promise<any> => {
+	return await instance({
+		url: `/auth/verify-email`,
+		headers: { Authorization: `Bearer ${token}` },
+		method: 'POST',
+	});
+};
+
+export const forgotPassword = async (data?: any): Promise<any> => {
+	return await instance({
+		url: `/auth/forgot-password`,
+		method: 'POST',
+		data: data,
+	});
+};
+
+export const resetPassword = async (
+	token?: string,
+	data?: any
+): Promise<any> => {
+	return await instance({
+		url: `/auth/reset-password`,
+		method: 'PUT',
+		headers: { Authorization: `Bearer ${token}` },
+		data: data,
 	});
 };

@@ -72,6 +72,23 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
 			</AppFormItem>
 
 			<AppFormItem
+				label={I18n.t('form.label.email')}
+				name='email'
+				rules={[
+					{
+						required: true,
+						message: I18n.t('form.required.email')!,
+					},
+					{
+						type: 'email',
+						message: I18n.t('form.validation.email')!,
+					},
+				]}
+			>
+				<AppInput placeholder={I18n.t('form.placeholder.email')!} />
+			</AppFormItem>
+
+			<AppFormItem
 				label={I18n.t('form.label.password')}
 				name='password'
 				rules={[

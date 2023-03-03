@@ -6,6 +6,12 @@ export const getRouteNames = (route: string): string => {
 			return '/login';
 		case RouteNames.REGISTER:
 			return '/register';
+		case RouteNames.VERIFY_EMAIL:
+			return '/email-verification';
+		case RouteNames.FORGOT_PASSWORD:
+			return '/forgot-password';
+		case RouteNames.RESET_PASSWORD:
+			return '/reset-password';
 		// case RouteNames.DASHBOARD:
 		// 	return '/dashboard';
 		case RouteNames.MANAGEMENT_WALLETS:

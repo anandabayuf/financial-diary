@@ -28,6 +28,11 @@ const general = {
 	about_us: 'Tentang Kami',
 
 	change_password: 'Ubah Kata Sandi',
+
+	email_verification: 'Verifikasi Email',
+
+	forgot_password: 'Lupa Kata Sandi',
+	reset_password: 'Atur Ulang Kata Sandi',
 };
 
 const content = {
@@ -66,11 +71,17 @@ const content = {
 
 	'content.about_app': 'Tentang Aplikasi',
 	'content.version': 'Versi',
+
+	'content.or': 'atau',
+
+	'content.forgot_password':
+		'Kami akan mengirim email ke akun tertaut untuk mengatur ulang kata sandi.',
 };
 
 const label = {
 	'label.username': 'Nama Pengguna',
 	'label.name': 'Nama',
+	'label.email': 'Email',
 	'label.budget': 'Anggaran',
 	'label.wallet': 'Dompet',
 	'label.category': 'Kategori',
@@ -98,6 +109,13 @@ const label = {
 
 	'label.change_password': 'Ubah Kata Sandi',
 
+	'label.go_to_home': 'Pergi ke Halaman Home',
+
+	'label.forgot_password': 'Lupa Kata Sandi?',
+	'label.send_email_reset_password': 'Kirim Email Atur Ulang Kata Sandi',
+	'label.back_to_login': 'Kembali untuk Masuk',
+	'label.reset_password': 'Atur Ulang Kata Sandi',
+
 	'label.action': 'Aksi',
 	'label.year': 'Tahun',
 	'label.month': 'Bulan',
@@ -122,6 +140,7 @@ const label = {
 	'label.Spend': 'Pengeluaran',
 
 	'form.label.username': 'Nama Pengguna',
+	'form.label.email': 'Email',
 	'form.label.password': 'Kata Sandi',
 	'form.label.profile_picture': 'Foto Profil',
 	'form.label.name': 'Nama',
@@ -153,6 +172,7 @@ const label = {
 	'form.label.new_password_confirmation': 'Konfirmasi Kata Sandi Baru',
 
 	'form.placeholder.username': 'masukkan nama pengguna kamu',
+	'form.placeholder.email': 'masukkan email kamu',
 	'form.placeholder.password': 'masukkan kata sandi kamu',
 	'form.placeholder.profile_picture': 'Unggah Gambar',
 	'form.placeholder.name': 'masukkan nama kamu',
@@ -237,6 +257,7 @@ const info = {
 
 const error = {
 	'form.required.username': 'Mohon masukkan nama pengguna kamu!',
+	'form.required.email': 'Mohon masukkan email kamu!',
 	'form.required.password': 'Mohon masukkan kata sandi kamu!',
 	'form.required.name': 'Mohon masukkan nama kamu!',
 	'form.required.password_confirmation':
@@ -268,6 +289,7 @@ const error = {
 		'Kamu hanya dapat mengunggah berkas JPG/PNG!',
 	'form.validation.size_lower_than_2mb': 'Gambar harus kurang dari 2MB!',
 	'form.validation.only_number': 'Mohon hanya masukkan nomor saja!',
+	'form.validation.email': 'Mohon masukkan email yang valid!',
 
 	'network.ERR_NETWORK': 'Kesalahan Jaringan',
 
@@ -277,8 +299,16 @@ const error = {
 const backend = {
 	//success
 	'login.success': 'Berhasil masuk',
-	'register.success': 'Berhasil daftar',
+	'register.success':
+		'Berhasil daftar. Harap verifikasi email kamu untuk dapat menggunakan Financial Diary App.',
 	'authtoken.success': 'Token valid',
+	'verify_email.success': 'Berhasil mem-verifikasi email',
+
+	'forgot_password.success': 'Berhasil mengirim email atur ulang kata sandi',
+	'forgot_password.send_email_success':
+		'Kami telah mengirim email ke akun tertaut untuk mengatur ulang kata sandi, silakan periksa email Kamu',
+
+	'reset_password.success': 'Berhasil mengatur ulang kata sandi',
 
 	'user.success.create': 'Berhasil membuat pengguna',
 	'user.success.get_all': 'Berhasil mendapatkan semua data pengguna',
@@ -331,12 +361,28 @@ const backend = {
 	'login.failed': 'Gagal masuk',
 	'login.exception.001':
 		'Kamu telah memasukkan nama pengguna atau kata sandi yang salah',
+	'login.exception.002':
+		'Email belum diverifikasi, harap verifikasi untuk menggunakan Aplikasi Financial Diary',
 
 	'register.failed': 'Gagal mendaftar',
-	'register.exception.001': 'Nama pengguna sudah digunakan',
+	'register.exception.001': 'Nama pengguna atau email sudah digunakan',
 
-	'authtoken.failed': 'Token tidak valid',
+	'authtoken.failed': 'Token tidak valid atau kedaluwarsa',
 	'auth.exception.001': 'Klien dilarang mengakses sumber daya yang valid',
+
+	'verify_email.failed': 'Gagal untuk mem-verifikasi email',
+	'verify_email.exception.001': 'Email sudah terverifikasi',
+	'verify_email.exception.002': 'Token tidak valid atau kedaluwarsa',
+
+	'forgot_password.failed':
+		'Gagal untuk mengirim email atur ulang kata sandi',
+	'forgot_password.exception.001':
+		'Email belum diverifikasi, harap verifikasi untuk menggunakan Aplikasi Financial Diary',
+	'forgot_password.exception.002':
+		'Pengguna dengan email atau nama pengguna tersebut tidak ditemukan',
+
+	'reset_password.failed': 'Failed to reset password',
+	'reset_password.exception.001': 'Token is not valid or expired',
 
 	'user.failed.create': 'Gagal membuat pengguna',
 	'user.exception.001': 'Nama pengguna sudah digunakan',
