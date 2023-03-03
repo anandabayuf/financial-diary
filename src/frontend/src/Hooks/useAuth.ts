@@ -1,6 +1,6 @@
 import { checkToken } from '../Api/Auth';
 import { useAppSelector, useAppDispatch } from './useRedux';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { errorHandling } from '../Api/errorHandling';
 import I18n from 'i18next';
@@ -24,7 +24,7 @@ const useAuth = () => {
 		checkTokenValidation(); // eslint-disable-next-line
 	}, []);
 
-	return user && user.isLoggedIn;
+	return user && user.accessToken && user.isLoggedIn;
 };
 
 export default useAuth;

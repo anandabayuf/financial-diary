@@ -64,7 +64,9 @@ const ResetPasswordPage: React.FC = () => {
 				try {
 					const res = await resetPassword(token, payload);
 
-					navigate(getRouteNames(RouteNames.LOGIN));
+					navigate(getRouteNames(RouteNames.LOGIN), {
+						replace: true,
+					});
 
 					AppMessage({
 						type: 'success',
