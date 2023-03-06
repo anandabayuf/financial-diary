@@ -37,7 +37,7 @@ const RegisterPage: React.FC = () => {
 		try {
 			data['password'] = encryptPassword(password);
 		} catch (error) {
-			errorHandling(error, I18n);
+			errorHandling(error, navigate);
 		}
 
 		const payload = new FormData();
@@ -51,7 +51,7 @@ const RegisterPage: React.FC = () => {
 			AppMessage({ content: I18n.t(res.data.message), type: 'success' });
 			navigate('/login', { replace: true });
 		} catch (error) {
-			errorHandling(error, I18n);
+			errorHandling(error, navigate);
 		}
 
 		setLoading(false);

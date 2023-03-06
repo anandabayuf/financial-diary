@@ -87,7 +87,7 @@ const NotesListPage: React.FC = () => {
 					})
 				);
 			} catch (error) {
-				errorHandling(error, I18n);
+				errorHandling(error, navigate);
 			}
 
 			setIsLoading(false);

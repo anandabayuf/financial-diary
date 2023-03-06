@@ -55,10 +55,10 @@ const LoginPage: React.FC = () => {
 					})
 				);
 			} catch (error) {
-				errorHandling(error, I18n);
+				errorHandling(error, navigate);
 			}
 		} catch (error) {
-			errorHandling(error, I18n);
+			errorHandling(error, navigate);
 		}
 
 		setLoading(false);

@@ -53,7 +53,7 @@ const ManagementCategoryPage: React.FC = () => {
 				setCategories(resCategories);
 				setCategoriesList(resCategories);
 			} catch (error) {
-				errorHandling(error, I18n);
+				errorHandling(error, navigate);
 			}
 
 			setIsLoading(false);

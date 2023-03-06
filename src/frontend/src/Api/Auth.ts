@@ -13,9 +13,17 @@ export const register = async (user: any): Promise<any> => {
 	});
 };
 
-export const checkToken = async (token?: string): Promise<any> => {
+export const authToken = async (token?: string): Promise<any> => {
 	return await instance({
 		url: '/auth/auth-token',
+		method: 'GET',
+		headers: { Authorization: `Bearer ${token}` },
+	});
+};
+
+export const checkToken = async (token?: string): Promise<any> => {
+	return await instance({
+		url: '/auth/check-token',
 		method: 'GET',
 		headers: { Authorization: `Bearer ${token}` },
 	});

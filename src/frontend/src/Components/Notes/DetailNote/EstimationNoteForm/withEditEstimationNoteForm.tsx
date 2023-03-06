@@ -5,6 +5,7 @@ import AppMessage from '../../../General/AppMessage/index';
 import { editCategoryNoteEstimated } from '../../../../Api/Category-Note';
 import { EstimationNoteFormProps } from './interfaces/interfaces';
 import { errorHandling } from '../../../../Api/errorHandling';
+import { useNavigate } from 'react-router-dom';
 
 const withEditEstimationNoteForm = (
 	Component: React.ComponentType<EstimationNoteFormProps>
@@ -16,6 +17,7 @@ const withEditEstimationNoteForm = (
 		I18n,
 		...rest
 	}) => {
+		const navigate = useNavigate();
 		const token = useAppSelector((state) => state.user.accessToken);
 		const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -54,7 +56,7 @@ const withEditEstimationNoteForm = (
 							handleCancel();
 						}
 					} catch (error) {
-						errorHandling(error, I18n!);
+						errorHandling(error, navigate);
 					}
 				} else if (values.estimatedTotal !== undefined) {
 					const payload = {
@@ -78,7 +80,7 @@ const withEditEstimationNoteForm = (
 							handleCancel();
 						}
 					} catch (error) {
-						errorHandling(error, I18n!);
+						errorHandling(error, navigate);
 					}
 				}
 			} else {

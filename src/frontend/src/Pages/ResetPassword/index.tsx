@@ -37,7 +37,7 @@ const ResetPasswordPage: React.FC = () => {
 					navigate(getRouteNames(RouteNames.LOGIN), {
 						replace: true,
 					});
-					errorHandling(error, I18n);
+					errorHandling(error, navigate);
 				}
 			} else {
 				navigate(getRouteNames(RouteNames.LOGIN), { replace: true });
@@ -73,7 +73,7 @@ const ResetPasswordPage: React.FC = () => {
 						content: I18n.t(res.data.message),
 					});
 				} catch (error) {
-					errorHandling(error, I18n);
+					errorHandling(error, navigate);
 				}
 			}
 			setIsloading(false);

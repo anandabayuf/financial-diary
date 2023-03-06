@@ -89,7 +89,7 @@ const NoteItemsPage: React.FC = () => {
 
 					setWalletNote(data);
 				} catch (error) {
-					errorHandling(error, I18n);
+					errorHandling(error, navigate);
 				}
 
 				try {
@@ -107,7 +107,7 @@ const NoteItemsPage: React.FC = () => {
 					setData(data);
 					setDataList(data);
 				} catch (error) {
-					errorHandling(error, I18n);
+					errorHandling(error, navigate);
 				}
 			}
 
@@ -121,7 +121,7 @@ const NoteItemsPage: React.FC = () => {
 
 					setCategoryNote(data);
 				} catch (error) {
-					errorHandling(error, I18n);
+					errorHandling(error, navigate);
 				}
 
 				try {
@@ -140,7 +140,7 @@ const NoteItemsPage: React.FC = () => {
 					setData(data);
 					setDataList(data);
 				} catch (error) {
-					errorHandling(error, I18n);
+					errorHandling(error, navigate);
 				}
 			}
 			setIsLoading(false);
@@ -175,7 +175,7 @@ const NoteItemsPage: React.FC = () => {
 			const res = await deleteUserNoteItem(token, deletedData._id);
 			AppMessage({ content: I18n.t(res.data.message), type: 'success' });
 		} catch (error) {
-			errorHandling(error, I18n);
+			errorHandling(error, navigate);
 		}
 
 		handleCancelDelete();

@@ -59,7 +59,7 @@ const withWalletNoteTab = (
 					setWalletNote(data);
 					setWalletNoteList(data);
 				} catch (error) {
-					errorHandling(error, I18n!);
+					errorHandling(error, navigate);
 				}
 
 				setIsLoading(false);

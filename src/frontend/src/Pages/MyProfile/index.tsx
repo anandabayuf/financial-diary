@@ -16,10 +16,12 @@ import { updateUserData } from '../../Store/User/UserSlice';
 import useLocale from '../../Hooks/useLocale';
 import { errorHandling } from '../../Api/errorHandling';
 import { APP_NAME } from '../../Constants/Constants';
+import { useNavigate } from 'react-router-dom';
 
 const MyProfilePage: React.FC = () => {
 	const { data, accessToken } = useAppSelector((state) => state.user);
 	const dispatch = useAppDispatch();
+	const navigate = useNavigate();
 	const { I18n, language } = useLocale();
 
 	const [isEdit, setIsEdit] = useState(false);
@@ -160,7 +162,7 @@ const MyProfilePage: React.FC = () => {
 			dispatch(updateUserData({ data: res.data.data }));
 			handleClickCancelEdit();
 		} catch (error) {
-			errorHandling(error, I18n);
+			errorHandling(error, navigate);
 		}
 
 		setIsLoading(false);

@@ -7,6 +7,7 @@ import { getAllUserWalletNote } from '../../../Api/Wallet-Note';
 import { getAllUserCategoryNote } from '../../../Api/Category-Note';
 import dayjs from 'dayjs';
 import { errorHandling } from '../../../Api/errorHandling';
+import { useNavigate } from 'react-router-dom';
 
 const withEditNoteItemsForm = (
 	Component: React.ComponentType<NoteItemsFormProps>
@@ -20,6 +21,7 @@ const withEditNoteItemsForm = (
 		I18n,
 		...rest
 	}) => {
+		const navigate = useNavigate();
 		const token = useAppSelector((state) => state.user.accessToken);
 
 		const [isLoading, setIsLoading] = useState(false);
@@ -35,14 +37,14 @@ const withEditNoteItemsForm = (
 					const res = await getAllUserWalletNote(token, noteId);
 					setWalletNote(res.data.data);
 				} catch (error) {
-					errorHandling(error, I18n!);
+					errorHandling(error, navigate);
 				}
 
 				try {
 					const res = await getAllUserCategoryNote(token, noteId);
 					setCategoryNote(res.data.data);
 				} catch (error) {
-					errorHandling(error, I18n!);
+					errorHandling(error, navigate);
 				}
 
 				setIsFetching(false);
@@ -79,7 +81,7 @@ const withEditNoteItemsForm = (
 					handleCancel();
 				}
 			} catch (error) {
-				errorHandling(error, I18n!);
+				errorHandling(error, navigate);
 			}
 
 			setIsLoading(false);
