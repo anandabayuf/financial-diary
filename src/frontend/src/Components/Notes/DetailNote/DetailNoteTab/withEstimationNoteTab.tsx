@@ -11,6 +11,7 @@ import withEditEstimationNoteForm from '../EstimationNoteForm/withEditEstimation
 import { setNotePaginationSize } from '../../../../Store/Note/NoteSlice';
 import { TableProps } from 'antd';
 import { errorHandling } from '../../../../Api/errorHandling';
+import { useNavigate } from 'react-router-dom';
 
 const withEstimationNoteTab = (
 	Component: React.ComponentType<DetailNoteTabProps>
@@ -22,6 +23,7 @@ const withEstimationNoteTab = (
 	}) => {
 		const token = useAppSelector((state) => state.user.accessToken);
 		const dispatch = useAppDispatch();
+		const navigate = useNavigate();
 		const pageSize = useAppSelector(
 			(state) => state.note.paginationSize?.estimation
 		);
@@ -74,10 +76,10 @@ const withEstimationNoteTab = (
 						setBudgets(data);
 						setBudgetsList(data);
 					} catch (error) {
-						errorHandling(error, I18n!);
+						errorHandling(error, navigate);
 					}
 				} catch (error) {
-					errorHandling(error, I18n!);
+					errorHandling(error, navigate);
 				}
 
 				setIsLoading(false);

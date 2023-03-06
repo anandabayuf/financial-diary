@@ -9,6 +9,7 @@ import {
 import { addWalletNoteEstimated } from '../../../../Api/Wallet-Note';
 import { EstimationNoteFormProps } from './interfaces/interfaces';
 import { errorHandling } from '../../../../Api/errorHandling';
+import { useNavigate } from 'react-router-dom';
 
 const withAddEstimationNoteForm = (
 	Component: React.ComponentType<EstimationNoteFormProps>
@@ -19,6 +20,7 @@ const withAddEstimationNoteForm = (
 		I18n,
 		...rest
 	}) => {
+		const navigate = useNavigate();
 		const token = useAppSelector((state) => state.user.accessToken);
 		const [availableWallet, setAvailableWallet] = useState<any[]>([]);
 		const [availableCategory, setAvailableCategory] = useState<any[]>([]);
@@ -44,7 +46,7 @@ const withAddEstimationNoteForm = (
 						setAvailableCategory(resCat.data.data);
 					} catch (error) {}
 				} catch (error) {
-					errorHandling(error, I18n!);
+					errorHandling(error, navigate);
 				}
 
 				setIsFetching(false);
@@ -81,7 +83,7 @@ const withAddEstimationNoteForm = (
 							handleCancel();
 						}
 					} catch (error) {
-						errorHandling(error, I18n!);
+						errorHandling(error, navigate);
 					}
 				}
 
@@ -112,7 +114,7 @@ const withAddEstimationNoteForm = (
 							handleCancel();
 						}
 					} catch (error) {
-						errorHandling(error, I18n!);
+						errorHandling(error, navigate);
 					}
 				}
 			}

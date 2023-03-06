@@ -53,7 +53,7 @@ const ManagementWalletPage: React.FC = () => {
 				setWallets(resWallets);
 				setWalletsList(resWallets);
 			} catch (error) {
-				errorHandling(error, I18n);
+				errorHandling(error, navigate);
 			}
 
 			setIsLoading(false);

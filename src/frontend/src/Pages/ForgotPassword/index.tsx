@@ -8,7 +8,7 @@ import { APP_NAME } from '../../Constants/Constants';
 import AppText from '../../Components/General/AppText/index';
 import ForgotPasswordForm from '../../Components/ForgotPassword/ForgotPasswordForm';
 import { Form } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getRouteNames } from '../../Utils/RouteUtils';
 import RouteNames from '../../Constants/RouteNames';
 import AppButton from '../../Components/General/AppButton';
@@ -18,6 +18,7 @@ import { errorHandling } from '../../Api/errorHandling';
 
 const ForgotPasswordPage: React.FC = () => {
 	const { I18n, language } = useLocale();
+	const navigate = useNavigate();
 
 	const [form] = Form.useForm();
 
@@ -36,7 +37,7 @@ const ForgotPasswordPage: React.FC = () => {
 					description: I18n.t(res.data.data),
 				});
 			} catch (error) {
-				errorHandling(error, I18n);
+				errorHandling(error, navigate);
 			}
 
 			setIsLoading(false);

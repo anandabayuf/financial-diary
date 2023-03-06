@@ -3,6 +3,7 @@ import { useAppSelector } from '../../../../Hooks/useRedux';
 import { useState, useEffect } from 'react';
 import AppMessage from '../../../General/AppMessage/index';
 import { errorHandling } from '../../../../Api/errorHandling';
+import { useNavigate } from 'react-router-dom';
 import {
 	getAvailableUserCategory,
 	addCategoryToTheNote,
@@ -17,6 +18,7 @@ const withCategoryNoteForm = (
 		I18n,
 		...rest
 	}) => {
+		const navigate = useNavigate();
 		const token = useAppSelector((state) => state.user.accessToken);
 		const [availableCategory, setAvailableCategory] = useState<any[]>([]);
 		const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -39,7 +41,7 @@ const withCategoryNoteForm = (
 					handleCancel();
 				}
 			} catch (error) {
-				errorHandling(error, I18n!);
+				errorHandling(error, navigate);
 			}
 
 			setIsLoading(false);
@@ -53,7 +55,7 @@ const withCategoryNoteForm = (
 					const res = await getAvailableUserCategory(token, noteId);
 					setAvailableCategory(res.data.data);
 				} catch (error) {
-					errorHandling(error, I18n!);
+					errorHandling(error, navigate);
 				}
 
 				setIsFetching(false);

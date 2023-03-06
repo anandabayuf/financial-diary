@@ -8,6 +8,7 @@ import { getAllUserCategoryNote } from '../../../Api/Category-Note';
 import { ITEM_TYPE } from '../../../Constants/Constants';
 import { DatePickerProps } from 'antd';
 import { errorHandling } from '../../../Api/errorHandling';
+import { useNavigate } from 'react-router-dom';
 
 const withCreateNoteItemsForm = (
 	Component: React.ComponentType<NoteItemsFormProps>
@@ -20,6 +21,7 @@ const withCreateNoteItemsForm = (
 		I18n,
 		...rest
 	}) => {
+		const navigate = useNavigate();
 		const token = useAppSelector((state) => state.user.accessToken);
 		const { selectedCategoryNote, selectedWalletNote } = useAppSelector(
 			(state) => state.note
@@ -44,7 +46,7 @@ const withCreateNoteItemsForm = (
 					const res = await getAllUserCategoryNote(token, noteId);
 					setCategoryNote(res.data.data);
 				} catch (error) {
-					errorHandling(error, I18n!);
+					errorHandling(error, navigate);
 				}
 
 				setIsFetching(false);
@@ -102,7 +104,7 @@ const withCreateNoteItemsForm = (
 					handleCancel();
 				}
 			} catch (error) {
-				errorHandling(error, I18n!);
+				errorHandling(error, navigate);
 			}
 
 			setIsLoading(false);

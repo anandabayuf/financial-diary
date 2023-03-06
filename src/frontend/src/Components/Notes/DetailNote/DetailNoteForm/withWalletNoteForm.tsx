@@ -7,6 +7,7 @@ import {
 import { useAppSelector } from '../../../../Hooks/useRedux';
 import AppMessage from '../../../General/AppMessage/index';
 import { errorHandling } from '../../../../Api/errorHandling';
+import { useNavigate } from 'react-router-dom';
 
 const withWalletNoteForm = (
 	Component: React.ComponentType<DetailNoteFormProps>
@@ -17,6 +18,7 @@ const withWalletNoteForm = (
 		I18n,
 		...rest
 	}) => {
+		const navigate = useNavigate();
 		const token = useAppSelector((state) => state.user.accessToken);
 		const [availableWallet, setAvailableWallet] = useState<any[]>([]);
 		const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -39,7 +41,7 @@ const withWalletNoteForm = (
 					handleCancel();
 				}
 			} catch (error) {
-				errorHandling(error, I18n!);
+				errorHandling(error, navigate);
 			}
 
 			setIsLoading(false);
@@ -53,7 +55,7 @@ const withWalletNoteForm = (
 					const res = await getAvailableUserWallet(token, noteId);
 					setAvailableWallet(res.data.data);
 				} catch (error) {
-					errorHandling(error, I18n!);
+					errorHandling(error, navigate);
 				}
 
 				setIsFetching(false);

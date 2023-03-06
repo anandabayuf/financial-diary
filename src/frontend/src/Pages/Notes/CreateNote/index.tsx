@@ -46,7 +46,7 @@ const CreateNotePage: React.FC = () => {
 				content: I18n.t(response.data.message),
 			});
 		} catch (error) {
-			errorHandling(error, I18n);
+			errorHandling(error, navigate);
 		}
 
 		setIsLoading(false);

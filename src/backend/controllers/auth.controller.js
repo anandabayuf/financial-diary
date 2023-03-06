@@ -15,8 +15,8 @@ router.post("/login", async (req, res) => {
 			token: await authModel.authenticate(credential),
 		});
 	} catch (err) {
-		res.status(401).json({
-			status: 401,
+		res.status(404).json({
+			status: 404,
 			message: message["login.failed"],
 			detail: err,
 		});
@@ -61,6 +61,25 @@ router.get("/auth-token", async (req, res) => {
 	} catch (err) {
 		res.status(401).json({
 			status: 401,
+			message: message["authtoken.failed"],
+			detail: err,
+		});
+	}
+});
+
+router.get("/check-token", async (req, res) => {
+	const authHeader = req.headers.authorization;
+	const token = authHeader && authHeader.split(" ")[1];
+
+	try {
+		res.status(200).json({
+			status: 200,
+			message: message["authtoken.success"],
+			data: await authModel.authToken(token),
+		});
+	} catch (err) {
+		res.status(404).json({
+			status: 404,
 			message: message["authtoken.failed"],
 			detail: err,
 		});

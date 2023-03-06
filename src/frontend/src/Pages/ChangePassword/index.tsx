@@ -11,10 +11,12 @@ import { useAppSelector } from '../../Hooks/useRedux';
 import { encryptPassword } from '../../Utils/AuthUtils';
 import { errorHandling } from '../../Api/errorHandling';
 import AppMessage from '../../Components/General/AppMessage/index';
+import { useNavigate } from 'react-router-dom';
 
 const ChangePasswordPage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
 	const { I18n, language } = useLocale();
+	const navigate = useNavigate();
 
 	const [form] = Form.useForm();
 
@@ -41,7 +43,7 @@ const ChangePasswordPage: React.FC = () => {
 				});
 				form.resetFields();
 			} catch (error) {
-				errorHandling(error, I18n);
+				errorHandling(error, navigate);
 			}
 
 			setIsLoading(false);

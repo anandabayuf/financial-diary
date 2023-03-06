@@ -1,22 +1,20 @@
-import { checkToken } from '../Api/Auth';
-import { useAppSelector, useAppDispatch } from './useRedux';
+import { authToken } from '../Api/Auth';
+import { useAppSelector } from './useRedux';
 import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { errorHandling } from '../Api/errorHandling';
-import I18n from 'i18next';
+import { useNavigate } from 'react-router-dom';
 
 const useAuth = () => {
 	const user = useAppSelector((state) => state.user);
 	const navigate = useNavigate();
-	const dispatch = useAppDispatch();
 
 	useMemo(() => {
 		const checkTokenValidation = async () => {
 			if (user.accessToken) {
 				try {
-					await checkToken(`${user.accessToken}`);
+					await authToken(`${user.accessToken}`);
 				} catch (error) {
-					errorHandling(error, I18n, dispatch, navigate);
+					errorHandling(error, navigate);
 				}
 			}
 		};

@@ -41,7 +41,7 @@ const VerifyEmailPage: React.FC = () => {
 					setIsSuccessVerify(true);
 				} catch (error) {
 					setIsSuccessVerify(false);
-					errorHandling(error, I18n);
+					errorHandling(error, navigate);
 				}
 			} else {
 				navigate('/', { replace: true });

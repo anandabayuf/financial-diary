@@ -60,7 +60,7 @@ const DetailNotePage: React.FC = () => {
 				const data = res.data.data;
 				setNote(data[0]);
 			} catch (error) {
-				errorHandling(error, I18n);
+				errorHandling(error, navigate);
 			}
 
 			setIsLoading(false);
