@@ -34,6 +34,11 @@ import {
 	setSelectedNote,
 } from '../../../Store/Note/NoteSlice';
 import { APP_NAME } from '../../../Constants/Constants';
+import { appendKey } from '../../../Utils/TableUtils';
+import {
+	TFetchErrorResponse,
+	TNoteResponse,
+} from '../../../Api/interfaces/types';
 
 const NotesListPage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
@@ -41,8 +46,8 @@ const NotesListPage: React.FC = () => {
 	const dispatch = useAppDispatch();
 	const { I18n, language } = useLocale();
 
-	const [notes, setNotes] = useState<any[]>([]);
-	const [notesList, setNotesList] = useState<any[]>([]);
+	const [notes, setNotes] = useState<TNoteResponse[]>([]);
+	const [notesList, setNotesList] = useState<TNoteResponse[]>([]);
 	const [optionYear, setOptionYear] = useState<number[]>([]);
 	const selectedYear = useAppSelector((state) => state.note.showYear);
 
@@ -57,37 +62,29 @@ const NotesListPage: React.FC = () => {
 		const getNotes = async () => {
 			setIsLoading(true);
 
-			try {
-				const res = await getAllUserNotes(token);
+			if (token) {
+				try {
+					const res = await getAllUserNotes(token);
 
-				const resNotes = [...res.data.data];
-				let years: number[] = [];
+					const resNotes = [...res.data.data];
+					let years: number[] = [];
 
-				resNotes.forEach((note) => {
-					const year = new Date(note.date).getFullYear();
+					resNotes.forEach((note) => {
+						const year = new Date(note.date).getFullYear();
 
-					if (years.length === 0) {
-						years = [year];
-					} else if (!years.some((value) => value === year)) {
-						years.push(year);
-					}
-				});
+						if (years.length === 0) {
+							years = [year];
+						} else if (!years.some((value) => value === year)) {
+							years.push(year);
+						}
+					});
 
-				setOptionYear(years);
-				setNotes(
-					resNotes.map((note: any) => {
-						note['key'] = note._id;
-						return note;
-					})
-				);
-				setNotesList(
-					resNotes.map((note: any) => {
-						note['key'] = note._id;
-						return note;
-					})
-				);
-			} catch (error) {
-				errorHandling(error, navigate);
+					setOptionYear(years);
+					setNotes(resNotes);
+					setNotesList(resNotes);
+				} catch (error) {
+					errorHandling(error as TFetchErrorResponse, navigate);
+				}
 			}
 
 			setIsLoading(false);
@@ -100,12 +97,12 @@ const NotesListPage: React.FC = () => {
 		navigate(getRouteNames(RouteNames.CREATE_NOTE));
 	};
 
-	const handleChangeDataViewType = (values: any) =>
-		dispatch(setNoteDataViewType({ dataViewType: { note: values } }));
+	const handleChangeDataViewType = (values: DataViewTypeNames) =>
+		dispatch(setNoteDataViewType({ note: values }));
 
-	const handleChangeYear = (value: any) => {
+	const handleChangeYear = (value: string | number) => {
 		// setSelectedYear(value);
-		dispatch(setNoteShowYear({ showYear: value }));
+		dispatch(setNoteShowYear(value));
 
 		if (value === 'all-year') {
 			setNotesList(notes);
@@ -120,17 +117,15 @@ const NotesListPage: React.FC = () => {
 		}
 	};
 
-	const handleView = (record?: any) => {
+	const handleView = (record: TNoteResponse) => {
 		dispatch(
 			setSelectedNote({
-				selectedNote: {
-					id: record._id,
-					month: getTwoDigitMonthStringFromDate(record.date),
-					year: getFullYearFromDate(record.date).toString(),
-				},
+				id: record._id,
+				month: getTwoDigitMonthStringFromDate(record.date),
+				year: getFullYearFromDate(record.date).toString(),
 			})
 		);
-		dispatch(setActiveKeyNoteTab({ activeKeyNoteTab: 'budget-note-tab' }));
+		dispatch(setActiveKeyNoteTab('budget-note-tab'));
 		navigate(
 			`/notes/${getFullYearFromDate(
 				record.date
@@ -138,12 +133,12 @@ const NotesListPage: React.FC = () => {
 		);
 	};
 
-	const pagination: TableProps<any>['pagination'] = {
+	const pagination: TableProps<TNoteResponse>['pagination'] = {
 		pageSize: pageSize,
 		onShowSizeChange(current, size) {
 			dispatch(
 				setNotePaginationSize({
-					paginationSize: { note: size },
+					note: size,
 				})
 			);
 		},
@@ -199,7 +194,7 @@ const NotesListPage: React.FC = () => {
 					</div>
 					{dataViewType === DataViewTypeNames.LIST ? (
 						<AppTable
-							dataSource={notesList}
+							dataSource={appendKey(notesList)}
 							columns={NotesColumns({
 								handleView,
 								showYear: selectedYear,

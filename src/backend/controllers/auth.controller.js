@@ -10,9 +10,10 @@ router.post("/login", async (req, res) => {
 	const credential = req.body;
 
 	try {
-		res.json({
+		res.status(200).json({
+			status: 200,
 			message: message["login.success"],
-			token: await authModel.authenticate(credential),
+			data: await authModel.authenticate(credential),
 		});
 	} catch (err) {
 		res.status(404).json({

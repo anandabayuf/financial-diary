@@ -11,7 +11,9 @@ const AppSegmented: React.FC<AppSegmentedProps> = ({ value, handleChange }) => {
 		<StyledSegmented
 			theme={color}
 			value={value}
-			onChange={handleChange}
+			onChange={(value) =>
+				handleChange && handleChange(value as DataViewTypeNames)
+			}
 			options={[
 				{
 					icon: <AiOutlineBars />,

@@ -17,6 +17,8 @@ import AppModal from '../../Components/General/AppModal/index';
 import { errorHandling } from '../../Api/errorHandling';
 import { encryptPassword } from '../../Utils/AuthUtils';
 import { APP_NAME } from '../../Constants/Constants';
+import { TFetchErrorResponse } from '../../Api/interfaces/types';
+import { RegisterFormType } from '../../Components/Register/RegisterForm/interfaces/interfaces';
 
 const RegisterPage: React.FC = () => {
 	const [loading, setLoading] = useState(false);
@@ -30,19 +32,19 @@ const RegisterPage: React.FC = () => {
 	const navigate = useNavigate();
 	const { I18n, language } = useLocale();
 
-	const handleRegister = async (values: any) => {
+	const handleRegister = async (values: RegisterFormType) => {
 		setLoading(true);
-		let { picture, passwordconfirm, password, ...data } = values;
+		let { picture, passwordconfirm, ...data } = values;
 
 		try {
-			data['password'] = encryptPassword(password);
+			data['password'] = encryptPassword(data.password);
 		} catch (error) {
-			errorHandling(error, navigate);
+			errorHandling(error as TFetchErrorResponse, navigate);
 		}
 
 		const payload = new FormData();
-		if (picture && picture.fileList.length !== 0) {
-			payload.append('picture', picture.fileList[0].originFileObj);
+		if (picture && picture.fileList && picture.fileList?.length !== 0) {
+			payload.append('picture', picture.fileList[0].originFileObj!);
 		}
 		payload.append('data', JSON.stringify(data));
 
@@ -51,13 +53,11 @@ const RegisterPage: React.FC = () => {
 			AppMessage({ content: I18n.t(res.data.message), type: 'success' });
 			navigate('/login', { replace: true });
 		} catch (error) {
-			errorHandling(error, navigate);
+			errorHandling(error as TFetchErrorResponse, navigate);
 		}
 
 		setLoading(false);
 	};
-
-	const handleRegisterFailed = (errorInfo: string) => {};
 
 	const handleClickLogin = () => {
 		navigate('/login');
@@ -141,7 +141,6 @@ const RegisterPage: React.FC = () => {
 				</div>
 				<RegisterForm
 					handleFinish={handleRegister}
-					handleFinishFailed={handleRegisterFailed}
 					loading={loading}
 					handleUploadImage={{
 						fileList: fileList,

@@ -227,16 +227,20 @@ exports.getAll = (query, noteId, userId) => {
 	};
 
 	return new Promise((resolve, reject) => {
-		schema.NoteItemSchema.find(
-			{ ...queryFunc(), noteId: noteId, userId: userId },
-			async (err, result) => {
+		schema.NoteItemSchema.find({
+			...queryFunc(),
+			noteId: noteId,
+			userId: userId,
+		})
+			.lean()
+			.sort({ date: "desc" })
+			.exec((err, result) => {
 				if (err) {
 					reject(err);
 				} else {
 					resolve(result);
 				}
-			}
-		).lean();
+			});
 	});
 };
 

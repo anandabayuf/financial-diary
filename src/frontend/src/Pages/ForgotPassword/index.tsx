@@ -15,6 +15,10 @@ import AppButton from '../../Components/General/AppButton';
 import { forgotPassword } from '../../Api/Auth';
 import AppNotification from '../../Components/General/AppNotification';
 import { errorHandling } from '../../Api/errorHandling';
+import {
+	TFetchErrorResponse,
+	TForgotPasswordPayload,
+} from '../../Api/interfaces/types';
 
 const ForgotPasswordPage: React.FC = () => {
 	const { I18n, language } = useLocale();
@@ -24,7 +28,7 @@ const ForgotPasswordPage: React.FC = () => {
 
 	const [isLoading, setIsLoading] = useState(false);
 
-	const handleSend = async (values: any) => {
+	const handleSend = async (values: TForgotPasswordPayload) => {
 		if (values) {
 			setIsLoading(true);
 
@@ -37,7 +41,7 @@ const ForgotPasswordPage: React.FC = () => {
 					description: I18n.t(res.data.data),
 				});
 			} catch (error) {
-				errorHandling(error, navigate);
+				errorHandling(error as TFetchErrorResponse, navigate);
 			}
 
 			setIsLoading(false);

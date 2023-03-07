@@ -6,7 +6,7 @@ import { DetailNoteTabsType } from './interfaces/interfaces';
 import withWalletNoteTab from '../DetailNoteTab/withWalletNoteTab';
 import DetailNoteTab from '../DetailNoteTab';
 import withCategoryNoteTab from '../DetailNoteTab/withCategoryNoteTab';
-import withEstimationNoteTab from '../DetailNoteTab/withEstimationNoteTab';
+import withEstimationNoteTab from '../DetailNoteTab/withBudgetNoteTab';
 
 const EstimationNoteTab = withEstimationNoteTab(DetailNoteTab);
 const WalletNoteTab = withWalletNoteTab(DetailNoteTab);

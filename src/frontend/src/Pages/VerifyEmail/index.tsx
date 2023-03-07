@@ -15,6 +15,7 @@ import AppLogo from '../../Components/General/AppLogo';
 import { getRouteNames } from '../../Utils/RouteUtils';
 import RouteNames from '../../Constants/RouteNames';
 import AppButton from '../../Components/General/AppButton';
+import { TFetchErrorResponse } from '../../Api/interfaces/types';
 
 const VerifyEmailPage: React.FC = () => {
 	const { I18n, language } = useLocale();
@@ -41,7 +42,7 @@ const VerifyEmailPage: React.FC = () => {
 					setIsSuccessVerify(true);
 				} catch (error) {
 					setIsSuccessVerify(false);
-					errorHandling(error, navigate);
+					errorHandling(error as TFetchErrorResponse, navigate);
 				}
 			} else {
 				navigate('/', { replace: true });

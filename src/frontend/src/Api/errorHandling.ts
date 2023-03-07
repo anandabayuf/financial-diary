@@ -1,4 +1,3 @@
-import { AxiosError } from 'axios';
 import AppNotification from '../Components/General/AppNotification/index';
 import AppMessage from '../Components/General/AppMessage/index';
 import { NavigateFunction } from 'react-router-dom';
@@ -7,9 +6,13 @@ import { store } from '../Store/index';
 import { getRouteNames } from '../Utils/RouteUtils';
 import RouteNames from '../Constants/RouteNames';
 import I18n from '../Localization';
+import { TFetchErrorResponse } from './interfaces/types';
 
-export const errorHandling = (error: any, navigate: NavigateFunction) => {
-	if (error instanceof AxiosError) {
+export const errorHandling = (
+	error: TFetchErrorResponse,
+	navigate: NavigateFunction
+) => {
+	if (error) {
 		if (error.code === 'ERR_NETWORK') {
 			AppMessage({
 				content: I18n.t(`network.ERR_NETWORK`),
@@ -22,7 +25,7 @@ export const errorHandling = (error: any, navigate: NavigateFunction) => {
 		} else {
 			AppNotification({
 				type: 'error',
-				message: I18n.t(error.response?.data.message),
+				message: I18n.t(error.response?.data.message!),
 				description:
 					typeof error.response?.data.detail === 'object'
 						? I18n.t('error.unknown_error')

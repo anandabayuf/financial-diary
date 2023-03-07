@@ -14,6 +14,8 @@ import AppTitle from '../../Components/General/AppTitle/index';
 import ResetPasswordForm from '../../Components/ResetPassword/ResetPasswordForm';
 import { encryptPassword } from '../../Utils/AuthUtils';
 import AppMessage from '../../Components/General/AppMessage';
+import { TFetchErrorResponse } from '../../Api/interfaces/types';
+import { ResetPasswordFormType } from '../../Components/ResetPassword/ResetPasswordForm/interfaces/interfaces';
 
 const ResetPasswordPage: React.FC = () => {
 	const { I18n, language } = useLocale();
@@ -37,7 +39,7 @@ const ResetPasswordPage: React.FC = () => {
 					navigate(getRouteNames(RouteNames.LOGIN), {
 						replace: true,
 					});
-					errorHandling(error, navigate);
+					errorHandling(error as TFetchErrorResponse, navigate);
 				}
 			} else {
 				navigate(getRouteNames(RouteNames.LOGIN), { replace: true });
@@ -49,7 +51,7 @@ const ResetPasswordPage: React.FC = () => {
 		isTokenValid(); // eslint-disable-next-line
 	}, [searchParams]);
 
-	const handleResetPassword = async (values: any) => {
+	const handleResetPassword = async (values: ResetPasswordFormType) => {
 		if (values) {
 			setIsloading(true);
 			const token = searchParams.get('token');
@@ -73,7 +75,7 @@ const ResetPasswordPage: React.FC = () => {
 						content: I18n.t(res.data.message),
 					});
 				} catch (error) {
-					errorHandling(error, navigate);
+					errorHandling(error as TFetchErrorResponse, navigate);
 				}
 			}
 			setIsloading(false);

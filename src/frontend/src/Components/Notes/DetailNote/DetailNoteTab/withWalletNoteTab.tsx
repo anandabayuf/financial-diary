@@ -1,5 +1,5 @@
 import { DetailNoteTabProps } from './interfaces/interfaces';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEventHandler } from 'react';
 import { getAllUserWalletNote } from '../../../../Api/Wallet-Note';
 import { useAppSelector, useAppDispatch } from '../../../../Hooks/useRedux';
 import AppModal from '../../../General/AppModal';
@@ -15,6 +15,11 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { TableProps } from 'antd';
 import { errorHandling } from '../../../../Api/errorHandling';
+import {
+	TFetchErrorResponse,
+	TWalletNoteResponse,
+} from '../../../../Api/interfaces/types';
+import { DataViewTypeNames } from '../../../../Constants/DataViewTypeNames';
 
 const withWalletNoteTab = (
 	Component: React.ComponentType<DetailNoteTabProps>
@@ -36,8 +41,10 @@ const withWalletNoteTab = (
 			(state) => state.note.paginationSize?.wallet
 		);
 
-		const [walletNote, setWalletNote] = useState<any[]>([]);
-		const [walletNoteList, setWalletNoteList] = useState<any[]>([]);
+		const [walletNote, setWalletNote] = useState<TWalletNoteResponse[]>([]);
+		const [walletNoteList, setWalletNoteList] = useState<
+			TWalletNoteResponse[]
+		>([]);
 
 		const [isLoading, setIsLoading] = useState<boolean>(false);
 		const [isSearching, setIsSearching] = useState<boolean>(false);
@@ -47,19 +54,21 @@ const withWalletNoteTab = (
 			const getWalletNote = async () => {
 				setIsLoading(true);
 
-				try {
-					const res = await getAllUserWalletNote(token, noteId);
+				if (token && noteId) {
+					try {
+						const res = await getAllUserWalletNote(token, noteId);
 
-					const data = res.data.data.map((el: any, index: number) => {
-						return {
-							...el,
-							key: index,
-						};
-					});
-					setWalletNote(data);
-					setWalletNoteList(data);
-				} catch (error) {
-					errorHandling(error, navigate);
+						const data = res.data.data.map((el, index: number) => {
+							return {
+								...el,
+								key: index,
+							};
+						});
+						setWalletNote(data);
+						setWalletNoteList(data);
+					} catch (error) {
+						errorHandling(error as TFetchErrorResponse, navigate);
+					}
 				}
 
 				setIsLoading(false);
@@ -70,24 +79,24 @@ const withWalletNoteTab = (
 			} // eslint-disable-next-line
 		}, [isModalOpen, token, noteId]);
 
-		const handleChangeDataViewType = (values: any) =>
-			dispatch(setNoteDataViewType({ dataViewType: { wallet: values } }));
+		const handleChangeDataViewType = (values: DataViewTypeNames) =>
+			dispatch(setNoteDataViewType({ wallet: values }));
 
 		const handleClickAdd = () => setIsModalOpen(true);
 
-		const handleClickView = (record: any) => {
+		const handleClickView = (record: TWalletNoteResponse) => {
 			dispatch(
 				setSelectedWalletNote({
-					selectedWalletNote: {
-						id: record._id,
-						name: record.wallet.name,
-					},
+					id: record._id,
+					name: record.wallet.name,
 				})
 			);
 			navigate(`${toURLFormat(record.wallet.name)}`);
 		};
 
-		const handleChangeSearch = (e: any) => {
+		const handleChangeSearch: ChangeEventHandler<HTMLInputElement> = (
+			e
+		) => {
 			if (e.target.value === '') {
 				setWalletNoteList(walletNote);
 			}
@@ -132,14 +141,10 @@ const withWalletNoteTab = (
 			</AppModal>
 		);
 
-		const pagination: TableProps<any>['pagination'] = {
+		const pagination: TableProps<TWalletNoteResponse>['pagination'] = {
 			pageSize: pageSize,
 			onShowSizeChange(current, size) {
-				dispatch(
-					setNotePaginationSize({
-						paginationSize: { wallet: size },
-					})
-				);
+				dispatch(setNotePaginationSize({ wallet: size }));
 			},
 		};
 

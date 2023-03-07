@@ -25,6 +25,10 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
 						required: true,
 						message: I18n?.t('form.required.username')!,
 					},
+					{
+						pattern: new RegExp(/^[^\s-]+$/g),
+						message: I18n?.t('form.validation.no_spaces')!,
+					},
 				]}
 			>
 				<AppInput placeholder={I18n?.t('form.placeholder.username')} />

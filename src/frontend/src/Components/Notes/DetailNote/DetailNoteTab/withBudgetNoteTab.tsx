@@ -5,15 +5,16 @@ import { useAppSelector, useAppDispatch } from '../../../../Hooks/useRedux';
 import AppModal from '../../../General/AppModal';
 import AppTitle from '../../../General/AppTitle';
 import { getAllUserCategoryNote } from '../../../../Api/Category-Note';
-import withAddEstimationNoteForm from '../EstimationNoteForm/withAddEstimationNoteForm';
-import EstimationNoteForm from '../EstimationNoteForm/index';
-import withEditEstimationNoteForm from '../EstimationNoteForm/withEditEstimationNoteForm';
+import withAddEstimationNoteForm from '../BudgetNoteForm/withAddBudgetNoteForm';
+import EstimationNoteForm from '../BudgetNoteForm/index';
+import withEditEstimationNoteForm from '../BudgetNoteForm/withEditBudgetNoteForm';
 import { setNotePaginationSize } from '../../../../Store/Note/NoteSlice';
 import { TableProps } from 'antd';
 import { errorHandling } from '../../../../Api/errorHandling';
 import { useNavigate } from 'react-router-dom';
+import { TFetchErrorResponse } from '../../../../Api/interfaces/types';
 
-const withEstimationNoteTab = (
+const withBudgetNoteTab = (
 	Component: React.ComponentType<DetailNoteTabProps>
 ) => {
 	const NewComponent: React.FC<DetailNoteTabProps> = ({
@@ -44,42 +45,59 @@ const withEstimationNoteTab = (
 			const getWalletAndCategory = async () => {
 				setIsLoading(true);
 
-				try {
-					const resWalletNote = await getAllUserWalletNote(
-						token,
-						noteId
-					);
-
-					const walletNote = await resWalletNote.data.data;
-
+				if (token && noteId) {
 					try {
-						const resCatNote = await getAllUserCategoryNote(
+						const resWalletNote = await getAllUserWalletNote(
 							token,
 							noteId
 						);
 
-						const catNote = await resCatNote.data.data;
-						const data = [...walletNote, ...catNote].map(
-							(el, index) => {
+						const walletNote = [...resWalletNote.data.data].map(
+							(data) => {
 								return {
-									...el,
-									key: index,
-									name: el.wallet
-										? el.wallet.name
-										: el.category.name,
-									debit: el.wallet && el.estimated.balance,
-									credit: el.category && el.estimated.total,
+									...data,
+									name: data.wallet.name,
+									debit: data.estimated.balance,
 								};
 							}
 						);
 
-						setBudgets(data);
-						setBudgetsList(data);
+						try {
+							const resCatNote = await getAllUserCategoryNote(
+								token,
+								noteId
+							);
+
+							const catNote = [...resCatNote.data.data].map(
+								(data) => {
+									return {
+										...data,
+										name: data.category.name,
+										credit: data.estimated.total,
+									};
+								}
+							);
+
+							const data = [...walletNote, ...catNote].map(
+								(dataElement, index) => {
+									return {
+										...dataElement,
+										key: index,
+									};
+								}
+							);
+
+							setBudgets(data);
+							setBudgetsList(data);
+						} catch (error) {
+							errorHandling(
+								error as TFetchErrorResponse,
+								navigate
+							);
+						}
 					} catch (error) {
-						errorHandling(error, navigate);
+						errorHandling(error as TFetchErrorResponse, navigate);
 					}
-				} catch (error) {
-					errorHandling(error, navigate);
 				}
 
 				setIsLoading(false);
@@ -97,7 +115,6 @@ const withEstimationNoteTab = (
 			});
 
 		const handleClickEdit = (record: any) => {
-			// console.log(record);
 			setRecordEdit(record);
 			setIsModalOpen({
 				...isModalOpen,
@@ -195,11 +212,7 @@ const withEstimationNoteTab = (
 		const pagination: TableProps<any>['pagination'] = {
 			pageSize: pageSize,
 			onShowSizeChange(current, size) {
-				dispatch(
-					setNotePaginationSize({
-						paginationSize: { estimation: size },
-					})
-				);
+				dispatch(setNotePaginationSize({ estimation: size }));
 			},
 		};
 
@@ -225,4 +238,4 @@ const withEstimationNoteTab = (
 	return NewComponent;
 };
 
-export default withEstimationNoteTab;
+export default withBudgetNoteTab;

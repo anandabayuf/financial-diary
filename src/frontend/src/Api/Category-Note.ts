@@ -1,9 +1,19 @@
 import instance from './index';
+import {
+	TCategoryNoteEstimationPayload,
+	TEditCategoryNotePayload,
+} from './interfaces/types';
+import {
+	TCategoryNoteListResponseApi,
+	TCategoriesResponseApi,
+	TCategoryNoteResponseApi,
+	TCategoryNotePayload,
+} from './interfaces/types';
 
 export const getAllUserCategoryNote = async (
-	token?: string,
-	noteId?: string
-): Promise<any> => {
+	token: string,
+	noteId: string
+): Promise<TCategoryNoteListResponseApi> => {
 	return await instance({
 		url: `/category-note/note/${noteId}`,
 		method: 'GET',
@@ -12,9 +22,9 @@ export const getAllUserCategoryNote = async (
 };
 
 export const getAvailableUserCategory = async (
-	token?: string,
-	noteId?: string
-): Promise<any> => {
+	token: string,
+	noteId: string
+): Promise<TCategoriesResponseApi> => {
 	return await instance({
 		url: `/category-note/note/${noteId}/available`,
 		method: 'GET',
@@ -23,9 +33,9 @@ export const getAvailableUserCategory = async (
 };
 
 export const getUserCategoryNoteById = async (
-	token?: string,
-	id?: string
-): Promise<any> => {
+	token: string,
+	id: string
+): Promise<TCategoryNoteResponseApi> => {
 	return await instance({
 		url: `/category-note/${id}`,
 		method: 'GET',
@@ -34,9 +44,9 @@ export const getUserCategoryNoteById = async (
 };
 
 export const addCategoryToTheNote = async (
-	token?: string,
-	data?: any
-): Promise<any> => {
+	token: string,
+	data: TCategoryNotePayload
+): Promise<TCategoryNoteListResponseApi> => {
 	return await instance({
 		url: `/category-note`,
 		method: 'POST',
@@ -46,9 +56,9 @@ export const addCategoryToTheNote = async (
 };
 
 export const addCategoryNoteEstimated = async (
-	token?: string,
-	data?: any
-): Promise<any> => {
+	token: string,
+	data: TCategoryNoteEstimationPayload
+): Promise<TCategoryNoteListResponseApi> => {
 	return await instance({
 		url: `/category-note/estimated`,
 		method: 'POST',
@@ -58,10 +68,10 @@ export const addCategoryNoteEstimated = async (
 };
 
 export const editCategoryNoteEstimated = async (
-	token?: string,
-	id?: string,
-	data?: any
-): Promise<any> => {
+	token: string,
+	id: string,
+	data: TEditCategoryNotePayload
+): Promise<TCategoryNoteResponseApi> => {
 	return await instance({
 		url: `/category-note/${id}/estimated`,
 		method: 'PUT',

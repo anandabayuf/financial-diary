@@ -8,16 +8,11 @@ import { Link } from 'react-router-dom';
 import { getRouteNames } from '../../../Utils/RouteUtils';
 import RouteNames from '../../../Constants/RouteNames';
 
-const LoginForm: React.FC<LoginFormProps> = ({
-	handleFinish,
-	handleFinishFailed,
-	loading,
-}) => {
+const LoginForm: React.FC<LoginFormProps> = ({ handleFinish, loading }) => {
 	const { I18n } = useLocale();
 	return (
 		<Form
 			onFinish={handleFinish}
-			onFinishFailed={handleFinishFailed}
 			autoComplete='on'
 			layout='vertical'
 		>
@@ -28,6 +23,10 @@ const LoginForm: React.FC<LoginFormProps> = ({
 					{
 						required: true,
 						message: I18n.t('form.required.username')!,
+					},
+					{
+						pattern: new RegExp(/^[^\s-]+$/g),
+						message: I18n.t('form.validation.no_spaces')!,
 					},
 				]}
 			>

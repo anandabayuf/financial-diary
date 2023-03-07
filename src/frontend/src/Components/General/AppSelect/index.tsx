@@ -9,6 +9,7 @@ const AppSelect: React.FC<AppSelectProps> = ({
 	placeholder,
 	loading,
 	onChange,
+	showSearch,
 	...rest
 }) => {
 	const { color } = useTheme();
@@ -26,6 +27,16 @@ const AppSelect: React.FC<AppSelectProps> = ({
 			placeholder={placeholder}
 			loading={loading}
 			onChange={onChange}
+			showSearch={showSearch}
+			filterOption={
+				showSearch
+					? (input, option) =>
+							(option?.label ?? '')
+								.toString()
+								.toLowerCase()
+								.includes(input.toLowerCase())
+					: undefined
+			}
 			{...rest}
 		/>
 	);

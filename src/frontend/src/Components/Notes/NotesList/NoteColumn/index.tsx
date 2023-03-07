@@ -1,6 +1,7 @@
 import AppButton from '../../../General/AppButton';
 import AppText from '../../../General/AppText';
 import { NoteColumnsType } from './interfaces/interfaces';
+import { TNoteResponse } from '../../../../Api/interfaces/types';
 import {
 	getFullYearFromDate,
 	getLongMonthFromDate,
@@ -23,7 +24,7 @@ const NotesColumns: NoteColumnsType = ({
 					),
 					dataIndex: 'date',
 					key: 'date',
-					render: (_: any, record: any) => (
+					render: (_, record: TNoteResponse) => (
 						<AppText text={getFullYearFromDate(record.date)} />
 					),
 				},

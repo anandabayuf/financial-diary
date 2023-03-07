@@ -28,9 +28,9 @@ const CreateNoteItemsPage: React.FC = () => {
 				/>
 			</div>
 			<CreateNoteItemsForm
-				noteId={selectedNote?.id}
-				isCategory={selectedCategoryNote?.id !== ''}
-				isWallet={selectedWalletNote?.id !== ''}
+				noteId={selectedNote.id!}
+				isCategory={selectedCategoryNote.id !== null}
+				isWallet={selectedWalletNote.id !== null}
 				handleCancel={handleCancel}
 				I18n={I18n}
 			/>

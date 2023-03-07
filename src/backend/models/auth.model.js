@@ -94,10 +94,17 @@ exports.register = (data) => {
 					reject(err);
 				}
 			} else {
-				const data = response.toObject();
-				const { password, salt, picture, ...rest } = data;
+				const { password, salt, picture, ...rest } =
+					response.toObject();
+				const jwtData = {
+					id: rest._id,
+					username: rest.username,
+					name: rest.name,
+					email: rest.email,
+					isEmailVerified: rest.isEmailVerified,
+				};
 
-				this.sendVerificationEmail(rest)
+				this.sendVerificationEmail(jwtData)
 					.then((res) => {
 						resolve(rest);
 					})
@@ -186,13 +193,13 @@ exports.verifyEmail = (token) => {
 				reject(message["verify_email.invalid_token"]);
 			} else {
 				userModel
-					.getById(res._id)
+					.getById(res.id)
 					.then((user) => {
 						if (user.isEmailVerified) {
 							reject(message["verify_email.already_verified"]);
 						} else {
 							userModel
-								.edit(res._id, { isEmailVerified: true })
+								.edit(res.id, { isEmailVerified: true })
 								.then((result) => resolve(true))
 								.catch((err) => reject(err));
 						}
@@ -214,9 +221,17 @@ exports.sendForgotPasswordEmail = (email, username) => {
 
 			if (user) {
 				if (user.isEmailVerified) {
-					const { password, salt, picture, ...rest } =
-						user.toObject();
-					const token = jwt.sign(rest, SECRET_KEY, {
+					const userData = user.toObject();
+
+					const data = {
+						id: userData._id,
+						username: userData.username,
+						name: userData.name,
+						email: userData.email,
+						isEmailVerified: userData.isEmailVerified,
+					};
+
+					const token = jwt.sign(data, SECRET_KEY, {
 						expiresIn: "86400s",
 						algorithm: "HS256",
 					});
@@ -299,7 +314,7 @@ exports.resetPassword = (token, newPassword) => {
 					const decryptedPassword = await PublicModel.decrypt(
 						newPassword
 					);
-					const userId = data._id;
+					const userId = data.id;
 
 					userModel
 						.getById(userId)
@@ -323,7 +338,7 @@ exports.resetPassword = (token, newPassword) => {
 									salt: newSalt,
 								})
 								.then((response) => {
-									const { salt, password, ...rest } =
+									const { salt, password, picture, ...rest } =
 										response;
 
 									resolve(rest);

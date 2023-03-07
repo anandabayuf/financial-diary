@@ -19,6 +19,7 @@ import AppLogo from '../../Components/General/AppLogo';
 import useLocale from '../../Hooks/useLocale';
 import { errorHandling } from '../../Api/errorHandling';
 import { APP_NAME } from '../../Constants/Constants';
+import { TLoginPayload, TFetchErrorResponse } from '../../Api/interfaces/types';
 
 const LoginPage: React.FC = () => {
 	const dispatch = useAppDispatch();
@@ -27,7 +28,7 @@ const LoginPage: React.FC = () => {
 	const [loading, setLoading] = useState(false);
 	const { I18n, language } = useLocale();
 
-	const handleLogin = async (values: any) => {
+	const handleLogin = async (values: TLoginPayload) => {
 		setLoading(true);
 
 		try {
@@ -38,33 +39,31 @@ const LoginPage: React.FC = () => {
 				password: encryptedPass,
 			});
 
-			const jwtDecoded: any = decodeJWT(res.data.token);
+			const jwtDecoded = decodeJWT(res.data.data);
 
 			try {
 				const responseGetUser = await getUserById(
 					jwtDecoded.id,
-					res.data.token
+					res.data.data
 				);
 
-				const user = await responseGetUser.data.data;
+				const user = responseGetUser.data.data;
 
 				dispatch(
 					setUserLoggedIn({
-						accessToken: res.data.token,
+						accessToken: res.data.data,
 						data: await user,
 					})
 				);
 			} catch (error) {
-				errorHandling(error, navigate);
+				errorHandling(error as TFetchErrorResponse, navigate);
 			}
 		} catch (error) {
-			errorHandling(error, navigate);
+			errorHandling(error as TFetchErrorResponse, navigate);
 		}
 
 		setLoading(false);
 	};
-
-	const handleLoginFailed = (errorInfo: string) => {};
 
 	const handleClickRegister = () => {
 		navigate('/register');
@@ -105,7 +104,6 @@ const LoginPage: React.FC = () => {
 						</div>
 						<LoginForm
 							handleFinish={handleLogin}
-							handleFinishFailed={handleLoginFailed}
 							loading={loading}
 						/>
 						<StyledRegisterContainer>

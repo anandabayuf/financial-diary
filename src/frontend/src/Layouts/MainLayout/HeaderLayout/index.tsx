@@ -20,6 +20,9 @@ import RouteNames from '../../../Constants/RouteNames';
 import AppLogo from '../../../Components/General/AppLogo';
 import { setLocalization } from '../../../Store/Localization/LocalizationSlice';
 import useTheme from '../../../Hooks/useTheme';
+import { MenuClickEventHandler } from 'rc-menu/lib/interface';
+import { SwitchChangeEventHandler } from 'antd/es/switch';
+import { LocaleType } from '../../../Store/interfaces/interfaces';
 
 const HeaderLayout: React.FC<HeaderLayoutProps> = ({
 	user,
@@ -33,7 +36,7 @@ const HeaderLayout: React.FC<HeaderLayoutProps> = ({
 	const [isOpen, setIsOpen] = useState(false);
 	const [isDropdownLangOpen, setIsDropdownLangOpen] = useState(false);
 
-	const handleClickProfileMenu = (e: any) => {
+	const handleClickProfileMenu: MenuClickEventHandler = (e) => {
 		if (e.key === 'logout') {
 			dispatch(setUserLoggedOut());
 		} else if (
@@ -46,7 +49,7 @@ const HeaderLayout: React.FC<HeaderLayoutProps> = ({
 		}
 	};
 
-	const handleChangeTheme = (e: any) => {
+	const handleChangeTheme: SwitchChangeEventHandler = (e) => {
 		if (e) {
 			dispatch(setLightMode());
 		} else {
@@ -54,8 +57,8 @@ const HeaderLayout: React.FC<HeaderLayoutProps> = ({
 		}
 	};
 
-	const handleChangeLanguage = (e: any) => {
-		dispatch(setLocalization({ locale: e.key }));
+	const handleChangeLanguage: MenuClickEventHandler = (e) => {
+		dispatch(setLocalization({ locale: e.key as LocaleType }));
 		setIsDropdownLangOpen(false);
 	};
 

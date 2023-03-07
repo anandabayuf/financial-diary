@@ -17,6 +17,8 @@ import useLocale from '../../Hooks/useLocale';
 import { errorHandling } from '../../Api/errorHandling';
 import { APP_NAME } from '../../Constants/Constants';
 import { useNavigate } from 'react-router-dom';
+import { TFetchErrorResponse } from '../../Api/interfaces/types';
+import { EditUserPayload } from '../../Components/MyProfile/MyProfileForm/interfaces/interfaces';
 
 const MyProfilePage: React.FC = () => {
 	const { data, accessToken } = useAppSelector((state) => state.user);
@@ -133,36 +135,44 @@ const MyProfilePage: React.FC = () => {
 
 	const handleClickCancelEdit = () => setIsEdit(false);
 
-	const handleClickSaveEdit = async (values: any) => {
+	const handleClickSaveEdit = async (values: EditUserPayload) => {
 		setIsLoading(true);
+		if (values && accessToken && data) {
+			console.log(values.picture, typeof values.picture);
+			let userData: EditUserPayload = {
+				name: values.name,
+				username: values.username,
+			};
 
-		let userData: any = {
-			name: values.name,
-			username: values.username,
-		};
+			let payload = new FormData();
 
-		let payload = new FormData();
+			if (values.picture === undefined) {
+				//if user do not edit their picture
+			} else if (values.picture?.fileList?.length === 0) {
+				//if user remove their picture
+				userData['picture'] = null;
+			} else if (values.picture?.fileList?.length === 1) {
+				//if user edited their picture
+				payload.append(
+					'picture',
+					values.picture.fileList[0].originFileObj!
+				);
+			}
 
-		if (values.picture === undefined) {
-			//if user do not edit their picture
-		} else if (values.picture.fileList.length === 0) {
-			//if user remove their picture
-			userData['picture'] = null;
-		} else if (values.picture.fileList.length === 1) {
-			//if user edited their picture
-			payload.append('picture', values.picture.fileList[0].originFileObj);
-		}
+			payload.append('data', JSON.stringify(userData));
 
-		payload.append('data', JSON.stringify(userData));
+			try {
+				const res = await editUserById(accessToken, data._id, payload);
 
-		try {
-			const res = await editUserById(accessToken, data._id, payload);
-
-			AppMessage({ content: I18n.t(res.data.message), type: 'success' });
-			dispatch(updateUserData({ data: res.data.data }));
-			handleClickCancelEdit();
-		} catch (error) {
-			errorHandling(error, navigate);
+				AppMessage({
+					content: I18n.t(res.data.message),
+					type: 'success',
+				});
+				dispatch(updateUserData(res.data.data));
+				handleClickCancelEdit();
+			} catch (error) {
+				errorHandling(error as TFetchErrorResponse, navigate);
+			}
 		}
 
 		setIsLoading(false);
@@ -198,14 +208,17 @@ const MyProfilePage: React.FC = () => {
 					</AppButton>
 				)}
 			</div>
-			{!isEdit ? (
+			{!isEdit && data ? (
 				<MyProfileCard
 					user={data}
 					I18n={I18n}
 				/>
 			) : (
 				<MyProfileForm
-					user={data}
+					user={{
+						name: data?.name,
+						username: data?.username,
+					}}
 					isLoading={isLoading}
 					handleSubmit={handleClickSaveEdit}
 					handleCancel={handleClickCancelEdit}

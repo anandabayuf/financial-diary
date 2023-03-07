@@ -1,5 +1,5 @@
-import { EstimationNoteFormProps } from './interfaces/interfaces';
-import { Form, Space } from 'antd';
+import { BudgetNoteFormProps } from './interfaces/interfaces';
+import { Form, SelectProps, Space } from 'antd';
 import AppFormItem from '../../../General/AppFormItem';
 import AppButton from '../../../General/AppButton/index';
 import AppLoader from '../../../General/AppLoader';
@@ -12,8 +12,12 @@ import { AiOutlineMinusCircle } from 'react-icons/ai';
 import AppSelect from '../../../General/AppSelect/index';
 import AppInput from '../../../General/AppInput';
 import { useState } from 'react';
+import {
+	TWalletResponse,
+	TCategoryResponse,
+} from '../../../../Api/interfaces/types';
 
-const EstimationNoteForm: React.FC<EstimationNoteFormProps> = ({
+const BudgetNoteForm: React.FC<BudgetNoteFormProps> = ({
 	walletData,
 	categoryData,
 	data,
@@ -30,18 +34,23 @@ const EstimationNoteForm: React.FC<EstimationNoteFormProps> = ({
 	const [selectedWallets, setSelectedWallets] = useState<string[]>();
 	const [selectedCategories, setSelectedCategories] = useState<string[]>();
 
-	const filteredWalletOptions = walletData
-		?.filter((wallet: any) => !selectedWallets?.includes(wallet._id))
-		.map((wallet: any) => {
+	const filteredWalletOptions: SelectProps['options'] = walletData
+		?.filter(
+			(wallet: TWalletResponse) => !selectedWallets?.includes(wallet._id)
+		)
+		.map((wallet: TWalletResponse) => {
 			return {
 				value: wallet._id,
 				label: wallet.name,
 			};
 		});
 
-	const filteredCategoryOptions = categoryData
-		?.filter((category: any) => !selectedCategories?.includes(category._id))
-		.map((category: any) => {
+	const filteredCategoryOptions: SelectProps['options'] = categoryData
+		?.filter(
+			(category: TCategoryResponse) =>
+				!selectedCategories?.includes(category._id)
+		)
+		.map((category: TCategoryResponse) => {
 			return {
 				value: category._id,
 				label: category.name,
@@ -469,4 +478,4 @@ const EstimationNoteForm: React.FC<EstimationNoteFormProps> = ({
 	);
 };
 
-export default EstimationNoteForm;
+export default BudgetNoteForm;

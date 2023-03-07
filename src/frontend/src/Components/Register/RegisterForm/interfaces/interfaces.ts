@@ -1,8 +1,19 @@
 import { UploadFile, UploadProps, RcFile } from 'antd/es/upload';
 
+export type RegisterFormType = {
+	picture: {
+		file: RcFile;
+		fileList: UploadProps['fileList'];
+	};
+	name: string;
+	username: string;
+	email: string;
+	password: string;
+	passwordconfirm: string;
+};
+
 export interface RegisterFormProps {
-	handleFinish?: (values: any) => void;
-	handleFinishFailed?: (errorInfo: any) => void;
+	handleFinish?: (values: RegisterFormType) => void;
 	loading?: boolean;
 	handleUploadImage?: {
 		fileList?: UploadFile[];

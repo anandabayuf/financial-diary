@@ -13,6 +13,10 @@ import AppMessage from '../../../../Components/General/AppMessage/index';
 import { errorHandling } from '../../../../Api/errorHandling';
 import useLocale from '../../../../Hooks/useLocale';
 import { APP_NAME } from '../../../../Constants/Constants';
+import {
+	TFetchErrorResponse,
+	TCategoryPayload,
+} from '../../../../Api/interfaces/types';
 
 const CreateForm = withCreateCategory(CategoryForm);
 
@@ -23,20 +27,22 @@ const CreateCategoryPage: React.FC = () => {
 
 	const [isLoading, setIsLoading] = useState(false);
 
-	const handleCreateCategory = async (values: any) => {
+	const handleCreateCategory = async (values: TCategoryPayload) => {
 		setIsLoading(true);
 
-		try {
-			const response = await createUserCategory(token, values);
-			navigate(getRouteNames(RouteNames.MANAGEMENT_CATEGORY), {
-				replace: true,
-			});
-			AppMessage({
-				type: 'success',
-				content: I18n.t(response.data.message),
-			});
-		} catch (error) {
-			errorHandling(error, navigate);
+		if (token) {
+			try {
+				const response = await createUserCategory(token, values);
+				navigate(getRouteNames(RouteNames.MANAGEMENT_CATEGORY), {
+					replace: true,
+				});
+				AppMessage({
+					type: 'success',
+					content: I18n.t(response.data.message),
+				});
+			} catch (error) {
+				errorHandling(error as TFetchErrorResponse, navigate);
+			}
 		}
 
 		setIsLoading(false);

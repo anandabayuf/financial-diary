@@ -1,6 +1,6 @@
 import AppTitle from '../../../../Components/General/AppTitle';
 import MainLayout from '../../../../Layouts/MainLayout/index';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEventHandler } from 'react';
 import { getAllUserWallet } from '../../../../Api/Wallets';
 import { useAppSelector, useAppDispatch } from '../../../../Hooks/useRedux';
 import AppButton from '../../../../Components/General/AppButton';
@@ -19,6 +19,11 @@ import { setManagementPaginationSize } from '../../../../Store/Management/Manage
 import useLocale from '../../../../Hooks/useLocale';
 import { errorHandling } from '../../../../Api/errorHandling';
 import { APP_NAME } from '../../../../Constants/Constants';
+import { appendKey } from '../../../../Utils/TableUtils';
+import {
+	TFetchErrorResponse,
+	TWalletResponse,
+} from '../../../../Api/interfaces/types';
 
 const ManagementWalletPage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
@@ -31,8 +36,8 @@ const ManagementWalletPage: React.FC = () => {
 
 	const { I18n, language } = useLocale();
 
-	const [wallets, setWallets] = useState<any[]>([]);
-	const [walletsList, setWalletsList] = useState<any[]>([]);
+	const [wallets, setWallets] = useState<TWalletResponse[]>([]);
+	const [walletsList, setWalletsList] = useState<TWalletResponse[]>([]);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const [isSearching, setIsSearching] = useState<boolean>(false);
@@ -41,19 +46,16 @@ const ManagementWalletPage: React.FC = () => {
 		const getWallets = async () => {
 			setIsLoading(true);
 
-			try {
-				const res = await getAllUserWallet(token);
-				let resWallets = [...res.data.data];
+			if (token) {
+				try {
+					const res = await getAllUserWallet(token);
+					let resWallets = [...res.data.data];
 
-				resWallets = resWallets.map((wallet: any) => {
-					wallet['key'] = wallet._id;
-					return wallet;
-				});
-
-				setWallets(resWallets);
-				setWalletsList(resWallets);
-			} catch (error) {
-				errorHandling(error, navigate);
+					setWallets(resWallets);
+					setWalletsList(resWallets);
+				} catch (error) {
+					errorHandling(error as TFetchErrorResponse, navigate);
+				}
 			}
 
 			setIsLoading(false);
@@ -66,7 +68,7 @@ const ManagementWalletPage: React.FC = () => {
 		navigate(getRouteNames(RouteNames.CREATE_WALLETS));
 	};
 
-	const handleChangeSearch = (e: any) => {
+	const handleChangeSearch: ChangeEventHandler<HTMLInputElement> = (e) => {
 		if (e.target.value === '') {
 			setWalletsList(wallets);
 		}
@@ -87,14 +89,10 @@ const ManagementWalletPage: React.FC = () => {
 		}
 	};
 
-	const pagination: TableProps<any>['pagination'] = {
+	const pagination: TableProps<TWalletResponse>['pagination'] = {
 		pageSize: pageSize,
 		onShowSizeChange(current, size) {
-			dispatch(
-				setManagementPaginationSize({
-					paginationSize: { wallet: size },
-				})
-			);
+			dispatch(setManagementPaginationSize({ wallet: size }));
 		},
 	};
 
@@ -137,7 +135,7 @@ const ManagementWalletPage: React.FC = () => {
 						/>
 					</div>
 					<AppTable
-						dataSource={walletsList}
+						dataSource={appendKey(walletsList)}
 						columns={WalletColumns({
 							navigate: navigate,
 							I18n: I18n,

@@ -1,5 +1,5 @@
 import { DetailNoteTabProps } from './interfaces/interfaces';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEventHandler } from 'react';
 import { useAppSelector, useAppDispatch } from '../../../../Hooks/useRedux';
 import { getAllUserCategoryNote } from '../../../../Api/Category-Note';
 import withCategoryNoteForm from '../DetailNoteForm/withCategoryNoteForm';
@@ -14,6 +14,12 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { toURLFormat } from '../../../../Utils/UrlUtils';
 import { TableProps } from 'antd';
+import { errorHandling } from '../../../../Api/errorHandling';
+import { DataViewTypeNames } from '../../../../Constants/DataViewTypeNames';
+import {
+	TFetchErrorResponse,
+	TCategoryNoteResponse,
+} from '../../../../Api/interfaces/types';
 
 const withCategoryNoteTab = (
 	Component: React.ComponentType<DetailNoteTabProps>
@@ -36,8 +42,12 @@ const withCategoryNoteTab = (
 			(state) => state.note.paginationSize?.category
 		);
 
-		const [categoryNote, setCategoryNote] = useState<any[]>([]);
-		const [categoryNoteList, setCategoryNoteList] = useState<any[]>([]);
+		const [categoryNote, setCategoryNote] = useState<
+			TCategoryNoteResponse[]
+		>([]);
+		const [categoryNoteList, setCategoryNoteList] = useState<
+			TCategoryNoteResponse[]
+		>([]);
 
 		const [isLoading, setIsLoading] = useState<boolean>(false);
 		const [isSearching, setIsSearching] = useState<boolean>(false);
@@ -47,18 +57,22 @@ const withCategoryNoteTab = (
 			const getCategoryNote = async () => {
 				setIsLoading(true);
 
-				try {
-					const res = await getAllUserCategoryNote(token, noteId);
+				if (token && I18n && noteId) {
+					try {
+						const res = await getAllUserCategoryNote(token, noteId);
 
-					const data = res.data.data.map((el: any, index: number) => {
-						return {
-							...el,
-							key: index,
-						};
-					});
-					setCategoryNote(data);
-					setCategoryNoteList(data);
-				} catch (error) {}
+						const data = res.data.data.map((el, index) => {
+							return {
+								...el,
+								key: index,
+							};
+						});
+						setCategoryNote(data);
+						setCategoryNoteList(data);
+					} catch (error) {
+						errorHandling(error as TFetchErrorResponse, navigate);
+					}
+				}
 
 				setIsLoading(false);
 			};
@@ -68,28 +82,24 @@ const withCategoryNoteTab = (
 			} // eslint-disable-next-line
 		}, [isModalOpen, noteId, token]);
 
-		const handleChangeDataViewType = (values: any) =>
-			dispatch(
-				setNoteDataViewType({
-					dataViewType: { category: values },
-				})
-			);
+		const handleChangeDataViewType = (values: DataViewTypeNames) =>
+			dispatch(setNoteDataViewType({ category: values }));
 
 		const handleClickAdd = () => setIsModalOpen(true);
 
-		const handleClickView = (record: any) => {
+		const handleClickView = (record: TCategoryNoteResponse) => {
 			dispatch(
 				setSelectedCategoryNote({
-					selectedCategoryNote: {
-						id: record._id,
-						name: record.category.name,
-					},
+					id: record._id,
+					name: record.category.name,
 				})
 			);
 			navigate(`${toURLFormat(record.category.name)}`);
 		};
 
-		const handleChangeSearch = (e: any) => {
+		const handleChangeSearch: ChangeEventHandler<HTMLInputElement> = (
+			e
+		) => {
 			if (e.target.value === '') {
 				setCategoryNoteList(categoryNote);
 			}
@@ -134,14 +144,10 @@ const withCategoryNoteTab = (
 			</AppModal>
 		);
 
-		const pagination: TableProps<any>['pagination'] = {
+		const pagination: TableProps<TCategoryNoteResponse>['pagination'] = {
 			pageSize: pageSize,
 			onShowSizeChange(current, size) {
-				dispatch(
-					setNotePaginationSize({
-						paginationSize: { category: size },
-					})
-				);
+				dispatch(setNotePaginationSize({ category: size }));
 			},
 		};
 

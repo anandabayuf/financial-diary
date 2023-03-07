@@ -7,14 +7,19 @@ import {
 	addCategoryNoteEstimated,
 } from '../../../../Api/Category-Note';
 import { addWalletNoteEstimated } from '../../../../Api/Wallet-Note';
-import { EstimationNoteFormProps } from './interfaces/interfaces';
+import { BudgetNoteFormProps } from './interfaces/interfaces';
 import { errorHandling } from '../../../../Api/errorHandling';
 import { useNavigate } from 'react-router-dom';
+import {
+	TFetchErrorResponse,
+	TWalletResponse,
+	TCategoryResponse,
+} from '../../../../Api/interfaces/types';
 
 const withAddEstimationNoteForm = (
-	Component: React.ComponentType<EstimationNoteFormProps>
+	Component: React.ComponentType<BudgetNoteFormProps>
 ) => {
-	const NewComponent: React.FC<EstimationNoteFormProps> = ({
+	const NewComponent: React.FC<BudgetNoteFormProps> = ({
 		noteId,
 		handleCancel,
 		I18n,
@@ -22,8 +27,12 @@ const withAddEstimationNoteForm = (
 	}) => {
 		const navigate = useNavigate();
 		const token = useAppSelector((state) => state.user.accessToken);
-		const [availableWallet, setAvailableWallet] = useState<any[]>([]);
-		const [availableCategory, setAvailableCategory] = useState<any[]>([]);
+		const [availableWallet, setAvailableWallet] = useState<
+			TWalletResponse[]
+		>([]);
+		const [availableCategory, setAvailableCategory] = useState<
+			TCategoryResponse[]
+		>([]);
 		const [isLoading, setIsLoading] = useState<boolean>(false);
 		const [isFetching, setIsFetching] = useState<boolean>(false);
 
@@ -31,22 +40,29 @@ const withAddEstimationNoteForm = (
 			const getAvailableWalletAndCategory = async () => {
 				setIsFetching(true);
 
-				try {
-					const resWallet = await getAvailableUserWallet(
-						token,
-						noteId
-					);
+				if (token && noteId) {
 					try {
-						const resCat = await getAvailableUserCategory(
+						const resWallet = await getAvailableUserWallet(
 							token,
 							noteId
 						);
+						try {
+							const resCat = await getAvailableUserCategory(
+								token,
+								noteId
+							);
 
-						setAvailableWallet(resWallet.data.data);
-						setAvailableCategory(resCat.data.data);
-					} catch (error) {}
-				} catch (error) {
-					errorHandling(error, navigate);
+							setAvailableWallet(resWallet.data.data);
+							setAvailableCategory(resCat.data.data);
+						} catch (error) {
+							errorHandling(
+								error as TFetchErrorResponse,
+								navigate
+							);
+						}
+					} catch (error) {
+						errorHandling(error as TFetchErrorResponse, navigate);
+					}
 				}
 
 				setIsFetching(false);
@@ -57,7 +73,7 @@ const withAddEstimationNoteForm = (
 
 		const handleSubmit = async (values: any) => {
 			setIsLoading(true);
-			if (values && (values.wallets || values.categories)) {
+			if (values && (values.wallets || values.categories) && token) {
 				if (values.wallets && values.wallets.length > 0) {
 					const walletsPayload = values.wallets.map((wallet: any) => {
 						return {
@@ -83,7 +99,7 @@ const withAddEstimationNoteForm = (
 							handleCancel();
 						}
 					} catch (error) {
-						errorHandling(error, navigate);
+						errorHandling(error as TFetchErrorResponse, navigate);
 					}
 				}
 
@@ -114,7 +130,7 @@ const withAddEstimationNoteForm = (
 							handleCancel();
 						}
 					} catch (error) {
-						errorHandling(error, navigate);
+						errorHandling(error as TFetchErrorResponse, navigate);
 					}
 				}
 			}

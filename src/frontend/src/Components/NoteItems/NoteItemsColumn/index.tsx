@@ -6,6 +6,7 @@ import { formatIDR } from '../../../Utils/CurrencyUtils';
 import { ColumnsType } from 'antd/es/table';
 import { ITEM_TYPE } from '../../../Constants/Constants';
 import dayjs from 'dayjs';
+import { TNoteItemResponse } from '../../../Api/interfaces/types';
 
 const NoteItemColumns: NoteItemColumnsType = ({
 	walletNoteId,
@@ -15,7 +16,7 @@ const NoteItemColumns: NoteItemColumnsType = ({
 	handleDelete,
 	handleEdit,
 }) => {
-	const debitRender = (): ColumnsType<any> =>
+	const debitRender = (): ColumnsType<TNoteItemResponse> =>
 		!isCategory
 			? [
 					{
