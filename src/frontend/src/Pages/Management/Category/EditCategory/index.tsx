@@ -10,43 +10,64 @@ import withEditCategory from '../../../../Components/Management/Category/Categor
 import CategoryForm from '../../../../Components/Management/Category/CategoryForm/index';
 import { editUserCategory } from '../../../../Api/Category';
 import AppMessage from '../../../../Components/General/AppMessage/index';
+import useLocale from '../../../../Hooks/useLocale';
+import { errorHandling } from '../../../../Api/errorHandling';
+import { APP_NAME } from '../../../../Constants/Constants';
+import {
+	TFetchErrorResponse,
+	TCategoryPayload,
+} from '../../../../Api/interfaces/types';
 
 const EditForm = withEditCategory(CategoryForm);
 
 const EditCategoryPage: React.FC = () => {
-	const [isLoading, setIsLoading] = useState(false);
 	const token = useAppSelector((state) => state.user.accessToken);
 	const navigate = useNavigate();
 	const location = useLocation();
 	const category = location.state;
 
-	const handleEditCategory = async (values: any) => {
+	const { I18n, language } = useLocale();
+
+	const [isLoading, setIsLoading] = useState(false);
+
+	const handleEditCategory = async (values: TCategoryPayload) => {
 		setIsLoading(true);
 
-		const response = await editUserCategory(token, category._id, values);
-		setIsLoading(false);
-		if (response.request.status === 201) {
-			navigate(getRouteNames(RouteNames.MANAGEMENT_CATEGORY), {
-				replace: true,
-				state: {
-					message: response.data.message,
-				},
-			});
-		} else {
-			AppMessage({ content: response.data.message, type: 'error' });
+		if (token) {
+			try {
+				const response = await editUserCategory(
+					token,
+					category._id,
+					values
+				);
+
+				navigate(getRouteNames(RouteNames.MANAGEMENT_CATEGORY), {
+					replace: true,
+				});
+				AppMessage({
+					type: 'success',
+					content: I18n.t(response.data.message),
+				});
+			} catch (error) {
+				errorHandling(error as TFetchErrorResponse, navigate);
+			}
 		}
+
+		setIsLoading(false);
 	};
 
 	useEffect(() => {
-		document.title = 'Edit Category - Financial Diary App';
-	}, []);
+		document.title = `${I18n.t(
+			'title.management.category.edit'
+		)} - ${APP_NAME}`;
+	}, [I18n, language]);
 
 	return (
 		<MainLayout>
 			<AppBreadcrumb className='mb-1' />
 			<div className='mb-5'>
 				<AppTitle
-					title='Edit Category'
+					title={I18n.t('management.category.edit')!}
 					level={5}
 				/>
 			</div>
@@ -54,6 +75,7 @@ const EditCategoryPage: React.FC = () => {
 				isLoading={isLoading}
 				handleSubmit={handleEditCategory}
 				data={category}
+				I18n={I18n}
 			/>
 		</MainLayout>
 	);

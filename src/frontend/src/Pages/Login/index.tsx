@@ -11,68 +11,67 @@ import { login } from '../../Api/Auth';
 import { useState, useEffect } from 'react';
 import { useAppDispatch } from '../../Hooks/useRedux';
 import { setUserLoggedIn } from '../../Store/User/UserSlice';
-import { decodeJWT } from '../../Utils/AuthUtils';
-import { useLocation, useNavigate } from 'react-router-dom';
-import StyledTitle from './styled/StyledTitle';
+import { decodeJWT, encryptPassword } from '../../Utils/AuthUtils';
+import { useNavigate } from 'react-router-dom';
 import { getUserById } from '../../Api/User';
-import AppMessage from '../../Components/General/AppMessage/index';
+import AppTitle from '../../Components/General/AppTitle/index';
+import AppLogo from '../../Components/General/AppLogo';
+import useLocale from '../../Hooks/useLocale';
+import { errorHandling } from '../../Api/errorHandling';
+import { APP_NAME } from '../../Constants/Constants';
+import { TLoginPayload, TFetchErrorResponse } from '../../Api/interfaces/types';
 
 const LoginPage: React.FC = () => {
-	const [loading, setLoading] = useState(false);
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
-	const location = useLocation();
 
-	const handleLogin = async (values: string) => {
+	const [loading, setLoading] = useState(false);
+	const { I18n, language } = useLocale();
+
+	const handleLogin = async (values: TLoginPayload) => {
 		setLoading(true);
 
-		const res = await login(values);
+		try {
+			const encryptedPass = encryptPassword(values.password);
 
-		if (res.request.status === 401) {
-			AppMessage({ content: res.response.data.detail, type: 'error' });
-		} else if (res.request.status === 200) {
-			const jwtDecoded: any = decodeJWT(res.data.token);
+			const res = await login({
+				username: values.username,
+				password: encryptedPass,
+			});
 
-			const responseGetUser = await getUserById(
-				jwtDecoded.id,
-				res.data.token
-			);
+			const jwtDecoded = decodeJWT(res.data.data);
 
-			const user = await responseGetUser.data.data;
+			try {
+				const responseGetUser = await getUserById(
+					jwtDecoded.id,
+					res.data.data
+				);
 
-			dispatch(
-				setUserLoggedIn({
-					accessToken: res.data.token,
-					data: await user,
-				})
-			);
-		} else {
-			AppMessage({ content: res.message, type: 'error' });
+				const user = responseGetUser.data.data;
+
+				dispatch(
+					setUserLoggedIn({
+						accessToken: res.data.data,
+						data: await user,
+					})
+				);
+			} catch (error) {
+				errorHandling(error as TFetchErrorResponse, navigate);
+			}
+		} catch (error) {
+			errorHandling(error as TFetchErrorResponse, navigate);
 		}
 
 		setLoading(false);
 	};
-
-	const handleLoginFailed = (errorInfo: string) => {};
 
 	const handleClickRegister = () => {
 		navigate('/register');
 	};
 
 	useEffect(() => {
-		const stateReceiveAction = () => {
-			if (location.state) {
-				AppMessage({ content: location.state.message, type: 'info' });
-				window.history.replaceState({}, document.title);
-			}
-		};
-
-		stateReceiveAction(); // eslint-disable-next-line
-	}, [location.state]);
-
-	useEffect(() => {
-		document.title = 'Login - Financial Diary App';
-	}, []);
+		document.title = `${I18n.t('login')} - ${APP_NAME}`;
+	}, [language, I18n]);
 
 	return (
 		<FrontLayout>
@@ -91,25 +90,32 @@ const LoginPage: React.FC = () => {
 						/>
 					</Col>
 					<Col className='login-form-container'>
-						<StyledTitle
-							level={3}
-							title='Welcome!'
-						/>
+						<div className='min-[426px]:hidden flex justify-center mb-3'>
+							<AppLogo width='128px' />
+						</div>
+						<div className='flex justify-between items-baseline mb-5'>
+							<AppTitle
+								level={4}
+								title={I18n.t('login')!}
+							/>
+							<div className='max-[425px]:hidden'>
+								<AppLogo width='128px' />
+							</div>
+						</div>
 						<LoginForm
 							handleFinish={handleLogin}
-							handleFinishFailed={handleLoginFailed}
 							loading={loading}
 						/>
 						<StyledRegisterContainer>
 							<AppText
-								text="Don't have an account?"
+								text={I18n.t('content.dont_have_an_account?')}
 								className='text-xs'
 							/>
 							<AppButton
 								type='link'
 								onClick={handleClickRegister}
 							>
-								Register
+								{I18n.t('register')}
 							</AppButton>
 						</StyledRegisterContainer>
 					</Col>

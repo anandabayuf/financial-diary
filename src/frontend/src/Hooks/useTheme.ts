@@ -4,12 +4,12 @@ import ThemeModeNames from '../Constants/ThemeModeNames';
 import { Dark, Light, ColorState } from '../Constants/Colors';
 
 const useTheme = () => {
-	const theme = useAppSelector((state) => state.theme);
+	const themeMode = useAppSelector((state) => state.theme);
 	const [colorTheme, setColorTheme] = useState<ColorState>();
 
 	useMemo(() => {
 		const changeColorTheme = () => {
-			if (theme === ThemeModeNames.DARK) {
+			if (themeMode === ThemeModeNames.DARK) {
 				setColorTheme(Dark);
 				document.body.style.backgroundColor = Dark.bg;
 				document.body.className = 'dark';
@@ -21,9 +21,12 @@ const useTheme = () => {
 		};
 
 		changeColorTheme();
-	}, [theme]);
+	}, [themeMode]);
 
-	return colorTheme;
+	return {
+		mode: themeMode,
+		color: colorTheme,
+	};
 };
 
 export default useTheme;

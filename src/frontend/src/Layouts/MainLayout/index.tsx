@@ -12,12 +12,15 @@ import { useAppDispatch, useAppSelector } from '../../Hooks/useRedux';
 import { setOpenKeys, setSelectedKeys } from '../../Store/Menu/MenuSlice';
 import { rootSubmenuKeys } from './SiderLayout/MenuItems';
 import DrawerLayout from './DrawerLayout';
+import useLocale from '../../Hooks/useLocale';
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
-	const theme = useTheme();
+	const { color } = useTheme();
 	const user = useAppSelector((state) => state.user.data);
 	const location = useLocation();
 	const dispatch = useAppDispatch();
+	const { I18n, language } = useLocale();
+
 	const { openKeys, selectedKeys } = useAppSelector((state) => state.menu);
 	const [drawerState, setDrawerState] = useState({
 		isOpen: false,
@@ -60,26 +63,31 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 
 	return (
 		<StyledLayout>
-			<HeaderLayout
-				user={user}
-				theme={theme}
-				handleOpenDrawer={handleOpenDrawer}
-			/>
+			{user && (
+				<HeaderLayout
+					user={user}
+					theme={color}
+					handleOpenDrawer={handleOpenDrawer}
+					I18n={I18n}
+					language={language}
+				/>
+			)}
 			<Layout hasSider>
 				<SiderLayout
-					theme={theme}
+					theme={color}
 					menu={{
 						selectedKeys: selectedKeys,
 						opensKeys: openKeys,
 						onOpenChange: onOpenSubMenuChange,
 					}}
+					I18n={I18n}
 				/>
-				<StyledContent backgroundcolor={theme?.bg}>
+				<StyledContent backgroundcolor={color?.bg}>
 					{children}
 				</StyledContent>
 			</Layout>
 			<DrawerLayout
-				theme={theme}
+				theme={color}
 				handleClose={handleCloseDrawer}
 				isOpen={drawerState.isOpen}
 				menu={{
@@ -87,6 +95,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 					opensKeys: openKeys,
 					onOpenChange: onOpenSubMenuChange,
 				}}
+				I18n={I18n}
 			/>
 		</StyledLayout>
 	);

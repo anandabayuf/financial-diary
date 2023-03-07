@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const message = require("../constants/message");
 
 const categoryNoteModel = require("../models/categorynote.model");
 
@@ -7,13 +8,13 @@ router.get("/note/:noteId", async (req, res) => {
 	try {
 		res.status(200).json({
 			status: 200,
-			message: "Successfully get category note",
+			message: message["categorynote.success.get_all"],
 			data: await categoryNoteModel.getAll(req.query, req.params.noteId),
 		});
 	} catch (err) {
 		res.status(404).json({
 			status: 404,
-			message: "Failed to get category note",
+			message: message["categorynote.failed.get_all"],
 			detail: err,
 		});
 	}
@@ -23,7 +24,7 @@ router.get("/note/:noteId/available", async (req, res) => {
 	try {
 		res.status(200).json({
 			status: 200,
-			message: "Successfully get available category note",
+			message: message["categorynote.success.get_available"],
 			data: await categoryNoteModel.getAllAvailableByNoteId(
 				req.query,
 				req.params.noteId,
@@ -33,7 +34,7 @@ router.get("/note/:noteId/available", async (req, res) => {
 	} catch (err) {
 		res.status(404).json({
 			status: 404,
-			message: "Failed to get available category note",
+			message: message["categorynote.failed.get_available"],
 			detail: err,
 		});
 	}
@@ -43,13 +44,13 @@ router.get("/:id", async (req, res) => {
 	try {
 		res.status(200).json({
 			status: 200,
-			message: "Successfully get category note data",
+			message: message["categorynote.success.get"],
 			data: await categoryNoteModel.getById(req.params.id),
 		});
 	} catch (err) {
 		res.status(404).json({
 			status: 404,
-			message: "Failed to get category note data",
+			message: message["categorynote.failed.get"],
 			detail: err,
 		});
 	}
@@ -74,13 +75,13 @@ router.post("/", async (req, res) => {
 	try {
 		res.status(201).json({
 			status: 201,
-			message: "Successfully create category note",
+			message: message["categorynote.success.create"],
 			data: await categoryNoteModel.create(payload),
 		});
 	} catch (err) {
 		res.status(404).json({
 			status: 404,
-			message: "Failed to create category note",
+			message: message["categorynote.failed.create"],
 			detail: err,
 		});
 	}
@@ -105,13 +106,13 @@ router.post("/estimated", async (req, res) => {
 	try {
 		res.status(201).json({
 			status: 201,
-			message: "Successfully create category note",
+			message: message["categorynote.success.create"],
 			data: await categoryNoteModel.create(payload),
 		});
 	} catch (err) {
 		res.status(404).json({
 			status: 404,
-			message: "Failed to create category note",
+			message: message["categorynote.failed.create"],
 			detail: err,
 		});
 	}
@@ -121,13 +122,13 @@ router.put("/:id", async (req, res) => {
 	try {
 		res.status(201).json({
 			status: 201,
-			message: "Successfully edit category note data",
+			message: message["categorynote.success.edit"],
 			data: await categoryNoteModel.edit(req.params.id, req.body),
 		});
 	} catch (err) {
 		res.status(404).json({
 			status: 404,
-			message: "Failed to edit category note data",
+			message: message["categorynote.failed.edit"],
 			detail: err,
 		});
 	}
@@ -139,7 +140,7 @@ router.put("/:id/estimated", async (req, res) => {
 	try {
 		res.status(201).json({
 			status: 201,
-			message: "Successfully edit category note estimated total data",
+			message: message["categorynote.success.edit_estimated"],
 			data: await categoryNoteModel.editEstimatedTotal(
 				req.params.id,
 				data.noteId,
@@ -149,7 +150,7 @@ router.put("/:id/estimated", async (req, res) => {
 	} catch (err) {
 		res.status(404).json({
 			status: 404,
-			message: "Failed to edit category note estimated total data",
+			message: message["categorynote.failed.edit_estimated"],
 			detail: err,
 		});
 	}

@@ -2,12 +2,12 @@ import { AppTextProps } from './interfaces/interfaces';
 import useTheme from '../../../Hooks/useTheme';
 import StyledText from './styled/StyledText';
 
-const AppText: React.FC<AppTextProps> = ({ text, ...rest }) => {
-	const theme = useTheme();
+const AppText: React.FC<AppTextProps> = ({ text, muted = false, ...rest }) => {
+	const { color } = useTheme();
 
 	return (
 		<StyledText
-			textcolor={theme?.text}
+			textcolor={muted ? color?.halfText : color?.text}
 			{...rest}
 		>
 			{text}

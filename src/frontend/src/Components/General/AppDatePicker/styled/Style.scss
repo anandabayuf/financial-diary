@@ -46,6 +46,10 @@ body.dark {
                 thead tr th {
                     color: $dark-text;
                 }
+
+                .ant-picker-cell-disabled{
+                    color: $dark-half-text
+                }
             }
         }
     }
@@ -101,6 +105,10 @@ body.light {
             .ant-picker-content{
                 thead tr th {
                     color: $light-text;
+                }
+
+                .ant-picker-cell-disabled{
+                    color: $light-half-text
                 }
             }
         }

@@ -1,8 +1,9 @@
 import { Select } from 'antd';
 import styled from 'styled-components';
 import { StyledSelectProps } from '../interfaces/interfaces';
+import { DefaultOptionType } from 'antd/es/select';
 
-const StyledSelect = styled(Select<any>)<StyledSelectProps>`
+const StyledSelect = styled(Select<DefaultOptionType>)<StyledSelectProps>`
 	.ant-select-selector {
 		background-color: ${(props) => props.themeselect?.container} !important;
 		border-color: ${(props) => props.themeselect?.container} !important;

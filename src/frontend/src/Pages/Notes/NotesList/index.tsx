@@ -10,7 +10,7 @@ import NotesColumns from '../../../Components/Notes/NotesList/NoteColumn';
 import AppEmpty from '../../../Components/General/AppEmpty/index';
 import AppLoader from '../../../Components/General/AppLoader';
 import AppBreadcrumb from '../../../Components/General/AppBreadcrumb';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { getRouteNames } from '../../../Utils/RouteUtils';
 import RouteNames from '../../../Constants/RouteNames';
 import { useAppSelector, useAppDispatch } from '../../../Hooks/useRedux';
@@ -20,7 +20,8 @@ import NotesOptionYear from '../../../Components/Notes/NotesList/NoteOptionYear'
 import AppText from '../../../Components/General/AppText/index';
 import { DataViewTypeNames } from '../../../Constants/DataViewTypeNames';
 import NotesGrid from '../../../Components/Notes/NotesList/NoteGrid';
-import AppMessage from '../../../Components/General/AppMessage/index';
+import useLocale from '../../../Hooks/useLocale';
+import { errorHandling } from '../../../Api/errorHandling';
 import {
 	getFullYearFromDate,
 	getTwoDigitMonthStringFromDate,
@@ -32,15 +33,21 @@ import {
 	setNoteShowYear,
 	setSelectedNote,
 } from '../../../Store/Note/NoteSlice';
+import { APP_NAME } from '../../../Constants/Constants';
+import { appendKey } from '../../../Utils/TableUtils';
+import {
+	TFetchErrorResponse,
+	TNoteResponse,
+} from '../../../Api/interfaces/types';
 
 const NotesListPage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
 	const navigate = useNavigate();
-	const location = useLocation();
 	const dispatch = useAppDispatch();
+	const { I18n, language } = useLocale();
 
-	const [notes, setNotes] = useState<any[]>([]);
-	const [notesList, setNotesList] = useState<any[]>([]);
+	const [notes, setNotes] = useState<TNoteResponse[]>([]);
+	const [notesList, setNotesList] = useState<TNoteResponse[]>([]);
 	const [optionYear, setOptionYear] = useState<number[]>([]);
 	const selectedYear = useAppSelector((state) => state.note.showYear);
 
@@ -55,41 +62,29 @@ const NotesListPage: React.FC = () => {
 		const getNotes = async () => {
 			setIsLoading(true);
 
-			const res = await getAllUserNotes(token);
+			if (token) {
+				try {
+					const res = await getAllUserNotes(token);
 
-			if (res.request.status === 200) {
-				const resNotes = [...res.data.data];
-				let years: number[] = [];
+					const resNotes = [...res.data.data];
+					let years: number[] = [];
 
-				resNotes.forEach((note) => {
-					const year = new Date(note.date).getFullYear();
+					resNotes.forEach((note) => {
+						const year = new Date(note.date).getFullYear();
 
-					if (years.length === 0) {
-						years = [year];
-					} else if (!years.some((value) => value === year)) {
-						years.push(year);
-					}
-				});
+						if (years.length === 0) {
+							years = [year];
+						} else if (!years.some((value) => value === year)) {
+							years.push(year);
+						}
+					});
 
-				setOptionYear(years);
-				// setSelectedYear('all-year');
-				// dispatch(setNoteShowYear({ showYear: 'all-year' }));
-				setNotes(
-					resNotes.map((note: any) => {
-						note['key'] = note._id;
-						return note;
-					})
-				);
-				setNotesList(
-					resNotes.map((note: any) => {
-						note['key'] = note._id;
-						return note;
-					})
-				);
-			} else {
-				const response = JSON.parse(res.request.response);
-
-				AppMessage({ content: response.message, type: 'error' });
+					setOptionYear(years);
+					setNotes(resNotes);
+					setNotesList(resNotes);
+				} catch (error) {
+					errorHandling(error as TFetchErrorResponse, navigate);
+				}
 			}
 
 			setIsLoading(false);
@@ -102,12 +97,12 @@ const NotesListPage: React.FC = () => {
 		navigate(getRouteNames(RouteNames.CREATE_NOTE));
 	};
 
-	const handleChangeDataViewType = (values: any) =>
-		dispatch(setNoteDataViewType({ dataViewType: { note: values } }));
+	const handleChangeDataViewType = (values: DataViewTypeNames) =>
+		dispatch(setNoteDataViewType({ note: values }));
 
-	const handleChangeYear = (value: any) => {
+	const handleChangeYear = (value: string | number) => {
 		// setSelectedYear(value);
-		dispatch(setNoteShowYear({ showYear: value }));
+		dispatch(setNoteShowYear(value));
 
 		if (value === 'all-year') {
 			setNotesList(notes);
@@ -122,19 +117,15 @@ const NotesListPage: React.FC = () => {
 		}
 	};
 
-	const handleView = (record?: any) => {
+	const handleView = (record: TNoteResponse) => {
 		dispatch(
 			setSelectedNote({
-				selectedNote: {
-					id: record._id,
-					month: getTwoDigitMonthStringFromDate(record.date),
-					year: getFullYearFromDate(record.date).toString(),
-				},
+				id: record._id,
+				month: getTwoDigitMonthStringFromDate(record.date),
+				year: getFullYearFromDate(record.date).toString(),
 			})
 		);
-		dispatch(
-			setActiveKeyNoteTab({ activeKeyNoteTab: 'estimation-note-tab' })
-		);
+		dispatch(setActiveKeyNoteTab('budget-note-tab'));
 		navigate(
 			`/notes/${getFullYearFromDate(
 				record.date
@@ -142,41 +133,27 @@ const NotesListPage: React.FC = () => {
 		);
 	};
 
-	useEffect(() => {
-		const stateReceiveAction = () => {
-			if (location.state) {
-				AppMessage({
-					content: location.state.message,
-					type: 'success',
-				});
-				window.history.replaceState({}, document.title);
-			}
-		};
-
-		stateReceiveAction(); // eslint-disable-next-line
-	}, [location.state]);
-
-	const pagination: TableProps<any>['pagination'] = {
+	const pagination: TableProps<TNoteResponse>['pagination'] = {
 		pageSize: pageSize,
 		onShowSizeChange(current, size) {
 			dispatch(
 				setNotePaginationSize({
-					paginationSize: { note: size },
+					note: size,
 				})
 			);
 		},
 	};
 
 	useEffect(() => {
-		document.title = 'Notes - Financial Diary App';
-	}, []);
+		document.title = `${I18n.t('notes')} - ${APP_NAME}`;
+	}, [I18n, language]);
 
 	return (
 		<MainLayout>
 			<AppBreadcrumb />
 			<div className='flex justify-between items-center mb-5'>
 				<AppTitle
-					title='Notes'
+					title={I18n.t('notes')!}
 					level={5}
 				/>
 				<AppButton
@@ -187,26 +164,28 @@ const NotesListPage: React.FC = () => {
 						<div className='flex justify-center'>
 							<BsPlusLg />
 						</div>
-						Create Notes
+						{I18n.t('label.create.note')}
 					</Space>
 				</AppButton>
 			</div>
 			{isLoading ? (
-				<AppLoader />
+				<AppLoader isInPage />
 			) : notesList.length > 0 ? (
 				<>
 					<div className='flex justify-end items-center mb-3 gap-x-3'>
 						<AppText
-							text='Show:'
-							className='text-sm'
+							text={`${I18n.t('content.show')}:`}
+							className='text-sm max-[425px]:hidden'
 						/>
 						<AppSelect
-							placeholder='Select year to show'
+							placeholder={I18n.t('placeholder.select_year')}
 							value={selectedYear}
-							options={NotesOptionYear({ years: optionYear })}
+							options={NotesOptionYear({
+								years: optionYear,
+								I18n: I18n,
+							})}
 							loading={isLoading}
 							onChange={handleChangeYear}
-							className='w-[100px]'
 						/>
 						<AppSegmented
 							value={dataViewType}
@@ -215,10 +194,12 @@ const NotesListPage: React.FC = () => {
 					</div>
 					{dataViewType === DataViewTypeNames.LIST ? (
 						<AppTable
-							dataSource={notesList}
+							dataSource={appendKey(notesList)}
 							columns={NotesColumns({
 								handleView,
 								showYear: selectedYear,
+								I18n: I18n,
+								language: language,
 							})}
 							pagination={pagination}
 						/>
@@ -227,11 +208,13 @@ const NotesListPage: React.FC = () => {
 							data={notesList}
 							showYear={selectedYear}
 							handleView={handleView}
+							I18n={I18n}
+							language={language}
 						/>
 					)}
 				</>
 			) : (
-				<AppEmpty />
+				<AppEmpty isInPage />
 			)}
 		</MainLayout>
 	);

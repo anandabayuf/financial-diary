@@ -7,38 +7,59 @@ import { AiOutlineUser, AiFillCaretDown, AiFillCaretUp } from 'react-icons/ai';
 import AppText from '../../../Components/General/AppText';
 import { useState } from 'react';
 import StyledUsernameContainer from './styled/StyledUsernameContainer';
-import StyledTitle from './styled/StyledTitle';
 import StyledSpace from './styled/StyledSpace';
 import React from 'react';
 import ProfileMenuItems from './ProfileMenuItems';
-import { useAppDispatch, useAppSelector } from '../../../Hooks/useRedux';
+import { useAppDispatch } from '../../../Hooks/useRedux';
 import { setUserLoggedOut } from '../../../Store/User/UserSlice';
 import ThemeModeNames from '../../../Constants/ThemeModeNames';
 import { setDarkMode, setLightMode } from '../../../Store/Theme/ThemeSlice';
+import { Link } from 'react-router-dom';
+import { getRouteNames } from '../../../Utils/RouteUtils';
+import RouteNames from '../../../Constants/RouteNames';
+import AppLogo from '../../../Components/General/AppLogo';
+import { setLocalization } from '../../../Store/Localization/LocalizationSlice';
+import useTheme from '../../../Hooks/useTheme';
+import { MenuClickEventHandler } from 'rc-menu/lib/interface';
+import { SwitchChangeEventHandler } from 'antd/es/switch';
+import { LocaleType } from '../../../Store/interfaces/interfaces';
 
 const HeaderLayout: React.FC<HeaderLayoutProps> = ({
 	user,
 	theme,
 	handleOpenDrawer,
+	I18n,
+	language,
 }) => {
-	const themeMode = useAppSelector((state) => state.theme);
-	const [isOpen, setIsOpen] = useState(false);
 	const dispatch = useAppDispatch();
+	const { mode } = useTheme();
+	const [isOpen, setIsOpen] = useState(false);
+	const [isDropdownLangOpen, setIsDropdownLangOpen] = useState(false);
 
-	const handleClickProfileMenu = (e: any) => {
+	const handleClickProfileMenu: MenuClickEventHandler = (e) => {
 		if (e.key === 'logout') {
 			dispatch(setUserLoggedOut());
-		} else if (e.key !== 'theme-switcher') {
+		} else if (
+			e.key === 'theme-switcher' ||
+			e.key === 'language-switcher'
+		) {
+			setIsOpen(true);
+		} else {
 			setIsOpen(false);
 		}
 	};
 
-	const handleChangeTheme = (e: any) => {
+	const handleChangeTheme: SwitchChangeEventHandler = (e) => {
 		if (e) {
 			dispatch(setLightMode());
 		} else {
 			dispatch(setDarkMode());
 		}
+	};
+
+	const handleChangeLanguage: MenuClickEventHandler = (e) => {
+		dispatch(setLocalization({ locale: e.key as LocaleType }));
+		setIsDropdownLangOpen(false);
 	};
 
 	return (
@@ -57,21 +78,26 @@ const HeaderLayout: React.FC<HeaderLayoutProps> = ({
 					size='large'
 					onClick={handleOpenDrawer}
 				/>
-				<StyledTitle
-					title='Financial Diary'
-					level={4}
-				/>
+				<Link to={getRouteNames(RouteNames.NOTES)}>
+					<AppLogo width='128px' />
+				</Link>
 			</div>
 			<Dropdown
 				menu={{
-					items: ProfileMenuItems(
-						theme?.text,
-						themeMode === ThemeModeNames.LIGHT,
-						handleChangeTheme,
-						theme?.container
-					),
+					items: ProfileMenuItems({
+						textColor: theme?.text,
+						isLight: mode === ThemeModeNames.LIGHT,
+						handleChangeTheme: handleChangeTheme,
+						I18n: I18n,
+						isEnglish: language === 'en',
+						handleChangeLang: handleChangeLanguage,
+						backgroundcolor: theme?.container,
+						isDropdownLangOpen: isDropdownLangOpen,
+						setIsDropdownLangOpen: setIsDropdownLangOpen,
+					}),
 					style: {
 						backgroundColor: theme?.button,
+						width: '200px',
 					},
 					onClick: handleClickProfileMenu,
 				}}
@@ -102,7 +128,10 @@ const HeaderLayout: React.FC<HeaderLayoutProps> = ({
 							/>
 						)}
 						{user && (
-							<StyledUsernameContainer className='text-ellipsis overflow-hidden ...'>
+							<StyledUsernameContainer
+								className='text-ellipsis overflow-hidden ...'
+								themecontainer={theme}
+							>
 								<AppText text={user.username} />
 							</StyledUsernameContainer>
 						)}

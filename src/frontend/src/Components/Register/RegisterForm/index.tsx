@@ -1,4 +1,4 @@
-import { RegisterFormProps } from './interfaces/interfaces';
+import { RegisterFormProps, RegisterFormType } from './interfaces/interfaces';
 import AppFormItem from '../../General/AppFormItem/index';
 import AppButton from '../../General/AppButton/index';
 import AppInput from '../../General/AppInput/index';
@@ -6,27 +6,30 @@ import UploadButton from '../UploadButton/index';
 import StyledUpload from './styled/StyledUpload';
 import useTheme from '../../../Hooks/useTheme';
 import StyledForm from './styled/StyledForm';
+import useLocale from '../../../Hooks/useLocale';
 
 const RegisterForm: React.FC<RegisterFormProps> = ({
 	handleFinish,
-	handleFinishFailed,
 	loading,
 	handleUploadImage,
 }) => {
-	const theme = useTheme();
+	const { color } = useTheme();
+	const { I18n } = useLocale();
+
 	return (
 		<StyledForm
-			onFinish={handleFinish}
-			onFinishFailed={handleFinishFailed}
+			onFinish={(values) =>
+				handleFinish && handleFinish(values as RegisterFormType)
+			}
 			autoComplete='on'
 			layout='vertical'
 		>
 			<AppFormItem
-				label='Profile Picture'
+				label={I18n.t('form.label.profile_picture')}
 				name='picture'
 			>
 				<StyledUpload
-					bordercolor={theme?.text}
+					bordercolor={color?.text}
 					listType='picture-card'
 					fileList={handleUploadImage?.fileList}
 					onPreview={handleUploadImage?.handlePreviewProfilePic}
@@ -39,58 +42,75 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
 				</StyledUpload>
 			</AppFormItem>
 			<AppFormItem
-				label='Name'
+				label={I18n.t('form.label.name')}
 				name='name'
 				rules={[
 					{
 						required: true,
-						message: 'Please input your name!',
+						message: I18n.t('form.required.name')!,
 					},
 				]}
 			>
-				<AppInput placeholder='input your name' />
+				<AppInput placeholder={I18n.t('form.placeholder.name')!} />
 			</AppFormItem>
 
 			<AppFormItem
-				label='Username'
+				label={I18n.t('form.label.username')}
 				name='username'
 				rules={[
 					{
 						required: true,
-						message: 'Please input your username!',
+						message: I18n.t('form.required.username')!,
 					},
 					{
 						pattern: new RegExp(/^[^\s-]+$/g),
-						message: 'No spaces allowed!',
+						message: I18n.t('form.validation.no_spaces')!,
 					},
 				]}
 			>
-				<AppInput placeholder='input your username' />
+				<AppInput placeholder={I18n.t('form.placeholder.username')!} />
 			</AppFormItem>
 
 			<AppFormItem
-				label='Password'
+				label={I18n.t('form.label.email')}
+				name='email'
+				rules={[
+					{
+						required: true,
+						message: I18n.t('form.required.email')!,
+					},
+					{
+						type: 'email',
+						message: I18n.t('form.validation.email')!,
+					},
+				]}
+			>
+				<AppInput placeholder={I18n.t('form.placeholder.email')!} />
+			</AppFormItem>
+
+			<AppFormItem
+				label={I18n.t('form.label.password')}
 				name='password'
 				rules={[
 					{
 						required: true,
-						message: 'Please input your password!',
+						message: I18n.t('form.required.password')!,
 					},
 				]}
 			>
 				<AppInput
 					isPassword
-					placeholder='input your password'
+					placeholder={I18n.t('form.placeholder.password')!}
 				/>
 			</AppFormItem>
 
 			<AppFormItem
-				label='Password Confirmation'
+				label={I18n.t('form.label.password_confirmation')}
 				name='passwordconfirm'
 				rules={[
 					{
 						required: true,
-						message: 'Please re-input your password!',
+						message: I18n.t('form.required.password_confirmation')!,
 					},
 					({ getFieldValue }) => ({
 						validator(_, value) {
@@ -98,7 +118,11 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
 								return Promise.resolve();
 							}
 							return Promise.reject(
-								new Error("password doesn't match!")
+								new Error(
+									I18n.t(
+										'form.validation.password_not_match'
+									)!
+								)
 							);
 						},
 					}),
@@ -106,7 +130,9 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
 			>
 				<AppInput
 					isPassword
-					placeholder='re-input your password'
+					placeholder={
+						I18n.t('form.placeholder.password_confirmation')!
+					}
 				/>
 			</AppFormItem>
 
@@ -117,7 +143,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
 					type='primary'
 					loading={loading}
 				>
-					Register
+					{I18n.t('register')}
 				</AppButton>
 			</AppFormItem>
 		</StyledForm>

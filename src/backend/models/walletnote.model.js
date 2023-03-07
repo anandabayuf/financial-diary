@@ -2,6 +2,7 @@ const schema = require("./schema");
 // const categoryModel = require("./category.model");
 const walletModel = require("./wallet.model");
 const noteModel = require("./note.model");
+const message = require("../constants/message");
 
 exports.create = (datas) => {
 	return new Promise((resolve, reject) => {
@@ -21,9 +22,7 @@ exports.create = (datas) => {
 				const dataToAdd = res.filter((el) => el !== undefined);
 
 				if (dataToAdd.length !== datas.length) {
-					reject(
-						"Cannot add wallet, there is Wallet which has been added"
-					);
+					reject(message["walletnote.already_added"]);
 				} else {
 					let totalBalance = 0;
 					let noteId = "";

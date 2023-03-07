@@ -10,47 +10,64 @@ import { useNavigate } from 'react-router-dom';
 import { getRouteNames } from '../../../../Utils/RouteUtils';
 import RouteNames from '../../../../Constants/RouteNames';
 import AppMessage from '../../../../Components/General/AppMessage/index';
+import useLocale from '../../../../Hooks/useLocale';
+import { errorHandling } from '../../../../Api/errorHandling';
+import { APP_NAME } from '../../../../Constants/Constants';
+import {
+	TFetchErrorResponse,
+	TWalletPayload,
+} from '../../../../Api/interfaces/types';
 
 const CreateForm = withCreateWallet(WalletForm);
 
 const CreateWalletPage: React.FC = () => {
-	const [isLoading, setIsLoading] = useState(false);
 	const token = useAppSelector((state) => state.user.accessToken);
 	const navigate = useNavigate();
+	const { I18n, language } = useLocale();
 
-	const handleCreateWallet = async (values: any) => {
+	const [isLoading, setIsLoading] = useState(false);
+
+	const handleCreateWallet = async (values: TWalletPayload) => {
 		setIsLoading(true);
 
-		const response = await createUserWallet(token, values);
-		setIsLoading(false);
-		if (response.request.status === 201) {
-			navigate(getRouteNames(RouteNames.MANAGEMENT_WALLETS), {
-				replace: true,
-				state: {
-					message: response.data.message,
-				},
-			});
-		} else {
-			AppMessage({ content: response.data.message, type: 'error' });
+		if (token) {
+			try {
+				const response = await createUserWallet(token, values);
+
+				navigate(getRouteNames(RouteNames.MANAGEMENT_WALLETS), {
+					replace: true,
+				});
+				AppMessage({
+					type: 'success',
+					content: I18n.t(response.data.message),
+				});
+			} catch (error) {
+				errorHandling(error as TFetchErrorResponse, navigate);
+			}
 		}
+
+		setIsLoading(false);
 	};
 
 	useEffect(() => {
-		document.title = 'Create New Wallet - Management - Financial Diary App';
-	}, []);
+		document.title = `${I18n.t(
+			'title.management.wallet.create'
+		)} - ${APP_NAME}`;
+	}, [language, I18n]);
 
 	return (
 		<MainLayout>
 			<AppBreadcrumb className='mb-1' />
 			<div className='mb-5'>
 				<AppTitle
-					title='Create New Wallet'
+					title={I18n.t('management.wallet.create')!}
 					level={5}
 				/>
 			</div>
 			<CreateForm
 				isLoading={isLoading}
 				handleSubmit={handleCreateWallet}
+				I18n={I18n}
 			/>
 		</MainLayout>
 	);

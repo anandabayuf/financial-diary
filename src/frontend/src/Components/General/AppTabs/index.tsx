@@ -3,11 +3,11 @@ import StyledTabs from './styled/StyledTabs';
 import useTheme from '../../../Hooks/useTheme';
 
 const AppTabs: React.FC<AppTabsProps> = ({ items, ...rest }) => {
-	const theme = useTheme();
+	const { color } = useTheme();
 
 	return (
 		<StyledTabs
-			theme={theme}
+			theme={color}
 			type='card'
 			items={items}
 			{...rest}

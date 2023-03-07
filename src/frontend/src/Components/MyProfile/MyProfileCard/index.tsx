@@ -6,7 +6,7 @@ import { AiOutlineUser } from 'react-icons/ai';
 import AppText from '../../General/AppText';
 import AppTitle from '../../General/AppTitle/index';
 
-const MyProfileCard: React.FC<MyProfileCardProps> = ({ user }) => {
+const MyProfileCard: React.FC<MyProfileCardProps> = ({ user, I18n }) => {
 	return user ? (
 		<AppCard>
 			<div className='flex justify-center mb-5'>
@@ -25,17 +25,24 @@ const MyProfileCard: React.FC<MyProfileCardProps> = ({ user }) => {
 			</div>
 			<div className='grid grid-cols-1 gap-y-2 mb-8'>
 				<AppTitle
-					title='Username'
+					title={I18n?.t('label.username')}
 					level={5}
 				/>
 				<AppText text={user.username} />
 			</div>
-			<div className='grid grid-cols-1 gap-y-2'>
+			<div className='grid grid-cols-1 gap-y-2 mb-8'>
 				<AppTitle
-					title='Name'
+					title={I18n?.t('label.name')}
 					level={5}
 				/>
 				<AppText text={user.name} />
+			</div>
+			<div className='grid grid-cols-1 gap-y-2'>
+				<AppTitle
+					title={I18n?.t('label.email')}
+					level={5}
+				/>
+				<AppText text={user.email} />
 			</div>
 		</AppCard>
 	) : (

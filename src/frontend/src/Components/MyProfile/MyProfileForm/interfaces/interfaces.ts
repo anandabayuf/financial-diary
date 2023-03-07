@@ -1,9 +1,24 @@
-import { UploadFile, UploadProps, RcFile } from 'antd/es/upload';
+import {
+	UploadFile,
+	UploadProps,
+	RcFile,
+	UploadListProps,
+} from 'antd/es/upload';
+import { i18n } from 'i18next';
+
+export interface EditUserPayload {
+	picture?: {
+		file: RcFile;
+		fileList: UploadProps['fileList'];
+	} | null;
+	name?: string;
+	username?: string;
+}
 
 export interface MyProfileFormProps {
-	user?: any;
+	user?: EditUserPayload;
 	isLoading?: boolean;
-	handleSubmit?: (values: any) => void;
+	handleSubmit?: (values: EditUserPayload) => void;
 	handleCancel?: () => void;
 	handleUploadImage?: {
 		fileList?: UploadFile[];
@@ -16,8 +31,9 @@ export interface MyProfileFormProps {
 	previewModalProps?: {
 		previewState?: {
 			isOpen?: boolean;
-			image?: any;
+			image?: string;
 		};
 		handleCancelViewProfilePic?: () => void;
 	};
+	I18n?: i18n;
 }

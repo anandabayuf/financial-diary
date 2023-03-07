@@ -1,4 +1,4 @@
-import { NoteItemsFormProps } from './interfaces/interfaces';
+import { NoteItemsFormProps, NoteItemFormType } from './interfaces/interfaces';
 import { useAppSelector } from '../../../Hooks/useRedux';
 import { useState, useEffect } from 'react';
 import AppMessage from '../../General/AppMessage';
@@ -6,6 +6,13 @@ import { editUserNoteItem } from '../../../Api/NoteItems';
 import { getAllUserWalletNote } from '../../../Api/Wallet-Note';
 import { getAllUserCategoryNote } from '../../../Api/Category-Note';
 import dayjs from 'dayjs';
+import { errorHandling } from '../../../Api/errorHandling';
+import { useNavigate } from 'react-router-dom';
+import {
+	TFetchErrorResponse,
+	TWalletNoteResponse,
+	TCategoryNoteResponse,
+} from '../../../Api/interfaces/types';
 
 const withEditNoteItemsForm = (
 	Component: React.ComponentType<NoteItemsFormProps>
@@ -16,31 +23,37 @@ const withEditNoteItemsForm = (
 		isCategory,
 		data,
 		handleCancel,
+		I18n,
 		...rest
 	}) => {
+		const navigate = useNavigate();
 		const token = useAppSelector((state) => state.user.accessToken);
 
 		const [isLoading, setIsLoading] = useState(false);
 		const [isFetching, setIsFetching] = useState(false);
-		const [walletNote, setWalletNote] = useState<any[]>([]);
-		const [categoryNote, setCategoryNote] = useState<any[]>([]);
+		const [walletNote, setWalletNote] = useState<TWalletNoteResponse[]>([]);
+		const [categoryNote, setCategoryNote] = useState<
+			TCategoryNoteResponse[]
+		>([]);
 
 		useEffect(() => {
 			const getData = async () => {
 				setIsFetching(true);
 
-				let res = await getAllUserWalletNote(token, noteId);
-				if (res.request.status === 200) {
-					setWalletNote(res.data.data);
-				} else {
-					AppMessage({ content: '', type: 'error' });
-				}
+				if (token && I18n && noteId) {
+					try {
+						const res = await getAllUserWalletNote(token, noteId);
+						setWalletNote(res.data.data);
+					} catch (error) {
+						errorHandling(error as TFetchErrorResponse, navigate);
+					}
 
-				res = await getAllUserCategoryNote(token, noteId);
-				if (res.request.status === 200) {
-					setCategoryNote(res.data.data);
-				} else {
-					AppMessage({ content: '', type: 'error' });
+					try {
+						const res = await getAllUserCategoryNote(token, noteId);
+						setCategoryNote(res.data.data);
+					} catch (error) {
+						errorHandling(error as TFetchErrorResponse, navigate);
+					}
 				}
 
 				setIsFetching(false);
@@ -49,35 +62,41 @@ const withEditNoteItemsForm = (
 			getData(); //eslint-disable-next-line
 		}, []);
 
-		const handleSubmit = async (values: any) => {
+		const handleSubmit = async (values: NoteItemFormType) => {
 			setIsLoading(true);
-			const { type, walletNoteId, categoryNoteId, ...rest } = values;
-			let payload = {
-				...rest,
-				date: dayjs(values.date).format('YYYY-MM-DD'),
-			};
+			if (values && token) {
+				const { type, walletNoteId, categoryNoteId, ...rest } = values;
+				let payload: any = {
+					...rest,
+					date: dayjs(values.date).format('YYYY-MM-DD'),
+				};
 
-			if (payload.debit) {
-				payload['debit'] = parseInt(payload.debit);
-			} else {
-				payload['credit'] = parseInt(payload.credit);
-			}
-
-			if (data.type === 1) {
-				payload['debit'] = payload.credit;
-			}
-
-			const res = await editUserNoteItem(token, data._id, payload);
-			if (res.request.status === 201) {
-				AppMessage({ content: res.data.message, type: 'success' });
-				if (handleCancel) {
-					handleCancel();
+				if (payload.debit) {
+					payload['debit'] = parseInt(payload.debit);
+				} else {
+					payload['credit'] = parseInt(payload.credit);
 				}
-			} else {
-				AppMessage({
-					content: `${res.response.data.message} - ${res.response.data.detail}`,
-					type: 'error',
-				});
+
+				if (data?.type === 1) {
+					payload['debit'] = payload.credit;
+				}
+
+				try {
+					const res = await editUserNoteItem(
+						token,
+						data?._id!,
+						payload
+					);
+					AppMessage({
+						content: I18n?.t(res.data.message),
+						type: 'success',
+					});
+					if (handleCancel) {
+						handleCancel();
+					}
+				} catch (error) {
+					errorHandling(error as TFetchErrorResponse, navigate);
+				}
 			}
 
 			setIsLoading(false);
@@ -95,6 +114,7 @@ const withEditNoteItemsForm = (
 				data={data}
 				handleCancel={handleCancel}
 				handleSubmit={handleSubmit}
+				I18n={I18n}
 				{...rest}
 			/>
 		);

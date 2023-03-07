@@ -1,4 +1,4 @@
-import { NoteItemsFormProps } from './interfaces/interfaces';
+import { NoteItemFormType, NoteItemsFormProps } from './interfaces/interfaces';
 import { useAppSelector } from '../../../Hooks/useRedux';
 import { useState, useEffect } from 'react';
 import AppMessage from '../../General/AppMessage';
@@ -6,7 +6,14 @@ import { createUserNoteItemByNoteId } from '../../../Api/NoteItems';
 import { getAllUserWalletNote } from '../../../Api/Wallet-Note';
 import { getAllUserCategoryNote } from '../../../Api/Category-Note';
 import { ITEM_TYPE } from '../../../Constants/Constants';
-import { DatePickerProps } from 'antd';
+import { errorHandling } from '../../../Api/errorHandling';
+import { useNavigate } from 'react-router-dom';
+import { TCategoryNoteResponse } from '../../../Api/interfaces/types';
+import dayjs from 'dayjs';
+import {
+	TFetchErrorResponse,
+	TWalletNoteResponse,
+} from '../../../Api/interfaces/types';
 
 const withCreateNoteItemsForm = (
 	Component: React.ComponentType<NoteItemsFormProps>
@@ -16,8 +23,10 @@ const withCreateNoteItemsForm = (
 		isWallet,
 		isCategory,
 		handleCancel,
+		I18n,
 		...rest
 	}) => {
+		const navigate = useNavigate();
 		const token = useAppSelector((state) => state.user.accessToken);
 		const { selectedCategoryNote, selectedWalletNote } = useAppSelector(
 			(state) => state.note
@@ -25,26 +34,29 @@ const withCreateNoteItemsForm = (
 
 		const [isLoading, setIsLoading] = useState(false);
 		const [isFetching, setIsFetching] = useState(false);
-		const [walletNote, setWalletNote] = useState<any[]>([]);
-		const [categoryNote, setCategoryNote] = useState<any[]>([]);
-		const [selectedDate, setSelectedDate] = useState<string>('');
+		const [walletNote, setWalletNote] = useState<TWalletNoteResponse[]>([]);
+		const [categoryNote, setCategoryNote] = useState<
+			TCategoryNoteResponse[]
+		>([]);
 
 		useEffect(() => {
 			const getData = async () => {
 				setIsFetching(true);
 
-				let res = await getAllUserWalletNote(token, noteId);
-				if (res.request.status === 200) {
-					setWalletNote(res.data.data);
-				} else {
-					AppMessage({ content: '', type: 'error' });
-				}
+				if (token && I18n && noteId) {
+					try {
+						const res = await getAllUserWalletNote(token, noteId);
+						setWalletNote(res.data.data);
+					} catch (error) {
+						errorHandling(error as TFetchErrorResponse, navigate);
+					}
 
-				res = await getAllUserCategoryNote(token, noteId);
-				if (res.request.status === 200) {
-					setCategoryNote(res.data.data);
-				} else {
-					AppMessage({ content: '', type: 'error' });
+					try {
+						const res = await getAllUserCategoryNote(token, noteId);
+						setCategoryNote(res.data.data);
+					} catch (error) {
+						errorHandling(error as TFetchErrorResponse, navigate);
+					}
 				}
 
 				setIsFetching(false);
@@ -53,58 +65,50 @@ const withCreateNoteItemsForm = (
 			getData(); //eslint-disable-next-line
 		}, []);
 
-		const handleChangeDatePicker: DatePickerProps['onChange'] = (
-			value,
-			dateString
-		) => {
-			setSelectedDate(dateString);
-		};
-
-		const handleSubmit = async (values: any) => {
+		const handleSubmit = async (values: NoteItemFormType) => {
 			setIsLoading(true);
 
-			let payload = {
-				...values,
-				type: ITEM_TYPE.findIndex((el) => el === values.type),
-				date: selectedDate,
-			};
+			if (values && token && noteId && I18n) {
+				let payload: any = {
+					...values,
+					type: ITEM_TYPE.findIndex((el) => el === values.type),
+					date: dayjs(values.date).format('YYYY-MM-DD'),
+				};
 
-			if (payload.debit) {
-				payload['debit'] = parseInt(payload.debit);
-			} else {
-				payload['credit'] = parseInt(payload.credit);
-			}
-
-			if (isCategory) {
-				payload['categoryNoteId'] = selectedCategoryNote?.id;
-			} else {
-				if (payload.type === 1) {
-					const walletNoteId2 = payload.walletNoteId;
-					payload['walletNoteId2'] = walletNoteId2;
-					payload['debit'] = payload.credit;
+				if (payload.debit) {
+					payload['debit'] = parseInt(payload.debit);
+				} else {
+					payload['credit'] = parseInt(payload.credit);
 				}
 
-				payload['walletNoteId'] = selectedWalletNote?.id;
-			}
+				if (isCategory) {
+					payload['categoryNoteId'] = selectedCategoryNote.id;
+				} else {
+					if (payload.type === 1) {
+						const walletNoteId2 = payload.walletNoteId;
+						payload['walletNoteId2'] = walletNoteId2;
+						payload['debit'] = payload.credit;
+					}
 
-			// console.log(payload);
-
-			const res = await createUserNoteItemByNoteId(
-				token,
-				noteId,
-				payload
-			);
-			// console.log(res);
-			if (res.request.status === 201) {
-				AppMessage({ content: res.data.message, type: 'success' });
-				if (handleCancel) {
-					handleCancel();
+					payload['walletNoteId'] = selectedWalletNote.id;
 				}
-			} else {
-				AppMessage({
-					content: `${res.response.data.message} - ${res.response.data.detail}`,
-					type: 'error',
-				});
+
+				try {
+					const res = await createUserNoteItemByNoteId(
+						token,
+						noteId,
+						payload
+					);
+					AppMessage({
+						content: I18n.t(res.data.message),
+						type: 'success',
+					});
+					if (handleCancel) {
+						handleCancel();
+					}
+				} catch (error) {
+					errorHandling(error as TFetchErrorResponse, navigate);
+				}
 			}
 
 			setIsLoading(false);
@@ -119,9 +123,9 @@ const withCreateNoteItemsForm = (
 				isFetching={isFetching}
 				walletNote={walletNote}
 				categoryNote={categoryNote}
-				handleChangeDatePicker={handleChangeDatePicker}
 				handleCancel={handleCancel}
 				handleSubmit={handleSubmit}
+				I18n={I18n}
 				{...rest}
 			/>
 		);

@@ -15,8 +15,10 @@ const NotesGrid: React.FC<NotesGridProps> = ({
 	data,
 	showYear,
 	handleView,
+	I18n,
+	language,
 }) => {
-	const theme = useTheme();
+	const { color } = useTheme();
 
 	return (
 		<div className='flex justify-center'>
@@ -30,7 +32,7 @@ const NotesGrid: React.FC<NotesGridProps> = ({
 						>
 							<div className='flex justify-between items-center mb-5'>
 								<GiNotebook
-									color={theme?.text}
+									color={color?.text}
 									size={32}
 								/>
 								<div>
@@ -43,7 +45,8 @@ const NotesGrid: React.FC<NotesGridProps> = ({
 									<div className='flex justify-end'>
 										<AppTitle
 											title={getLongMonthFromDate(
-												el.date
+												el.date,
+												language
 											)}
 											level={4}
 										/>
@@ -55,7 +58,7 @@ const NotesGrid: React.FC<NotesGridProps> = ({
 									type='text'
 									onClick={() => handleView && handleView(el)}
 								>
-									View
+									{I18n?.t('label.view')}
 								</AppButton>
 							</div>
 						</StyledNoteGridCard>

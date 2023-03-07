@@ -1,6 +1,9 @@
-export const getLongMonthFromDate = (dateString?: string): string => {
+export const getLongMonthFromDate = (
+	dateString?: string,
+	locale?: string
+): string => {
 	if (dateString) {
-		return new Date(dateString).toLocaleString('en-us', {
+		return new Date(dateString).toLocaleString(locale, {
 			month: 'long',
 		});
 	}

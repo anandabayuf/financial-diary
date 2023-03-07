@@ -3,11 +3,11 @@ import StyledFormItem from './styled/StyledFormItem';
 import useTheme from '../../../Hooks/useTheme';
 
 const AppFormItem: React.FC<AppFormItemProps> = ({ children, ...rest }) => {
-	const theme = useTheme();
+	const { color } = useTheme();
 
 	return (
 		<StyledFormItem
-			formitemtheme={theme}
+			formitemtheme={color}
 			requiredMark={'optional'}
 			{...rest}
 		>

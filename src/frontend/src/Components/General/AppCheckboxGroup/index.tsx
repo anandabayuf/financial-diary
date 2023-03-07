@@ -7,14 +7,14 @@ const AppCheckboxGroup: React.FC<AppCheckboxGroupProps> = ({
 	onChange,
 	...rest
 }) => {
-	const theme = useTheme();
+	const { color } = useTheme();
 
 	return (
 		<StyledCheckboxGroup
 			className='grid grid-cols-1'
 			onChange={onChange}
 			options={options}
-			checkboxtheme={theme}
+			checkboxtheme={color}
 			{...rest}
 		/>
 	);

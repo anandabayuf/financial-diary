@@ -1,8 +1,8 @@
 const schema = require("./schema");
+const message = require("../constants/message");
 
 exports.create = (data) => {
 	return new Promise((resolve, reject) => {
-		// console.log(data);
 		schema.NoteSchema.find(
 			{ date: data.date, userId: data.userId },
 			async (err, result) => {
@@ -18,7 +18,7 @@ exports.create = (data) => {
 							}
 						});
 					} else {
-						reject("Note with the month is already available");
+						reject(message["note.month_already_available"]);
 					}
 				}
 			}
@@ -32,16 +32,16 @@ exports.getAll = (query, userId) => {
 	const value = new Date(search[key]);
 
 	return new Promise((resolve, reject) => {
-		schema.NoteSchema.find(
-			{ [key]: value, userId: userId },
-			async (err, result) => {
+		schema.NoteSchema.find({ [key]: value, userId: userId })
+			.lean()
+			.sort({ date: "ascending" })
+			.exec((err, result) => {
 				if (err) {
 					reject(err);
 				} else {
 					resolve(result);
 				}
-			}
-		).lean();
+			});
 	});
 };
 

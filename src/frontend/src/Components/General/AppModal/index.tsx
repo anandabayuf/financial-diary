@@ -9,7 +9,7 @@ const AppModal: React.FC<AppModalProps> = ({
 	children,
 	...rest
 }) => {
-	const theme = useTheme();
+	const { color } = useTheme();
 
 	return (
 		<StyledModal
@@ -18,7 +18,7 @@ const AppModal: React.FC<AppModalProps> = ({
 			onCancel={onCancel}
 			centered
 			closable={false}
-			modaltheme={theme}
+			modaltheme={color}
 			footer={null}
 			maskClosable={false}
 			{...rest}

@@ -1,7 +1,17 @@
-import { DetailNoteFormProps } from './interfaces/interfaces';
+import {
+	DetailNoteFormProps,
+	DetailNoteFormType,
+} from './interfaces/interfaces';
 import { useAppSelector } from '../../../../Hooks/useRedux';
 import { useState, useEffect } from 'react';
 import AppMessage from '../../../General/AppMessage/index';
+import { errorHandling } from '../../../../Api/errorHandling';
+import { useNavigate } from 'react-router-dom';
+import {
+	TFetchErrorResponse,
+	TCategoryResponse,
+	TCategoryNotePayload,
+} from '../../../../Api/interfaces/types';
 import {
 	getAvailableUserCategory,
 	addCategoryToTheNote,
@@ -13,29 +23,38 @@ const withCategoryNoteForm = (
 	const NewComponent: React.FC<DetailNoteFormProps> = ({
 		noteId,
 		handleCancel,
+		I18n,
 		...rest
 	}) => {
+		const navigate = useNavigate();
 		const token = useAppSelector((state) => state.user.accessToken);
-		const [availableCategory, setAvailableCategory] = useState<any[]>([]);
+		const [availableCategory, setAvailableCategory] = useState<
+			TCategoryResponse[]
+		>([]);
 		const [isLoading, setIsLoading] = useState<boolean>(false);
 		const [isFetching, setIsFetching] = useState<boolean>(false);
 
-		const handleSubmit = async (values: any) => {
+		const handleSubmit = async (values: DetailNoteFormType) => {
 			setIsLoading(true);
-			const payload = {
-				categoryIds: values.ids,
-				noteId,
-			};
 
-			const res = await addCategoryToTheNote(token, payload);
+			if (token && values && noteId) {
+				const payload: TCategoryNotePayload = {
+					categoryIds: values.ids,
+					noteId,
+				};
 
-			if (res.request.status === 201) {
-				AppMessage({ content: res.data.message, type: 'success' });
-				if (handleCancel) {
-					handleCancel();
+				try {
+					const res = await addCategoryToTheNote(token, payload);
+					AppMessage({
+						content: I18n?.t(res.data.message),
+						type: 'success',
+					});
+					if (handleCancel) {
+						handleCancel();
+					}
+				} catch (error) {
+					errorHandling(error as TFetchErrorResponse, navigate);
 				}
-			} else {
-				AppMessage({ content: res.data.message, type: 'error' });
 			}
 
 			setIsLoading(false);
@@ -45,13 +64,30 @@ const withCategoryNoteForm = (
 			const getAvailableCategory = async () => {
 				setIsFetching(true);
 
-				const res = await getAvailableUserCategory(token, noteId);
-				if (res.request.status === 200) {
-					setAvailableCategory(res.data.data);
-				} else {
-					const response = JSON.parse(res.request.response);
-
-					AppMessage({ content: response.message, type: 'error' });
+				if (token && noteId) {
+					try {
+						const res = await getAvailableUserCategory(
+							token,
+							noteId
+						);
+						setAvailableCategory(res.data.data);
+					} catch (error) {
+						errorHandling(error as TFetchErrorResponse, navigate);
+						if (token && noteId) {
+							try {
+								const res = await getAvailableUserCategory(
+									token,
+									noteId
+								);
+								setAvailableCategory(res.data.data);
+							} catch (error) {
+								errorHandling(
+									error as TFetchErrorResponse,
+									navigate
+								);
+							}
+						}
+					}
 				}
 
 				setIsFetching(false);
@@ -68,6 +104,7 @@ const withCategoryNoteForm = (
 				isLoading={isLoading}
 				isFetching={isFetching}
 				handleCancel={handleCancel}
+				I18n={I18n}
 				{...rest}
 			/>
 		);

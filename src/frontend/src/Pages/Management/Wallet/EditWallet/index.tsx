@@ -10,43 +10,64 @@ import { getRouteNames } from '../../../../Utils/RouteUtils';
 import RouteNames from '../../../../Constants/RouteNames';
 import withEditWallet from '../../../../Components/Management/Wallets/WalletForm/withEditWallet';
 import AppMessage from '../../../../Components/General/AppMessage/index';
+import useLocale from '../../../../Hooks/useLocale';
+import { errorHandling } from '../../../../Api/errorHandling';
+import { APP_NAME } from '../../../../Constants/Constants';
+import {
+	TFetchErrorResponse,
+	TWalletPayload,
+} from '../../../../Api/interfaces/types';
 
 const EditForm = withEditWallet(WalletForm);
 
 const EditWalletPage: React.FC = () => {
-	const [isLoading, setIsLoading] = useState(false);
 	const token = useAppSelector((state) => state.user.accessToken);
 	const navigate = useNavigate();
 	const location = useLocation();
 	const wallet = location.state;
+	const { I18n, language } = useLocale();
 
-	const handleEditWallet = async (values: any) => {
+	const [isLoading, setIsLoading] = useState(false);
+
+	const handleEditWallet = async (values: TWalletPayload) => {
 		setIsLoading(true);
 
-		const response = await editUserWallet(token, wallet._id, values);
-		setIsLoading(false);
-		if (response.request.status === 201) {
-			navigate(getRouteNames(RouteNames.MANAGEMENT_WALLETS), {
-				replace: true,
-				state: {
-					message: response.data.message,
-				},
-			});
-		} else {
-			AppMessage({ content: response.data.message, type: 'error' });
+		if (token) {
+			try {
+				const response = await editUserWallet(
+					token,
+					wallet._id,
+					values
+				);
+
+				navigate(getRouteNames(RouteNames.MANAGEMENT_WALLETS), {
+					replace: true,
+				});
+
+				AppMessage({
+					type: 'success',
+					content: I18n.t(response.data.message),
+				});
+			} catch (error) {
+				errorHandling(error as TFetchErrorResponse, navigate);
+			}
 		}
+
+		setIsLoading(false);
 	};
 
 	useEffect(() => {
-		document.title = 'Edit Wallet - Management - Financial Diary App';
-	}, []);
+		document.title = `${I18n.t(
+			'title.management.wallet.edit'
+		)} - ${APP_NAME}`;
+	}, [language, I18n]);
 
 	return (
 		<MainLayout>
 			<AppBreadcrumb className='mb-1' />
 			<div className='mb-5'>
 				<AppTitle
-					title='Edit Wallet'
+					title={I18n.t('management.wallet.edit')!}
 					level={5}
 				/>
 			</div>
@@ -54,6 +75,7 @@ const EditWalletPage: React.FC = () => {
 				isLoading={isLoading}
 				handleSubmit={handleEditWallet}
 				data={wallet}
+				I18n={I18n}
 			/>
 		</MainLayout>
 	);

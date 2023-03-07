@@ -1,27 +1,22 @@
-import { checkToken } from '../Api/Auth';
-import { useAppSelector, useAppDispatch } from './useRedux';
+import { authToken } from '../Api/Auth';
+import { useAppSelector } from './useRedux';
 import { useMemo } from 'react';
+import { errorHandling } from '../Api/errorHandling';
 import { useNavigate } from 'react-router-dom';
-import { setUserLoggedOut } from '../Store/User/UserSlice';
+import I18n from 'i18next';
+import { TFetchErrorResponse } from '../Api/interfaces/types';
 
 const useAuth = () => {
 	const user = useAppSelector((state) => state.user);
 	const navigate = useNavigate();
-	const dispatch = useAppDispatch();
 
 	useMemo(() => {
 		const checkTokenValidation = async () => {
 			if (user.accessToken) {
-				const res = await checkToken(`${user.accessToken}`);
-				if (res.request.status === 401) {
-					dispatch(setUserLoggedOut());
-
-					navigate('/login', {
-						state: {
-							message: 'Session has expired, please log in again',
-						},
-						replace: true,
-					});
+				try {
+					await authToken(`${user.accessToken}`);
+				} catch (error) {
+					errorHandling(error as TFetchErrorResponse, navigate);
 				}
 			}
 		};
@@ -29,7 +24,7 @@ const useAuth = () => {
 		checkTokenValidation(); // eslint-disable-next-line
 	}, []);
 
-	return user && user.isLoggedIn;
+	return user && user.accessToken && user.isLoggedIn;
 };
 
 export default useAuth;

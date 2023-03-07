@@ -14,9 +14,10 @@ import AppTooltip from '../../../General/AppTooltip/index';
 const DetailNoteGrid: React.FC<DetailNoteGridProps> = ({
 	isWallet,
 	data,
+	I18n,
 	handleView,
 }) => {
-	const theme = useTheme();
+	const { color } = useTheme();
 
 	return (
 		<div className='flex justify-center'>
@@ -32,12 +33,12 @@ const DetailNoteGrid: React.FC<DetailNoteGridProps> = ({
 								<div className='flex justify-between items-center mb-5'>
 									{isWallet ? (
 										<IoWalletOutline
-											color={theme?.text}
+											color={color?.text}
 											size={32}
 										/>
 									) : (
 										<BsCreditCard2Front
-											color={theme?.text}
+											color={color?.text}
 											size={32}
 										/>
 									)}
@@ -87,7 +88,7 @@ const DetailNoteGrid: React.FC<DetailNoteGridProps> = ({
 											handleView && handleView(el)
 										}
 									>
-										View
+										{I18n?.t('label.view')}
 									</AppButton>
 								</div>
 							</StyledDetailNoteGridCard>
@@ -95,7 +96,7 @@ const DetailNoteGrid: React.FC<DetailNoteGridProps> = ({
 					})}
 				</StyledGrid>
 			) : (
-				<AppEmpty />
+				<AppEmpty isInPage />
 			)}
 		</div>
 	);

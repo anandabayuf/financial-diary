@@ -1,4 +1,3 @@
-import { Modal } from 'antd';
 import AppCard from '../../Components/General/AppCard';
 import FrontLayout from '../../Layouts/FrontLayout';
 import AppButton from '../../Components/General/AppButton';
@@ -10,8 +9,16 @@ import { RcFile, UploadFile, UploadProps } from 'antd/es/upload';
 import { useState, useEffect } from 'react';
 import { getBase64 } from '../../Utils/ImageUtils';
 import { register } from '../../Api/Auth';
-import StyledTitle from './styled/StyledTitle';
 import AppMessage from '../../Components/General/AppMessage/index';
+import AppLogo from '../../Components/General/AppLogo/index';
+import AppTitle from '../../Components/General/AppTitle/index';
+import useLocale from '../../Hooks/useLocale';
+import AppModal from '../../Components/General/AppModal/index';
+import { errorHandling } from '../../Api/errorHandling';
+import { encryptPassword } from '../../Utils/AuthUtils';
+import { APP_NAME } from '../../Constants/Constants';
+import { TFetchErrorResponse } from '../../Api/interfaces/types';
+import { RegisterFormType } from '../../Components/Register/RegisterForm/interfaces/interfaces';
 
 const RegisterPage: React.FC = () => {
 	const [loading, setLoading] = useState(false);
@@ -23,35 +30,38 @@ const RegisterPage: React.FC = () => {
 	const [fileList, setFileList] = useState<UploadFile[]>([]);
 
 	const navigate = useNavigate();
+	const { I18n, language } = useLocale();
 
-	const handleRegister = async (values: any) => {
+	const handleRegister = async (values: RegisterFormType) => {
 		setLoading(true);
-		const { picture, passwordconfirm, ...data } = values;
+		let { picture, passwordconfirm, ...data } = values;
+
+		try {
+			data['password'] = encryptPassword(data.password);
+		} catch (error) {
+			errorHandling(error as TFetchErrorResponse, navigate);
+		}
 
 		const payload = new FormData();
-		if (picture && picture.fileList.length !== 0) {
-			payload.append('picture', picture.fileList[0].originFileObj);
+		if (
+			picture &&
+			picture.fileList &&
+			picture.fileList?.length !== 0 &&
+			fileList.length === 1
+		) {
+			payload.append('picture', picture.fileList[0].originFileObj!);
 		}
 		payload.append('data', JSON.stringify(data));
-
-		const res = await register(payload);
-
-		if (res.request.status === 404) {
-			AppMessage({
-				content: `${res.response.data.message}, username already taken.`,
-				type: 'error',
-			});
-			setLoading(false);
-		} else if (res.request.status === 201) {
-			AppMessage({ content: res.data.message, type: 'success' });
-			setTimeout(() => {
-				navigate('/login', { replace: true });
-				setLoading(false);
-			}, 2000);
+		try {
+			const res = await register(payload);
+			AppMessage({ content: I18n.t(res.data.message), type: 'success' });
+			navigate('/login', { replace: true });
+		} catch (error) {
+			errorHandling(error as TFetchErrorResponse, navigate);
 		}
-	};
 
-	const handleRegisterFailed = (errorInfo: string) => {};
+		setLoading(false);
+	};
 
 	const handleClickLogin = () => {
 		navigate('/login');
@@ -95,14 +105,14 @@ const RegisterPage: React.FC = () => {
 			file.type === 'image/jpeg' || file.type === 'image/png';
 		if (!isJpgOrPng) {
 			AppMessage({
-				content: 'You can only upload JPG/PNG file!',
+				content: I18n.t('form.validation.upload_only_image'),
 				type: 'error',
 			});
 		}
 		const isLt2M = file.size / 1024 / 1024 < 2;
 		if (!isLt2M) {
 			AppMessage({
-				content: 'Image must smaller than 2MB!',
+				content: I18n.t('form.validation.size_lower_than_2mb'),
 				type: 'error',
 			});
 		}
@@ -115,19 +125,26 @@ const RegisterPage: React.FC = () => {
 	};
 
 	useEffect(() => {
-		document.title = 'Register - Financial Diary App';
-	}, []);
+		document.title = `${I18n.t('register')} - ${APP_NAME}`;
+	}, [language, I18n]);
 
 	return (
 		<FrontLayout>
 			<AppCard>
-				<StyledTitle
-					level={3}
-					title='Register'
-				/>
+				<div className='min-[426px]:hidden flex justify-center mb-3'>
+					<AppLogo width='128px' />
+				</div>
+				<div className='flex justify-between items-baseline mb-5'>
+					<AppTitle
+						level={4}
+						title={I18n.t('register')!}
+					/>
+					<div className='max-[425px]:hidden'>
+						<AppLogo width='128px' />
+					</div>
+				</div>
 				<RegisterForm
 					handleFinish={handleRegister}
-					handleFinishFailed={handleRegisterFailed}
 					loading={loading}
 					handleUploadImage={{
 						fileList: fileList,
@@ -138,21 +155,26 @@ const RegisterPage: React.FC = () => {
 				/>
 				<StyledRegisterContainer>
 					<AppText
-						text='Already have an account?'
+						text={I18n.t('content.already_have_an_account?')}
 						className='text-xs'
 					/>
 					<AppButton
 						type='link'
 						onClick={handleClickLogin}
 					>
-						Login
+						{I18n.t('login')}
 					</AppButton>
 				</StyledRegisterContainer>
 			</AppCard>
-			<Modal
+			<AppModal
 				open={previewState.isOpen}
-				title={previewState.title}
-				footer={null}
+				title={
+					<AppTitle
+						title={previewState.title}
+						level={5}
+					/>
+				}
+				closable
 				onCancel={handleCancelViewProfilePic}
 			>
 				<img
@@ -160,7 +182,7 @@ const RegisterPage: React.FC = () => {
 					style={{ width: '100%' }}
 					src={previewState.image}
 				/>
-			</Modal>
+			</AppModal>
 		</FrontLayout>
 	);
 };

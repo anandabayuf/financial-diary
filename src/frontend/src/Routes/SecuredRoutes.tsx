@@ -16,11 +16,17 @@ import MyProfilePage from '../Pages/MyProfile';
 import NoteItemsPage from '../Pages/NoteItems/NoteItemsList/index';
 import CreateNoteItemsPage from '../Pages/NoteItems/CreateNoteItems/index';
 import EditNoteItemsPage from '../Pages/NoteItems/EditNoteItems/index';
+import AboutPage from '../Pages/About';
+import ChangePasswordPage from '../Pages/ChangePassword/index';
 
 const ProtectedRoute = () => {
 	const isLoggedIn = useAuth();
 
-	return isLoggedIn ? <Outlet /> : <Navigate to='/login' />;
+	return isLoggedIn ? (
+		<Outlet />
+	) : (
+		<Navigate to={getRouteNames(RouteNames.LOGIN)} />
+	);
 };
 
 const SecuredRoutes: RouteObject[] = [
@@ -94,6 +100,14 @@ const SecuredRoutes: RouteObject[] = [
 			{
 				path: getRouteNames(RouteNames.MY_PROFILE),
 				element: <MyProfilePage />,
+			},
+			{
+				path: getRouteNames(RouteNames.CHANGE_PASSWORD),
+				element: <ChangePasswordPage />,
+			},
+			{
+				path: getRouteNames(RouteNames.ABOUT_US),
+				element: <AboutPage />,
 			},
 		],
 	},

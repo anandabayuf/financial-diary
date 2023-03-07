@@ -1,4 +1,4 @@
-import { Form, Space, Avatar } from 'antd';
+import { Form, Avatar } from 'antd';
 import AppCard from '../../General/AppCard';
 import AppFormItem from '../../General/AppFormItem';
 import AppInput from '../../General/AppInput';
@@ -18,8 +18,10 @@ const MyProfileForm: React.FC<MyProfileFormProps> = ({
 	handleCancel,
 	handleUploadImage,
 	previewModalProps,
+	I18n,
 }) => {
-	const theme = useTheme();
+	const { color } = useTheme();
+
 	return (
 		<>
 			<AppCard>
@@ -27,15 +29,15 @@ const MyProfileForm: React.FC<MyProfileFormProps> = ({
 					autoComplete='on'
 					layout='vertical'
 					initialValues={{
-						name: user.name,
-						username: user.username,
+						name: user?.name,
+						username: user?.username,
 					}}
 					onFinish={handleSubmit}
 				>
 					<AppFormItem name='picture'>
 						<StyledUpload
 							widthupload={150}
-							bordercolor={theme?.text}
+							bordercolor={color?.text}
 							listType='picture-card'
 							fileList={handleUploadImage?.fileList}
 							onPreview={
@@ -52,32 +54,36 @@ const MyProfileForm: React.FC<MyProfileFormProps> = ({
 						</StyledUpload>
 					</AppFormItem>
 					<AppFormItem
-						label='Username'
+						label={I18n?.t('form.label.username')}
 						name='username'
 						rules={[
 							{
 								required: true,
-								message: 'Please input username!',
+								message: I18n?.t('form.required.username')!,
 							},
 							{
 								pattern: new RegExp(/^[^\s-]+$/g),
-								message: 'No spaces allowed!',
+								message: I18n?.t('form.validation.no_spaces')!,
 							},
 						]}
 					>
-						<AppInput placeholder='input username...' />
+						<AppInput
+							placeholder={I18n?.t('form.placeholder.username')}
+						/>
 					</AppFormItem>
 					<AppFormItem
-						label='Name'
+						label={I18n?.t('form.label.name')}
 						name='name'
 						rules={[
 							{
 								required: true,
-								message: 'Please input profile name!',
+								message: I18n?.t('form.required.name')!,
 							},
 						]}
 					>
-						<AppInput placeholder='input profile name...' />
+						<AppInput
+							placeholder={I18n?.t('form.placeholder.name')}
+						/>
 					</AppFormItem>
 
 					{isLoading ? (
@@ -88,13 +94,13 @@ const MyProfileForm: React.FC<MyProfileFormProps> = ({
 								type='text'
 								onClick={handleCancel}
 							>
-								<Space>Cancel</Space>
+								{I18n?.t('label.cancel')}
 							</AppButton>
 							<AppButton
 								type='primary'
 								htmlType='submit'
 							>
-								<Space>Save</Space>
+								{I18n?.t('label.save')}
 							</AppButton>
 						</div>
 					)}

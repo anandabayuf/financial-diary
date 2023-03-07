@@ -1,5 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ManagementState } from '../interfaces/interfaces';
+import {
+	ManagementState,
+	ManagementPaginationSizeType,
+} from '../interfaces/interfaces';
 
 const initialState: ManagementState = {
 	paginationSize: {
@@ -14,13 +17,13 @@ const ManagementSlice = createSlice({
 	reducers: {
 		setManagementPaginationSize: (
 			state: ManagementState,
-			action: PayloadAction<ManagementState>
+			action: PayloadAction<ManagementPaginationSizeType>
 		) => {
 			return {
 				...state,
 				paginationSize: {
 					...state.paginationSize,
-					...action.payload.paginationSize,
+					...action.payload,
 				},
 			};
 		},

@@ -1,6 +1,6 @@
 import MainLayout from '../../../Layouts/MainLayout';
 import { useAppSelector, useAppDispatch } from '../../../Hooks/useRedux';
-import { useEffect, useState } from 'react';
+import { ChangeEventHandler, useEffect, useState } from 'react';
 import {
 	getAllUserCategoryNoteItemsByNoteId,
 	getAllUserWalletNoteItemsByNoteId,
@@ -25,6 +25,17 @@ import { formatIDR } from '../../../Utils/CurrencyUtils';
 import NoteItemsDeleteModal from '../../../Components/NoteItems/NoteItemsDeleteModal';
 import { deleteUserNoteItem } from '../../../Api/NoteItems';
 import { setNotePaginationSize } from '../../../Store/Note/NoteSlice';
+import { errorHandling } from '../../../Api/errorHandling';
+import useLocale from '../../../Hooks/useLocale';
+import AppTooltip from '../../../Components/General/AppTooltip';
+import {
+	TWalletNoteResponse,
+	TCategoryNoteResponse,
+} from '../../../Api/interfaces/types';
+import {
+	TFetchErrorResponse,
+	TNoteItemResponse,
+} from '../../../Api/interfaces/types';
 
 const NoteItemsPage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
@@ -32,38 +43,38 @@ const NoteItemsPage: React.FC = () => {
 	const navigate = useNavigate();
 	const dispatch = useAppDispatch();
 
+	const { I18n } = useLocale();
+
 	const { selectedNote, selectedCategoryNote, selectedWalletNote } =
 		useAppSelector((state) => state.note);
-	const pageSize = useAppSelector(
-		(state) => state.note.paginationSize?.items
-	);
+	const pageSize = useAppSelector((state) => state.note.paginationSize.items);
 
-	const [walletNote, setWalletNote] = useState<any>();
-	const [categoryNote, setCategoryNote] = useState<any>();
-	const [data, setData] = useState<any[]>([]);
-	const [dataList, setDataList] = useState<any[]>([]);
+	const [walletNote, setWalletNote] = useState<TWalletNoteResponse>();
+	const [categoryNote, setCategoryNote] = useState<TCategoryNoteResponse>();
+	const [data, setData] = useState<TNoteItemResponse[]>([]);
+	const [dataList, setDataList] = useState<TNoteItemResponse[]>([]);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
-	const [deletedData, setDeletedData] = useState<any>();
+	const [deletedData, setDeletedData] = useState<TNoteItemResponse>();
 	const [isDeleting, setIsDeleting] = useState(false);
 
 	useEffect(() => {
 		const navigateIfLocationIsNotMatch = () => {
 			if (params) {
 				if (
-					params.year !== selectedNote?.year ||
-					params.month !== selectedNote?.month ||
-					(selectedCategoryNote?.id !== '' &&
+					params.year !== selectedNote.year ||
+					params.month !== selectedNote.month ||
+					(selectedCategoryNote.id &&
 						params.name !==
-							toURLFormat(selectedCategoryNote?.name!)) ||
-					(selectedWalletNote?.id !== '' &&
-						params.name !== toURLFormat(selectedWalletNote?.name!))
+							toURLFormat(selectedCategoryNote.name!)) ||
+					(selectedWalletNote.id &&
+						params.name !== toURLFormat(selectedWalletNote.name!))
 				) {
 					navigate(
-						`/notes/${selectedNote?.year}/${selectedNote?.month}/${
-							selectedWalletNote?.name === ''
-								? toURLFormat(selectedCategoryNote?.name!)
-								: toURLFormat(selectedWalletNote?.name!)
+						`/notes/${selectedNote.year}/${selectedNote.month}/${
+							selectedWalletNote.name === null
+								? toURLFormat(selectedCategoryNote.name!)
+								: toURLFormat(selectedWalletNote.name)
 						}`
 					);
 				}
@@ -73,28 +84,27 @@ const NoteItemsPage: React.FC = () => {
 		const getNoteItems = async () => {
 			setIsLoading(true);
 			navigateIfLocationIsNotMatch();
-			if (selectedNote?.id !== '' && selectedWalletNote?.id !== '') {
-				let res = await getUserWalletNoteById(
-					token,
-					selectedWalletNote?.id
-				);
+			if (selectedNote.id && selectedWalletNote.id && token) {
+				try {
+					const res = await getUserWalletNoteById(
+						token,
+						selectedWalletNote.id
+					);
 
-				if (res.request.status === 200) {
 					const data = res.data.data;
 
 					setWalletNote(data);
-				} else {
-					AppMessage({ type: 'error', content: '' });
+				} catch (error) {
+					errorHandling(error as TFetchErrorResponse, navigate);
 				}
 
-				res = await getAllUserWalletNoteItemsByNoteId(
-					token,
-					selectedNote?.id,
-					selectedWalletNote?.id
-				);
-				// console.log(res);
-				if (res.request.status === 200) {
-					const data = res.data.data.map((el: any, index: number) => {
+				try {
+					const res = await getAllUserWalletNoteItemsByNoteId(
+						token,
+						selectedNote.id,
+						selectedWalletNote.id
+					);
+					const data = res.data.data.map((el, index: number) => {
 						return {
 							...el,
 							key: index,
@@ -102,33 +112,32 @@ const NoteItemsPage: React.FC = () => {
 					});
 					setData(data);
 					setDataList(data);
-				} else {
-					AppMessage({ type: 'error', content: '' });
+				} catch (error) {
+					errorHandling(error as TFetchErrorResponse, navigate);
 				}
 			}
 
-			if (selectedNote?.id !== '' && selectedCategoryNote?.id !== '') {
-				let res = await getUserCategoryNoteById(
-					token,
-					selectedCategoryNote?.id
-				);
-
-				if (res.request.status === 200) {
+			if (selectedNote.id && selectedCategoryNote.id && token) {
+				try {
+					const res = await getUserCategoryNoteById(
+						token,
+						selectedCategoryNote.id
+					);
 					const data = res.data.data;
 
 					setCategoryNote(data);
-				} else {
-					AppMessage({ type: 'error', content: '' });
+				} catch (error) {
+					errorHandling(error as TFetchErrorResponse, navigate);
 				}
 
-				res = await getAllUserCategoryNoteItemsByNoteId(
-					token,
-					selectedNote?.id,
-					selectedCategoryNote?.id
-				);
-				// console.log(res);
-				if (res.request.status === 200) {
-					const data = res.data.data.map((el: any, index: number) => {
+				try {
+					const res = await getAllUserCategoryNoteItemsByNoteId(
+						token,
+						selectedNote.id,
+						selectedCategoryNote.id
+					);
+
+					const data = res.data.data.map((el, index: number) => {
 						return {
 							...el,
 							key: index,
@@ -136,8 +145,8 @@ const NoteItemsPage: React.FC = () => {
 					});
 					setData(data);
 					setDataList(data);
-				} else {
-					AppMessage({ type: 'error', content: '' });
+				} catch (error) {
+					errorHandling(error as TFetchErrorResponse, navigate);
 				}
 			}
 			setIsLoading(false);
@@ -147,18 +156,18 @@ const NoteItemsPage: React.FC = () => {
 			getNoteItems();
 		} // eslint-disable-next-line
 	}, [
-		selectedNote?.id,
-		selectedWalletNote?.id,
-		selectedCategoryNote?.id,
+		selectedNote.id,
+		selectedWalletNote.id,
+		selectedCategoryNote.id,
 		isModalDeleteOpen,
 	]);
 
 	const handleClickCreate = () => navigate('create');
 
-	const handleClickEdit = (values?: any) =>
+	const handleClickEdit = (values: TNoteItemResponse) =>
 		navigate('edit', { state: values });
 
-	const handleClickDelete = (values?: any) => {
+	const handleClickDelete = (values: TNoteItemResponse) => {
 		setDeletedData(values);
 		setIsModalDeleteOpen(true);
 	};
@@ -167,18 +176,23 @@ const NoteItemsPage: React.FC = () => {
 
 	const handleDelete = async () => {
 		setIsDeleting(true);
-		const res = await deleteUserNoteItem(token, deletedData._id);
-		console.log(res);
-		if (res.request.status === 200) {
-			AppMessage({ content: res.data.message, type: 'success' });
-		} else {
-			AppMessage({ content: '', type: 'error' });
+		if (token) {
+			try {
+				const res = await deleteUserNoteItem(token, deletedData?._id!);
+				AppMessage({
+					content: I18n.t(res.data.message),
+					type: 'success',
+				});
+				handleCancelDelete();
+			} catch (error) {
+				errorHandling(error as TFetchErrorResponse, navigate);
+			}
 		}
-		handleCancelDelete();
+
 		setIsDeleting(false);
 	};
 
-	const handleChangeSearch = (e: any) => {
+	const handleChangeSearch: ChangeEventHandler<HTMLInputElement> = (e) => {
 		if (e.target.value === '') {
 			setDataList(data);
 		}
@@ -197,36 +211,59 @@ const NoteItemsPage: React.FC = () => {
 		}
 	};
 
-	const pagination: TableProps<any>['pagination'] = {
+	const pagination: TableProps<TNoteItemResponse>['pagination'] = {
 		pageSize: pageSize,
 		onShowSizeChange(current, size) {
-			dispatch(
-				setNotePaginationSize({
-					paginationSize: { items: size },
-				})
-			);
+			dispatch(setNotePaginationSize({ items: size }));
 		},
 	};
 
 	useEffect(() => {
-		document.title = `${
-			selectedCategoryNote?.name === ''
-				? selectedWalletNote?.name!
-				: selectedCategoryNote?.name!
-		} - ${document.title}`;
-	}, [selectedWalletNote?.name, selectedCategoryNote?.name]);
+		if (selectedCategoryNote.id !== null) {
+			document.title = document.title.includes(selectedCategoryNote.name!)
+				? document.title
+				: `${selectedCategoryNote.name} - ${document.title}`;
+		}
+
+		if (selectedWalletNote.id !== null) {
+			document.title = document.title.includes(selectedWalletNote.name!)
+				? document.title
+				: `${selectedWalletNote.name} - ${document.title}`;
+		}
+	}, [selectedWalletNote, selectedCategoryNote]);
 
 	return (
 		<MainLayout>
 			<AppBreadcrumb />
-			<div className='flex justify-between items-center mb-5'>
+			<div className='flex justify-between items-center mb-5 gap-x-1'>
+				<AppTooltip
+					className='min-[426px]:hidden'
+					title={`${I18n.t('notes.items')} - ${
+						selectedCategoryNote.name === null
+							? selectedWalletNote.name
+							: selectedCategoryNote.name
+					}`}
+				>
+					<div className='max-[425px]:max-w-[250px] max-[375px]:max-w-[180px]'>
+						<AppTitle
+							title={`${I18n.t('notes.items')} - ${
+								selectedCategoryNote.name === null
+									? selectedWalletNote.name
+									: selectedCategoryNote.name
+							}`}
+							level={5}
+							className='truncate ...'
+						/>
+					</div>
+				</AppTooltip>
 				<AppTitle
-					title={`Note Items - ${
-						selectedCategoryNote?.name === ''
-							? selectedWalletNote?.name
-							: selectedCategoryNote?.name
+					title={`${I18n.t('notes.items')} - ${
+						selectedCategoryNote.name === null
+							? selectedWalletNote.name
+							: selectedCategoryNote.name
 					}`}
 					level={5}
+					className='max-[425px]:hidden'
 				/>
 				<AppButton
 					type='primary'
@@ -236,17 +273,19 @@ const NoteItemsPage: React.FC = () => {
 						<div className='flex justify-center'>
 							<BsPlusLg />
 						</div>
-						Create Item
+						{I18n.t('label.create.note.item')}
 					</Space>
 				</AppButton>
 			</div>
 			{isLoading ? (
-				<AppLoader />
+				<AppLoader isInPage />
 			) : data.length > 0 ? (
 				<>
-					<div className='flex justify-between items-center mb-5'>
+					<div className='flex justify-between items-center mb-5 gap-x-3'>
 						<AppSearchInput
-							placeholder={`Search item description...`}
+							placeholder={
+								I18n.t('search.placeholder.note.items')!
+							}
 							onSearch={handleSearch}
 							onChange={handleChangeSearch}
 						/>
@@ -254,17 +293,17 @@ const NoteItemsPage: React.FC = () => {
 							<div>
 								<AppText
 									text={
-										selectedCategoryNote?.id === ''
-											? 'Balance: '
-											: 'Total: '
+										selectedCategoryNote.id === null
+											? `${I18n.t('content.balance')}: `
+											: `${I18n.t('content.total')}: `
 									}
 									className='text-sm'
 								/>
 								<AppText
 									text={formatIDR(
-										selectedCategoryNote?.id === ''
-											? walletNote.balance
-											: categoryNote.total
+										selectedCategoryNote.id === null
+											? walletNote?.balance!
+											: categoryNote?.total!
 									)}
 									strong
 									className='text-sm'
@@ -279,9 +318,10 @@ const NoteItemsPage: React.FC = () => {
 					<AppTable
 						dataSource={dataList}
 						columns={NoteItemColumns({
-							walletNoteId: selectedWalletNote?.id,
-							isCategory: selectedCategoryNote?.id !== '',
-							isWallet: selectedWalletNote?.id !== '',
+							walletNoteId: selectedWalletNote.id!,
+							isCategory: selectedCategoryNote.id !== null,
+							isWallet: selectedWalletNote.id !== null,
+							I18n: I18n,
 							handleEdit: handleClickEdit,
 							handleDelete: handleClickDelete,
 						})}
@@ -289,16 +329,17 @@ const NoteItemsPage: React.FC = () => {
 					/>
 				</>
 			) : (
-				<AppEmpty />
+				<AppEmpty isInPage />
 			)}
 			{isModalDeleteOpen && deletedData && (
 				<NoteItemsDeleteModal
 					deletedData={deletedData}
 					handleCancelDelete={handleCancelDelete}
-					isCategory={selectedCategoryNote?.id !== ''}
+					isCategory={selectedCategoryNote.id !== null}
 					isLoading={isDeleting}
 					isModalDeleteOpen={isModalDeleteOpen}
 					handleDelete={handleDelete}
+					I18n={I18n}
 				/>
 			)}
 		</MainLayout>

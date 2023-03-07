@@ -3,6 +3,7 @@ const noteModel = require("./note.model");
 const walletNoteModel = require("./walletnote.model");
 const categoryNoteModel = require("./categorynote.model");
 const { ITEM_TYPE } = require("../constants/enum");
+const message = require("../constants/message");
 
 exports.isCanAdd = (note, data) => {
 	const noteYear = new Date(note.date).getFullYear();
@@ -96,17 +97,15 @@ exports.create = (noteId, data) => {
 		noteModel
 			.getById(noteId)
 			.then(async (note) => {
-				const noteYear = new Date(note.date).getFullYear();
-				const noteMonth = new Date(note.date).getMonth() + 1;
+				// const noteYear = new Date(note.date).getFullYear();
+				// const noteMonth = new Date(note.date).getMonth() + 1;
 
 				if (this.isCanAdd(note, data)) {
 					let payload = data;
 					switch (ITEM_TYPE[payload.type]) {
 						case "INCOME":
 							if (payload.debit < 0) {
-								reject(
-									"Income amount must be zero or positive number"
-								);
+								reject(message["noteitem.income_gt_0"]);
 							} else {
 								this.incomeTransaction(
 									payload.walletNoteId,
@@ -126,9 +125,7 @@ exports.create = (noteId, data) => {
 							break;
 						case "WITHDRAW_OR_TRANSFER":
 							if (payload.debit < 0) {
-								reject(
-									"Transfer amount must be zero or positive number"
-								);
+								reject(message["noteitem.transfer_gt_0"]);
 							} else {
 								this.withdrawOrTransferTransaction(
 									payload.walletNoteId, //pengirim
@@ -147,9 +144,7 @@ exports.create = (noteId, data) => {
 							break;
 						case "SPEND":
 							if (payload.credit < 0) {
-								reject(
-									"Total amount must be zero or positive number"
-								);
+								reject(message["noteitem.spend_gt_0"]);
 							} else {
 								this.spendTransaction(
 									payload.walletNoteId,
@@ -170,9 +165,7 @@ exports.create = (noteId, data) => {
 							break;
 						case "SPEND_ONLY_IN_WALLET":
 							if (payload.credit < 0) {
-								reject(
-									"Total amount must be zero or positive number"
-								);
+								reject(message["noteitem.spend_gt_0"]);
 							} else {
 								this.spendOnlyInWalletTransaction(
 									payload.walletNoteId,
@@ -192,16 +185,17 @@ exports.create = (noteId, data) => {
 
 							break;
 						default:
-							reject("Cannot add item. Invalid type item");
+							reject(message["noteitem.invalid_type"]);
 							break;
 					}
 				} else {
 					reject(
-						`Cannot add item. The range of note is from 26-${
-							noteMonth - 1 === 0 ? 12 : noteMonth - 1
-						}-${
-							noteMonth - 1 === 0 ? noteYear - 1 : noteYear
-						} to 25-${noteMonth}-${noteYear}`
+						message["noteitem.invalid_date"]
+						// `Cannot add item. The range of note is from 26-${
+						// 	noteMonth - 1 === 0 ? 12 : noteMonth - 1
+						// }-${
+						// 	noteMonth - 1 === 0 ? noteYear - 1 : noteYear
+						// } to 25-${noteMonth}-${noteYear}`
 					);
 				}
 			})
@@ -233,61 +227,20 @@ exports.getAll = (query, noteId, userId) => {
 	};
 
 	return new Promise((resolve, reject) => {
-		schema.NoteItemSchema.find(
-			{ ...queryFunc(), noteId: noteId, userId: userId },
-			async (err, result) => {
+		schema.NoteItemSchema.find({
+			...queryFunc(),
+			noteId: noteId,
+			userId: userId,
+		})
+			.lean()
+			.sort({ date: "desc" })
+			.exec((err, result) => {
 				if (err) {
 					reject(err);
 				} else {
 					resolve(result);
 				}
-			}
-		).lean();
-	});
-};
-
-exports.getAllNoteItemsByNoteId = (noteId, userId) => {
-	return new Promise((resolve, reject) => {
-		schema.NoteItemSchema.find(
-			{ noteId: noteId, userId: userId },
-			async (err, result) => {
-				if (err) {
-					reject(err);
-				} else {
-					let mapData = result.map(async (noteItem) => {
-						let { walletNoteId, categoryNoteId, ...rest } =
-							noteItem;
-						if (walletNoteId) {
-							try {
-								let walletNote = await walletNoteModel.getById(
-									walletNoteId
-								);
-								rest["walletNote"] = walletNote;
-							} catch (err) {
-								reject(err);
-							}
-						}
-
-						if (categoryNoteId) {
-							try {
-								let categoryNote =
-									await categoryNoteModel.getById(
-										categoryNoteId
-									);
-								rest["categoryNote"] = categoryNote;
-							} catch (err) {
-								reject(err);
-							}
-						}
-
-						return rest;
-					});
-					Promise.all(mapData)
-						.then((res) => resolve(res))
-						.catch((err) => reject(err));
-				}
-			}
-		).lean();
+			});
 	});
 };
 
@@ -358,8 +311,8 @@ exports.editFunction = (id, data) => {
 				noteModel
 					.getById(noteItem.noteId)
 					.then((note) => {
-						const noteYear = new Date(note.date).getFullYear();
-						const noteMonth = new Date(note.date).getMonth() + 1;
+						// const noteYear = new Date(note.date).getFullYear();
+						// const noteMonth = new Date(note.date).getMonth() + 1;
 						if (
 							(data.date && this.isCanAdd(note, data)) ||
 							data.date === undefined
@@ -367,9 +320,7 @@ exports.editFunction = (id, data) => {
 							switch (ITEM_TYPE[noteItem.type]) {
 								case "INCOME":
 									if (data.debit < 0) {
-										reject(
-											"Income amount must be zero or positive number"
-										);
+										reject(message["noteitem.income_gt_0"]);
 									} else {
 										this.incomeTransaction(
 											noteItem.walletNote._id,
@@ -388,7 +339,7 @@ exports.editFunction = (id, data) => {
 								case "WITHDRAW_OR_TRANSFER":
 									if (data.debit < 0 || data.credit < 0) {
 										reject(
-											"Transfer amount must be zero or positive number"
+											message["noteitem.transfer_gt_0"]
 										);
 									} else {
 										this.withdrawOrTransferTransaction(
@@ -409,9 +360,7 @@ exports.editFunction = (id, data) => {
 									break;
 								case "SPEND":
 									if (data.credit < 0) {
-										reject(
-											"Total amount must be zero or positive number"
-										);
+										reject(message["noteitem.spend_gt_0"]);
 									} else {
 										this.spendTransaction(
 											noteItem.walletNote._id,
@@ -431,9 +380,7 @@ exports.editFunction = (id, data) => {
 									break;
 								case "SPEND_ONLY_IN_WALLET":
 									if (data.credit < 0) {
-										reject(
-											"Total amount must be zero or positive number"
-										);
+										reject(message["noteitem.spend_gt_0"]);
 									} else {
 										this.spendOnlyInWalletTransaction(
 											noteItem.walletNote._id,
@@ -452,13 +399,14 @@ exports.editFunction = (id, data) => {
 							}
 						} else {
 							reject(
-								`Cannot add item. The range of note is from 26-${
-									noteMonth - 1 === 0 ? 12 : noteMonth - 1
-								}-${
-									noteMonth - 1 === 0
-										? noteYear - 1
-										: noteYear
-								} to 25-${noteMonth}-${noteYear}`
+								message["noteitem.invalid_date"]
+								// `Cannot add item. The range of note is from 26-${
+								// 	noteMonth - 1 === 0 ? 12 : noteMonth - 1
+								// }-${
+								// 	noteMonth - 1 === 0
+								// 		? noteYear - 1
+								// 		: noteYear
+								// } to 25-${noteMonth}-${noteYear}`
 							);
 						}
 					})

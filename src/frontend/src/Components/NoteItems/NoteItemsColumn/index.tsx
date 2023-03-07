@@ -6,27 +6,34 @@ import { formatIDR } from '../../../Utils/CurrencyUtils';
 import { ColumnsType } from 'antd/es/table';
 import { ITEM_TYPE } from '../../../Constants/Constants';
 import dayjs from 'dayjs';
+import { TNoteItemResponse } from '../../../Api/interfaces/types';
 
 const NoteItemColumns: NoteItemColumnsType = ({
 	walletNoteId,
 	isCategory,
 	isWallet,
+	I18n,
 	handleDelete,
 	handleEdit,
 }) => {
-	const debitRender = (): ColumnsType<any> =>
+	const debitRender = (): ColumnsType<TNoteItemResponse> =>
 		!isCategory
 			? [
 					{
 						title: (
 							<AppText
-								text='Debit'
+								text={I18n?.t('label.debit')}
 								strong
 							/>
 						),
 						dataIndex: 'debit',
 						key: 'debit',
-						sorter: (a, b) => a.debit - b.debit,
+						sorter: (a, b) =>
+							ITEM_TYPE[a.type] === 'Transfer or Withdraw'
+								? walletNoteId === a.walletNoteId
+									? 0 - b.debit
+									: a.debit - b.debit
+								: a.debit - b.debit,
 						render: (_, record) => (
 							<AppText
 								text={formatIDR(
@@ -47,7 +54,7 @@ const NoteItemColumns: NoteItemColumnsType = ({
 		{
 			title: (
 				<AppText
-					text='Date'
+					text={I18n?.t('label.date')}
 					strong
 				/>
 			),
@@ -56,13 +63,13 @@ const NoteItemColumns: NoteItemColumnsType = ({
 			sorter: (a, b) =>
 				new Date(a.date).getTime() - new Date(b.date).getTime(),
 			render: (_, record) => (
-				<AppText text={dayjs(record.date).format('YYYY-MM-DD')} />
+				<AppText text={dayjs(record.date).format('DD-MM-YYYY')} />
 			),
 		},
 		{
 			title: (
 				<AppText
-					text='Description'
+					text={I18n?.t('label.description')}
 					strong
 				/>
 			),
@@ -75,7 +82,7 @@ const NoteItemColumns: NoteItemColumnsType = ({
 		{
 			title: (
 				<AppText
-					text='Credit'
+					text={I18n?.t('label.credit')}
 					strong
 				/>
 			),
@@ -97,7 +104,7 @@ const NoteItemColumns: NoteItemColumnsType = ({
 		{
 			title: (
 				<AppText
-					text='Action'
+					text={I18n?.t('label.action')}
 					strong
 				/>
 			),
@@ -110,14 +117,14 @@ const NoteItemColumns: NoteItemColumnsType = ({
 							type='text'
 							onClick={() => handleEdit && handleEdit(record)}
 						>
-							Edit
+							{I18n?.t('label.edit')}
 						</AppButton>
 						<AppButton
 							type='text'
 							onClick={() => handleDelete && handleDelete(record)}
 							danger
 						>
-							Delete
+							{I18n?.t('label.delete')}
 						</AppButton>
 					</Space>
 				);

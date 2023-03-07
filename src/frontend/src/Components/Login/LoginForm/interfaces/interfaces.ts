@@ -1,5 +1,5 @@
+import { TLoginPayload } from '../../../../Api/interfaces/types';
 export interface LoginFormProps {
-	handleFinish?: (values: any) => void;
-	handleFinishFailed?: (errorInfo: any) => void;
+	handleFinish?: (values: TLoginPayload) => void;
 	loading?: boolean;
 }
