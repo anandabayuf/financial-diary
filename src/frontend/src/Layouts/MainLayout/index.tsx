@@ -63,13 +63,15 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 
 	return (
 		<StyledLayout>
-			<HeaderLayout
-				user={user}
-				theme={color}
-				handleOpenDrawer={handleOpenDrawer}
-				I18n={I18n}
-				language={language}
-			/>
+			{user && (
+				<HeaderLayout
+					user={user}
+					theme={color}
+					handleOpenDrawer={handleOpenDrawer}
+					I18n={I18n}
+					language={language}
+				/>
+			)}
 			<Layout hasSider>
 				<SiderLayout
 					theme={color}

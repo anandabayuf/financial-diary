@@ -227,61 +227,20 @@ exports.getAll = (query, noteId, userId) => {
 	};
 
 	return new Promise((resolve, reject) => {
-		schema.NoteItemSchema.find(
-			{ ...queryFunc(), noteId: noteId, userId: userId },
-			async (err, result) => {
+		schema.NoteItemSchema.find({
+			...queryFunc(),
+			noteId: noteId,
+			userId: userId,
+		})
+			.lean()
+			.sort({ date: "desc" })
+			.exec((err, result) => {
 				if (err) {
 					reject(err);
 				} else {
 					resolve(result);
 				}
-			}
-		).lean();
-	});
-};
-
-exports.getAllNoteItemsByNoteId = (noteId, userId) => {
-	return new Promise((resolve, reject) => {
-		schema.NoteItemSchema.find(
-			{ noteId: noteId, userId: userId },
-			async (err, result) => {
-				if (err) {
-					reject(err);
-				} else {
-					let mapData = result.map(async (noteItem) => {
-						let { walletNoteId, categoryNoteId, ...rest } =
-							noteItem;
-						if (walletNoteId) {
-							try {
-								let walletNote = await walletNoteModel.getById(
-									walletNoteId
-								);
-								rest["walletNote"] = walletNote;
-							} catch (err) {
-								reject(err);
-							}
-						}
-
-						if (categoryNoteId) {
-							try {
-								let categoryNote =
-									await categoryNoteModel.getById(
-										categoryNoteId
-									);
-								rest["categoryNote"] = categoryNote;
-							} catch (err) {
-								reject(err);
-							}
-						}
-
-						return rest;
-					});
-					Promise.all(mapData)
-						.then((res) => resolve(res))
-						.catch((err) => reject(err));
-				}
-			}
-		).lean();
+			});
 	});
 };
 

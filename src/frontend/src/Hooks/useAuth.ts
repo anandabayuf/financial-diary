@@ -3,6 +3,8 @@ import { useAppSelector } from './useRedux';
 import { useMemo } from 'react';
 import { errorHandling } from '../Api/errorHandling';
 import { useNavigate } from 'react-router-dom';
+import I18n from 'i18next';
+import { TFetchErrorResponse } from '../Api/interfaces/types';
 
 const useAuth = () => {
 	const user = useAppSelector((state) => state.user);
@@ -14,7 +16,7 @@ const useAuth = () => {
 				try {
 					await authToken(`${user.accessToken}`);
 				} catch (error) {
-					errorHandling(error, navigate);
+					errorHandling(error as TFetchErrorResponse, navigate);
 				}
 			}
 		};

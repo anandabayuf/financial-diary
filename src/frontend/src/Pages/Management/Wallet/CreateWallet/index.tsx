@@ -13,6 +13,10 @@ import AppMessage from '../../../../Components/General/AppMessage/index';
 import useLocale from '../../../../Hooks/useLocale';
 import { errorHandling } from '../../../../Api/errorHandling';
 import { APP_NAME } from '../../../../Constants/Constants';
+import {
+	TFetchErrorResponse,
+	TWalletPayload,
+} from '../../../../Api/interfaces/types';
 
 const CreateForm = withCreateWallet(WalletForm);
 
@@ -23,21 +27,23 @@ const CreateWalletPage: React.FC = () => {
 
 	const [isLoading, setIsLoading] = useState(false);
 
-	const handleCreateWallet = async (values: any) => {
+	const handleCreateWallet = async (values: TWalletPayload) => {
 		setIsLoading(true);
 
-		try {
-			const response = await createUserWallet(token, values);
+		if (token) {
+			try {
+				const response = await createUserWallet(token, values);
 
-			navigate(getRouteNames(RouteNames.MANAGEMENT_WALLETS), {
-				replace: true,
-			});
-			AppMessage({
-				type: 'success',
-				content: I18n.t(response.data.message),
-			});
-		} catch (error) {
-			errorHandling(error, navigate);
+				navigate(getRouteNames(RouteNames.MANAGEMENT_WALLETS), {
+					replace: true,
+				});
+				AppMessage({
+					type: 'success',
+					content: I18n.t(response.data.message),
+				});
+			} catch (error) {
+				errorHandling(error as TFetchErrorResponse, navigate);
+			}
 		}
 
 		setIsLoading(false);

@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { UserState } from '../interfaces/interfaces';
+import { UserState, SetUserLoggedInType } from '../interfaces/interfaces';
+import { TUserResponse } from '../../Api/interfaces/types';
 
 const initialState: UserState = {
 	isLoggedIn: false,
-	accessToken: '',
-	data: {},
+	accessToken: null,
+	data: null,
 };
 
 const UserSlice = createSlice({
@@ -13,13 +14,12 @@ const UserSlice = createSlice({
 	reducers: {
 		setUserLoggedIn: (
 			state: UserState,
-			action: PayloadAction<UserState>
+			action: PayloadAction<SetUserLoggedInType>
 		) => {
 			return {
 				...state,
 				isLoggedIn: true,
-				accessToken: action.payload.accessToken,
-				data: action.payload.data,
+				...action.payload,
 			};
 		},
 		setUserLoggedOut: () => {
@@ -27,11 +27,11 @@ const UserSlice = createSlice({
 		},
 		updateUserData: (
 			state: UserState,
-			action: PayloadAction<UserState>
+			action: PayloadAction<TUserResponse>
 		) => {
 			return {
 				...state,
-				data: action.payload.data,
+				data: action.payload,
 			};
 		},
 	},

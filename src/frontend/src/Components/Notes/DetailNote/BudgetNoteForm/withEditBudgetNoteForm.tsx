@@ -1,16 +1,20 @@
 import { useState } from 'react';
-import { editWalletNoteEstimated } from '../../../../Api/Wallet-Note';
+import { editWalletNoteBudget } from '../../../../Api/Wallet-Note';
 import { useAppSelector } from '../../../../Hooks/useRedux';
 import AppMessage from '../../../General/AppMessage/index';
-import { editCategoryNoteEstimated } from '../../../../Api/Category-Note';
-import { EstimationNoteFormProps } from './interfaces/interfaces';
+import { editCategoryNoteBudget } from '../../../../Api/Category-Note';
+import { BudgetNoteFormProps } from './interfaces/interfaces';
 import { errorHandling } from '../../../../Api/errorHandling';
 import { useNavigate } from 'react-router-dom';
+import {
+	TFetchErrorResponse,
+	TEditWalletNotePayload,
+} from '../../../../Api/interfaces/types';
 
-const withEditEstimationNoteForm = (
-	Component: React.ComponentType<EstimationNoteFormProps>
+const withEditBudgetNoteForm = (
+	Component: React.ComponentType<BudgetNoteFormProps>
 ) => {
-	const NewComponent: React.FC<EstimationNoteFormProps> = ({
+	const NewComponent: React.FC<BudgetNoteFormProps> = ({
 		noteId,
 		data,
 		handleCancel,
@@ -33,16 +37,16 @@ const withEditEstimationNoteForm = (
 						parseInt(values.estimatedTotal) !==
 							data.estimated.total))
 			) {
-				if (values.estimatedBalance !== undefined) {
-					const payload = {
-						noteId: noteId,
+				if (values.estimatedBalance !== undefined && token && noteId) {
+					const payload: TEditWalletNotePayload = {
+						noteId,
 						estimated: {
 							balance: parseInt(values.estimatedBalance),
 						},
 					};
 
 					try {
-						const res = await editWalletNoteEstimated(
+						const res = await editWalletNoteBudget(
 							token,
 							data._id,
 							payload
@@ -56,9 +60,13 @@ const withEditEstimationNoteForm = (
 							handleCancel();
 						}
 					} catch (error) {
-						errorHandling(error, navigate);
+						errorHandling(error as TFetchErrorResponse, navigate);
 					}
-				} else if (values.estimatedTotal !== undefined) {
+				} else if (
+					values.estimatedTotal !== undefined &&
+					token &&
+					noteId
+				) {
 					const payload = {
 						noteId: noteId,
 						estimated: {
@@ -66,7 +74,7 @@ const withEditEstimationNoteForm = (
 						},
 					};
 					try {
-						const res = await editCategoryNoteEstimated(
+						const res = await editCategoryNoteBudget(
 							token,
 							data._id,
 							payload
@@ -80,7 +88,7 @@ const withEditEstimationNoteForm = (
 							handleCancel();
 						}
 					} catch (error) {
-						errorHandling(error, navigate);
+						errorHandling(error as TFetchErrorResponse, navigate);
 					}
 				}
 			} else {
@@ -108,4 +116,4 @@ const withEditEstimationNoteForm = (
 	return NewComponent;
 };
 
-export default withEditEstimationNoteForm;
+export default withEditBudgetNoteForm;

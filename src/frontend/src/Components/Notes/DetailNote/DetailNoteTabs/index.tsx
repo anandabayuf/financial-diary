@@ -6,9 +6,9 @@ import { DetailNoteTabsType } from './interfaces/interfaces';
 import withWalletNoteTab from '../DetailNoteTab/withWalletNoteTab';
 import DetailNoteTab from '../DetailNoteTab';
 import withCategoryNoteTab from '../DetailNoteTab/withCategoryNoteTab';
-import withEstimationNoteTab from '../DetailNoteTab/withEstimationNoteTab';
+import withBudgetNoteTab from '../DetailNoteTab/withBudgetNoteTab';
 
-const EstimationNoteTab = withEstimationNoteTab(DetailNoteTab);
+const BudgetNoteTab = withBudgetNoteTab(DetailNoteTab);
 const WalletNoteTab = withWalletNoteTab(DetailNoteTab);
 const CategoryNoteTab = withCategoryNoteTab(DetailNoteTab);
 
@@ -22,7 +22,7 @@ const DetailNoteTabs: DetailNoteTabsType = ({ noteId, I18n }) => [
 			</div>
 		),
 		children: (
-			<EstimationNoteTab
+			<BudgetNoteTab
 				noteId={noteId}
 				I18n={I18n}
 			/>

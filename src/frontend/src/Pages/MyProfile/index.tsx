@@ -17,6 +17,8 @@ import useLocale from '../../Hooks/useLocale';
 import { errorHandling } from '../../Api/errorHandling';
 import { APP_NAME } from '../../Constants/Constants';
 import { useNavigate } from 'react-router-dom';
+import { TFetchErrorResponse } from '../../Api/interfaces/types';
+import { EditUserPayload } from '../../Components/MyProfile/MyProfileForm/interfaces/interfaces';
 
 const MyProfilePage: React.FC = () => {
 	const { data, accessToken } = useAppSelector((state) => state.user);
@@ -104,14 +106,14 @@ const MyProfilePage: React.FC = () => {
 			file.type === 'image/jpeg' || file.type === 'image/png';
 		if (!isJpgOrPng) {
 			AppMessage({
-				content: 'You can only upload JPG/PNG file!',
+				content: I18n.t('form.validation.upload_only_image'),
 				type: 'error',
 			});
 		}
 		const isLt2M = file.size / 1024 / 1024 < 2;
 		if (!isLt2M) {
 			AppMessage({
-				content: 'Image must smaller than 2MB!',
+				content: I18n.t('form.validation.size_lower_than_2mb'),
 				type: 'error',
 			});
 		}
@@ -133,36 +135,42 @@ const MyProfilePage: React.FC = () => {
 
 	const handleClickCancelEdit = () => setIsEdit(false);
 
-	const handleClickSaveEdit = async (values: any) => {
+	const handleClickSaveEdit = async (values: EditUserPayload) => {
 		setIsLoading(true);
-
-		let userData: any = {
-			name: values.name,
-			username: values.username,
-		};
-
-		let payload = new FormData();
-
-		if (values.picture === undefined) {
-			//if user do not edit their picture
-		} else if (values.picture.fileList.length === 0) {
-			//if user remove their picture
-			userData['picture'] = null;
-		} else if (values.picture.fileList.length === 1) {
-			//if user edited their picture
-			payload.append('picture', values.picture.fileList[0].originFileObj);
-		}
-
-		payload.append('data', JSON.stringify(userData));
-
-		try {
-			const res = await editUserById(accessToken, data._id, payload);
-
-			AppMessage({ content: I18n.t(res.data.message), type: 'success' });
-			dispatch(updateUserData({ data: res.data.data }));
-			handleClickCancelEdit();
-		} catch (error) {
-			errorHandling(error, navigate);
+		if (values && accessToken && data) {
+			console.log(values.picture, fileList);
+			let userData: EditUserPayload = {
+				name: values.name,
+				username: values.username,
+			};
+			let payload = new FormData();
+			if (values.picture === undefined) {
+				//if user do not edit their picture
+			} else if (values.picture?.fileList?.length === 0) {
+				//if user remove their picture
+				userData['picture'] = null;
+			} else if (
+				fileList.length === 1 &&
+				values.picture?.fileList?.length === 1
+			) {
+				//if user edited their picture
+				payload.append(
+					'picture',
+					values.picture.fileList[0].originFileObj!
+				);
+			}
+			payload.append('data', JSON.stringify(userData));
+			try {
+				const res = await editUserById(accessToken, data._id, payload);
+				AppMessage({
+					content: I18n.t(res.data.message),
+					type: 'success',
+				});
+				dispatch(updateUserData(res.data.data));
+				handleClickCancelEdit();
+			} catch (error) {
+				errorHandling(error as TFetchErrorResponse, navigate);
+			}
 		}
 
 		setIsLoading(false);
@@ -198,14 +206,17 @@ const MyProfilePage: React.FC = () => {
 					</AppButton>
 				)}
 			</div>
-			{!isEdit ? (
+			{!isEdit && data ? (
 				<MyProfileCard
 					user={data}
 					I18n={I18n}
 				/>
 			) : (
 				<MyProfileForm
-					user={data}
+					user={{
+						name: data?.name,
+						username: data?.username,
+					}}
 					isLoading={isLoading}
 					handleSubmit={handleClickSaveEdit}
 					handleCancel={handleClickCancelEdit}

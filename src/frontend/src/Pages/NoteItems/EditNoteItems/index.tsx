@@ -29,12 +29,12 @@ const EditNoteItemsPage: React.FC = () => {
 				/>
 			</div>
 			<EditNoteItemsForm
-				noteId={selectedNote?.id}
-				isCategory={selectedCategoryNote?.id !== ''}
-				isWallet={selectedWalletNote?.id !== ''}
+				noteId={selectedNote.id!}
+				isCategory={selectedCategoryNote.id !== null}
+				isWallet={selectedWalletNote.id !== null}
 				handleCancel={handleCancel}
 				data={location.state}
-                I18n={I18n}
+				I18n={I18n}
 			/>
 		</MainLayout>
 	);

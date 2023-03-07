@@ -13,6 +13,10 @@ import AppMessage from '../../../../Components/General/AppMessage/index';
 import useLocale from '../../../../Hooks/useLocale';
 import { errorHandling } from '../../../../Api/errorHandling';
 import { APP_NAME } from '../../../../Constants/Constants';
+import {
+	TFetchErrorResponse,
+	TCategoryPayload,
+} from '../../../../Api/interfaces/types';
 
 const EditForm = withEditCategory(CategoryForm);
 
@@ -26,25 +30,27 @@ const EditCategoryPage: React.FC = () => {
 
 	const [isLoading, setIsLoading] = useState(false);
 
-	const handleEditCategory = async (values: any) => {
+	const handleEditCategory = async (values: TCategoryPayload) => {
 		setIsLoading(true);
 
-		try {
-			const response = await editUserCategory(
-				token,
-				category._id,
-				values
-			);
+		if (token) {
+			try {
+				const response = await editUserCategory(
+					token,
+					category._id,
+					values
+				);
 
-			navigate(getRouteNames(RouteNames.MANAGEMENT_CATEGORY), {
-				replace: true,
-			});
-			AppMessage({
-				type: 'success',
-				content: I18n.t(response.data.message),
-			});
-		} catch (error) {
-			errorHandling(error, navigate);
+				navigate(getRouteNames(RouteNames.MANAGEMENT_CATEGORY), {
+					replace: true,
+				});
+				AppMessage({
+					type: 'success',
+					content: I18n.t(response.data.message),
+				});
+			} catch (error) {
+				errorHandling(error as TFetchErrorResponse, navigate);
+			}
 		}
 
 		setIsLoading(false);

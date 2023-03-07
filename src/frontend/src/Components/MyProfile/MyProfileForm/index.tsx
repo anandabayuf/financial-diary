@@ -29,8 +29,8 @@ const MyProfileForm: React.FC<MyProfileFormProps> = ({
 					autoComplete='on'
 					layout='vertical'
 					initialValues={{
-						name: user.name,
-						username: user.username,
+						name: user?.name,
+						username: user?.username,
 					}}
 					onFinish={handleSubmit}
 				>

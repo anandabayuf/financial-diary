@@ -13,6 +13,10 @@ import AppMessage from '../../../Components/General/AppMessage/index';
 import useLocale from '../../../Hooks/useLocale';
 import { errorHandling } from '../../../Api/errorHandling';
 import { APP_NAME } from '../../../Constants/Constants';
+import {
+	TFetchErrorResponse,
+	TNotePayload,
+} from '../../../Api/interfaces/types';
 
 const CreateNotePage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
@@ -20,7 +24,7 @@ const CreateNotePage: React.FC = () => {
 	const { I18n, language } = useLocale();
 
 	const [isLoading, setIsLoading] = useState(false);
-	const [dateString, setDateString] = useState<any>();
+	const [dateString, setDateString] = useState<string>();
 
 	const handleChangeDatePicker: DatePickerProps['onChange'] = (
 		date,
@@ -29,24 +33,25 @@ const CreateNotePage: React.FC = () => {
 		setDateString(dateString);
 	};
 
-	const handleSubmit = async (values: any) => {
+	const handleSubmit = async (values: TNotePayload) => {
 		setIsLoading(true);
 
-		const payload = {
-			date: dateString,
-		};
-
-		try {
-			const response = await createUserNote(token, payload);
-			navigate(getRouteNames(RouteNames.NOTES), {
-				replace: true,
-			});
-			AppMessage({
-				type: 'success',
-				content: I18n.t(response.data.message),
-			});
-		} catch (error) {
-			errorHandling(error, navigate);
+		if (token && dateString) {
+			const payload = {
+				date: dateString,
+			};
+			try {
+				const response = await createUserNote(token, payload);
+				navigate(getRouteNames(RouteNames.NOTES), {
+					replace: true,
+				});
+				AppMessage({
+					type: 'success',
+					content: I18n.t(response.data.message),
+				});
+			} catch (error) {
+				errorHandling(error as TFetchErrorResponse, navigate);
+			}
 		}
 
 		setIsLoading(false);

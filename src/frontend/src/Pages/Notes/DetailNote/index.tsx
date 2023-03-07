@@ -18,6 +18,10 @@ import { setActiveKeyNoteTab } from '../../../Store/Note/NoteSlice';
 import useLocale from '../../../Hooks/useLocale';
 import { errorHandling } from '../../../Api/errorHandling';
 import { APP_NAME } from '../../../Constants/Constants';
+import {
+	TFetchErrorResponse,
+	TNoteResponse,
+} from '../../../Api/interfaces/types';
 
 const DetailNotePage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
@@ -31,7 +35,7 @@ const DetailNotePage: React.FC = () => {
 		(state) => state.note
 	);
 
-	const [note, setNote] = useState<any>();
+	const [note, setNote] = useState<TNoteResponse>();
 
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -52,15 +56,17 @@ const DetailNotePage: React.FC = () => {
 		const getNote = async () => {
 			setIsLoading(true);
 			navigateIfLocationIsNotMatch();
-			try {
-				const res = await getUserNoteByDate(
-					token,
-					`${selectedNote?.year}-${selectedNote?.month}`
-				);
-				const data = res.data.data;
-				setNote(data[0]);
-			} catch (error) {
-				errorHandling(error, navigate);
+			if (token) {
+				try {
+					const res = await getUserNoteByDate(
+						token,
+						`${selectedNote?.year}-${selectedNote?.month}`
+					);
+					const data = res.data.data;
+					setNote(data[0]);
+				} catch (error) {
+					errorHandling(error as TFetchErrorResponse, navigate);
+				}
 			}
 
 			setIsLoading(false);
@@ -70,7 +76,7 @@ const DetailNotePage: React.FC = () => {
 	}, []);
 
 	const handleChangeTab = (activeKey: string) =>
-		dispatch(setActiveKeyNoteTab({ activeKeyNoteTab: activeKey }));
+		dispatch(setActiveKeyNoteTab(activeKey));
 
 	useEffect(() => {
 		const stateReceiveAction = () => {
@@ -109,7 +115,7 @@ const DetailNotePage: React.FC = () => {
 		<MainLayout>
 			<AppBreadcrumb />
 			{isLoading ? (
-				<AppLoader />
+				<AppLoader isInPage />
 			) : note ? (
 				<>
 					<div className='mb-5'>
@@ -133,7 +139,7 @@ const DetailNotePage: React.FC = () => {
 					/>
 				</>
 			) : (
-				<AppEmpty />
+				<AppEmpty isInPage />
 			)}
 		</MainLayout>
 	);

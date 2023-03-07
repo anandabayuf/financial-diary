@@ -12,6 +12,8 @@ import { encryptPassword } from '../../Utils/AuthUtils';
 import { errorHandling } from '../../Api/errorHandling';
 import AppMessage from '../../Components/General/AppMessage/index';
 import { useNavigate } from 'react-router-dom';
+import { TFetchErrorResponse } from '../../Api/interfaces/types';
+import { ChangePasswordFormType } from '../../Components/ChangePassword/ChangePasswordForm/interfaces/interfaces';
 
 const ChangePasswordPage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
@@ -22,10 +24,10 @@ const ChangePasswordPage: React.FC = () => {
 
 	const [isLoading, setIsLoading] = useState(false);
 
-	const handleChangePassword = async (values: any) => {
-		if (values) {
+	const handleChangePassword = async (values: ChangePasswordFormType) => {
+		if (values && token) {
 			setIsLoading(true); // eslint-disable-next-line
-			let { oldPassword, newPassword, newPasswordConfirmation } = values;
+			let { oldPassword, newPassword } = values;
 
 			let oldPasswordEncrypted = encryptPassword(oldPassword);
 			let newPasswordEncrypted = encryptPassword(newPassword);
@@ -43,7 +45,7 @@ const ChangePasswordPage: React.FC = () => {
 				});
 				form.resetFields();
 			} catch (error) {
-				errorHandling(error, navigate);
+				errorHandling(error as TFetchErrorResponse, navigate);
 			}
 
 			setIsLoading(false);

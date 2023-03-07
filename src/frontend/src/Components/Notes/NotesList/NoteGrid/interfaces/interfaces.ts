@@ -1,8 +1,9 @@
 import { i18n } from 'i18next';
+import { TNoteResponse } from '../../../../../Api/interfaces/types';
 export interface NotesGridProps {
-	data?: any[];
+	data?: TNoteResponse[];
 	showYear?: string | number;
-	handleView?: (record?: any) => void;
+	handleView?: (record: TNoteResponse) => void;
 	I18n?: i18n;
 	language?: 'en' | 'id';
 }

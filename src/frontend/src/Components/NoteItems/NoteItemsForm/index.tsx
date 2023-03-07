@@ -25,7 +25,6 @@ const NoteItemsForm: React.FC<NoteItemsFormProps> = ({
 	walletNote,
 	categoryNote,
 	I18n,
-	handleChangeDatePicker,
 	handleSubmit,
 	handleCancel,
 }) => {
@@ -76,9 +75,9 @@ const NoteItemsForm: React.FC<NoteItemsFormProps> = ({
 	);
 
 	const initialValues = () => {
-		// console.log(data);
 		if (!isEdit && isCategory) {
 			return {
+				date: dayjs(new Date(Date.now())),
 				type: 'Spend',
 			};
 		}
@@ -86,19 +85,19 @@ const NoteItemsForm: React.FC<NoteItemsFormProps> = ({
 		if (isEdit) {
 			return {
 				...data,
-				date: dayjs(data.date),
-				type: ITEM_TYPE[data.type],
+				date: dayjs(data?.date),
+				type: ITEM_TYPE[data?.type!],
 				walletNoteId:
-					selectedWalletNoteId === data.walletNoteId2 &&
-					data.type === 1
+					selectedWalletNoteId === data?.walletNoteId2 &&
+					data?.type === 1
 						? data.walletNoteId
-						: data.type === 1
+						: data?.type === 1
 						? data.walletNoteId2
-						: data.walletNoteId,
+						: data?.walletNoteId,
 			};
 		}
 
-		return {};
+		return { date: dayjs(new Date(Date.now())) };
 	};
 
 	const disabledDate: DatePickerProps['disabledDate'] = (date) => {
@@ -145,7 +144,6 @@ const NoteItemsForm: React.FC<NoteItemsFormProps> = ({
 				<AppDatePicker
 					placeholder={I18n?.t('form.placeholder.date')}
 					picker='date'
-					onChange={handleChangeDatePicker}
 					disabledDate={disabledDate}
 				/>
 			</AppFormItem>
@@ -178,6 +176,7 @@ const NoteItemsForm: React.FC<NoteItemsFormProps> = ({
 					placeholder={I18n?.t('form.placeholder.item_type')}
 					options={ItemTypeOptions}
 					disabled={isEdit}
+					showSearch
 				/>
 			</AppFormItem>
 			<Form.Item
@@ -247,6 +246,7 @@ const NoteItemsForm: React.FC<NoteItemsFormProps> = ({
 											)}
 											options={categoryNoteOptions}
 											disabled={isEdit}
+											showSearch
 										/>
 									</AppFormItem>
 								)}
@@ -269,6 +269,7 @@ const NoteItemsForm: React.FC<NoteItemsFormProps> = ({
 										)}
 										options={walletNoteOptions}
 										disabled={isEdit}
+										showSearch
 									/>
 								</AppFormItem>
 							)}
@@ -322,7 +323,7 @@ const NoteItemsForm: React.FC<NoteItemsFormProps> = ({
 								name={'walletNoteId'}
 								label={
 									isEdit &&
-									selectedWalletNoteId === data.walletNoteId2
+									selectedWalletNoteId === data?.walletNoteId2
 										? I18n?.t('form.label.transfer_from')
 										: I18n?.t('form.label.transfer_to')
 								}
@@ -341,6 +342,7 @@ const NoteItemsForm: React.FC<NoteItemsFormProps> = ({
 									)}
 									options={walletNoteOptions}
 									disabled={isEdit}
+									showSearch
 								/>
 							</AppFormItem>
 							<AppFormItem

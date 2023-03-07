@@ -1,4 +1,4 @@
-import { RegisterFormProps } from './interfaces/interfaces';
+import { RegisterFormProps, RegisterFormType } from './interfaces/interfaces';
 import AppFormItem from '../../General/AppFormItem/index';
 import AppButton from '../../General/AppButton/index';
 import AppInput from '../../General/AppInput/index';
@@ -10,7 +10,6 @@ import useLocale from '../../../Hooks/useLocale';
 
 const RegisterForm: React.FC<RegisterFormProps> = ({
 	handleFinish,
-	handleFinishFailed,
 	loading,
 	handleUploadImage,
 }) => {
@@ -19,8 +18,9 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
 
 	return (
 		<StyledForm
-			onFinish={handleFinish}
-			onFinishFailed={handleFinishFailed}
+			onFinish={(values) =>
+				handleFinish && handleFinish(values as RegisterFormType)
+			}
 			autoComplete='on'
 			layout='vertical'
 		>

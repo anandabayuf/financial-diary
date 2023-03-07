@@ -1,12 +1,12 @@
 import AppTitle from '../../../../Components/General/AppTitle';
 import MainLayout from '../../../../Layouts/MainLayout/index';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEventHandler } from 'react';
 import { useAppSelector, useAppDispatch } from '../../../../Hooks/useRedux';
 import AppButton from '../../../../Components/General/AppButton';
 import { BsPlusLg } from 'react-icons/bs';
 import { Space, TableProps } from 'antd';
 import AppTable from '../../../../Components/General/AppTable/index';
-import WalletColumns from '../../../../Components/Management/Category/CategoryColumn';
+import WalletColumns from '../../../../Components/Management/Wallets/WalletColumn';
 import AppEmpty from '../../../../Components/General/AppEmpty/index';
 import AppLoader from '../../../../Components/General/AppLoader';
 import AppBreadcrumb from '../../../../Components/General/AppBreadcrumb';
@@ -19,6 +19,11 @@ import { setManagementPaginationSize } from '../../../../Store/Management/Manage
 import { errorHandling } from '../../../../Api/errorHandling';
 import useLocale from '../../../../Hooks/useLocale';
 import { APP_NAME } from '../../../../Constants/Constants';
+import { appendKey } from '../../../../Utils/TableUtils';
+import {
+	TFetchErrorResponse,
+	TCategoryResponse,
+} from '../../../../Api/interfaces/types';
 
 const ManagementCategoryPage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
@@ -31,8 +36,10 @@ const ManagementCategoryPage: React.FC = () => {
 		(state) => state.management.paginationSize?.category
 	);
 
-	const [categories, setCategories] = useState<any[]>([]);
-	const [categoriesList, setCategoriesList] = useState<any[]>([]);
+	const [categories, setCategories] = useState<TCategoryResponse[]>([]);
+	const [categoriesList, setCategoriesList] = useState<TCategoryResponse[]>(
+		[]
+	);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const [isSearching, setIsSearching] = useState<boolean>(false);
@@ -41,19 +48,16 @@ const ManagementCategoryPage: React.FC = () => {
 		const getCategory = async () => {
 			setIsLoading(true);
 
-			try {
-				const res = await getAllUserCategory(token);
-				let resCategories = [...res.data.data];
+			if (token) {
+				try {
+					const res = await getAllUserCategory(token);
+					let resCategories = [...res.data.data];
 
-				resCategories = resCategories.map((category: any) => {
-					category['key'] = category._id;
-					return category;
-				});
-
-				setCategories(resCategories);
-				setCategoriesList(resCategories);
-			} catch (error) {
-				errorHandling(error, navigate);
+					setCategories(resCategories);
+					setCategoriesList(resCategories);
+				} catch (error) {
+					errorHandling(error as TFetchErrorResponse, navigate);
+				}
 			}
 
 			setIsLoading(false);
@@ -66,7 +70,7 @@ const ManagementCategoryPage: React.FC = () => {
 		navigate(getRouteNames(RouteNames.CREATE_CATEGORY));
 	};
 
-	const handleChangeSearch = (e: any) => {
+	const handleChangeSearch: ChangeEventHandler<HTMLInputElement> = (e) => {
 		if (e.target.value === '') {
 			setCategoriesList(categories);
 		}
@@ -87,14 +91,10 @@ const ManagementCategoryPage: React.FC = () => {
 		}
 	};
 
-	const pagination: TableProps<any>['pagination'] = {
+	const pagination: TableProps<TCategoryResponse>['pagination'] = {
 		pageSize: pageSize,
 		onShowSizeChange(current, size) {
-			dispatch(
-				setManagementPaginationSize({
-					paginationSize: { category: size },
-				})
-			);
+			dispatch(setManagementPaginationSize({ category: size }));
 		},
 	};
 
@@ -123,7 +123,7 @@ const ManagementCategoryPage: React.FC = () => {
 				</AppButton>
 			</div>
 			{isLoading ? (
-				<AppLoader />
+				<AppLoader isInPage />
 			) : categories.length > 0 ? (
 				<>
 					<div className='flex justify-start mb-3'>
@@ -139,7 +139,7 @@ const ManagementCategoryPage: React.FC = () => {
 						/>
 					</div>
 					<AppTable
-						dataSource={categoriesList}
+						dataSource={appendKey(categoriesList)}
 						columns={WalletColumns({
 							navigate: navigate,
 							I18n: I18n,
@@ -148,7 +148,7 @@ const ManagementCategoryPage: React.FC = () => {
 					/>
 				</>
 			) : (
-				<AppEmpty />
+				<AppEmpty isInPage />
 			)}
 		</MainLayout>
 	);

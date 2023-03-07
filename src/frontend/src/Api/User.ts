@@ -1,9 +1,15 @@
 import instance from './index';
+import {
+	TEditUserByIdPayload,
+	TUserResponseApi,
+	TChangePasswordResponseApi,
+	TChangePasswordPayload,
+} from './interfaces/types';
 
 export const getUserById = async (
-	id?: string,
-	token?: string
-): Promise<any> => {
+	id: string,
+	token: string
+): Promise<TUserResponseApi> => {
 	return await instance({
 		url: `/user/${id}`,
 		method: 'GET',
@@ -12,10 +18,10 @@ export const getUserById = async (
 };
 
 export const editUserById = async (
-	token?: string,
-	id?: string,
-	data?: any
-): Promise<any> => {
+	token: string,
+	id: string,
+	data: TEditUserByIdPayload
+): Promise<TUserResponseApi> => {
 	return await instance({
 		url: `/user/${id}`,
 		method: 'PUT',
@@ -28,9 +34,9 @@ export const editUserById = async (
 };
 
 export const changePassword = async (
-	token?: string,
-	data?: any
-): Promise<any> => {
+	token: string,
+	data: TChangePasswordPayload
+): Promise<TChangePasswordResponseApi> => {
 	return await instance({
 		url: '/user/change-password',
 		method: 'PUT',

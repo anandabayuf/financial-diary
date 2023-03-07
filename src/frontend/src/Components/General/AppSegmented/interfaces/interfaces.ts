@@ -3,7 +3,7 @@ import { DataViewTypeNames } from '../../../../Constants/DataViewTypeNames';
 
 export interface AppSegmentedProps {
 	value?: DataViewTypeNames;
-	handleChange?: (value: any) => void;
+	handleChange?: (value: DataViewTypeNames) => void;
 }
 
 export interface StyledSegmentedProps {

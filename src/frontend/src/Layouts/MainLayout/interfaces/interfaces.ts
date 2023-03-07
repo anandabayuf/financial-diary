@@ -1,5 +1,7 @@
 import { MenuProps } from 'antd';
+import { SwitchChangeEventHandler } from 'antd/es/switch';
 import { i18n } from 'i18next';
+import { MenuClickEventHandler } from 'rc-menu/lib/interface';
 export interface MainLayoutProps {
 	children?: React.ReactNode;
 }
@@ -24,8 +26,8 @@ export interface ProfileMenuItemsProps {
 	isEnglish?: boolean;
 	isDropdownLangOpen?: boolean;
 	setIsDropdownLangOpen?: React.Dispatch<React.SetStateAction<boolean>>;
-	handleChangeTheme?: (e: any) => void;
-	handleChangeLang?: (e: any) => void;
+	handleChangeTheme?: SwitchChangeEventHandler;
+	handleChangeLang?: MenuClickEventHandler;
 }
 
 export type ProfileMenuItemsType =

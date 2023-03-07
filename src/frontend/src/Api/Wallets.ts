@@ -1,6 +1,13 @@
 import instance from './index';
+import {
+	TWalletsResponseApi,
+	TWalletPayload,
+	TWalletResponseApi,
+} from './interfaces/types';
 
-export const getAllUserWallet = async (token?: string): Promise<any> => {
+export const getAllUserWallet = async (
+	token: string
+): Promise<TWalletsResponseApi> => {
 	return await instance({
 		url: `/wallet`,
 		method: 'GET',
@@ -9,9 +16,9 @@ export const getAllUserWallet = async (token?: string): Promise<any> => {
 };
 
 export const createUserWallet = async (
-	token?: string,
-	data?: any
-): Promise<any> => {
+	token: string,
+	data: TWalletPayload
+): Promise<TWalletResponseApi> => {
 	return await instance({
 		url: `/wallet`,
 		method: 'POST',
@@ -21,10 +28,10 @@ export const createUserWallet = async (
 };
 
 export const editUserWallet = async (
-	token?: string,
-	id?: string,
-	data?: any
-): Promise<any> => {
+	token: string,
+	id: string,
+	data: TWalletPayload
+): Promise<TWalletResponseApi> => {
 	return await instance({
 		url: `/wallet/${id}`,
 		method: 'PUT',
