@@ -43,11 +43,15 @@ const RegisterPage: React.FC = () => {
 		}
 
 		const payload = new FormData();
-		if (picture && picture.fileList && picture.fileList?.length !== 0) {
+		if (
+			picture &&
+			picture.fileList &&
+			picture.fileList?.length !== 0 &&
+			fileList.length === 1
+		) {
 			payload.append('picture', picture.fileList[0].originFileObj!);
 		}
 		payload.append('data', JSON.stringify(data));
-
 		try {
 			const res = await register(payload);
 			AppMessage({ content: I18n.t(res.data.message), type: 'success' });

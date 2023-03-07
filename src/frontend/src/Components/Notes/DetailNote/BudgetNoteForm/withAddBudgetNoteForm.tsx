@@ -4,9 +4,9 @@ import { useAppSelector } from '../../../../Hooks/useRedux';
 import AppMessage from '../../../General/AppMessage/index';
 import {
 	getAvailableUserCategory,
-	addCategoryNoteEstimated,
+	addCategoryNoteBudget,
 } from '../../../../Api/Category-Note';
-import { addWalletNoteEstimated } from '../../../../Api/Wallet-Note';
+import { addWalletNoteBudget } from '../../../../Api/Wallet-Note';
 import { BudgetNoteFormProps } from './interfaces/interfaces';
 import { errorHandling } from '../../../../Api/errorHandling';
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +16,7 @@ import {
 	TCategoryResponse,
 } from '../../../../Api/interfaces/types';
 
-const withAddEstimationNoteForm = (
+const withAddBudgetNoteForm = (
 	Component: React.ComponentType<BudgetNoteFormProps>
 ) => {
 	const NewComponent: React.FC<BudgetNoteFormProps> = ({
@@ -86,7 +86,7 @@ const withAddEstimationNoteForm = (
 					});
 
 					try {
-						const res = await addWalletNoteEstimated(
+						const res = await addWalletNoteBudget(
 							token,
 							walletsPayload
 						);
@@ -117,7 +117,7 @@ const withAddEstimationNoteForm = (
 					);
 
 					try {
-						const res = await addCategoryNoteEstimated(
+						const res = await addCategoryNoteBudget(
 							token,
 							categoriesPayload
 						);
@@ -156,4 +156,4 @@ const withAddEstimationNoteForm = (
 	return NewComponent;
 };
 
-export default withAddEstimationNoteForm;
+export default withAddBudgetNoteForm;

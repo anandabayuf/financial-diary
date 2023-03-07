@@ -64,7 +64,7 @@ const DetailNoteTab: React.FC<DetailNoteTabProps> = ({
 			</div>
 
 			{isLoading ? (
-				<AppLoader />
+				<AppLoader isInPage />
 			) : (
 				data &&
 				(data.length > 0 ? (
@@ -138,7 +138,7 @@ const DetailNoteTab: React.FC<DetailNoteTabProps> = ({
 						)}
 					</>
 				) : (
-					<AppEmpty />
+					<AppEmpty isInPage />
 				))
 			)}
 			{modalAdd}

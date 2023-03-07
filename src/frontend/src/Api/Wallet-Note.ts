@@ -4,8 +4,8 @@ import {
 	TWalletsResponseApi,
 	TWalletNoteResponseApi,
 	TWalletNotePayload,
-	TWalletNoteEstimationPayload,
 	TEditWalletNotePayload,
+	TWalletNoteBudgetPayload,
 } from './interfaces/types';
 
 export const getAllUserWalletNote = async (
@@ -53,9 +53,9 @@ export const addWalletToTheNote = async (
 	});
 };
 
-export const addWalletNoteEstimated = async (
+export const addWalletNoteBudget = async (
 	token: string,
-	data: TWalletNoteEstimationPayload
+	data: TWalletNoteBudgetPayload
 ): Promise<TWalletsResponseApi> => {
 	return await instance({
 		url: `/wallet-note/estimated`,
@@ -65,7 +65,7 @@ export const addWalletNoteEstimated = async (
 	});
 };
 
-export const editWalletNoteEstimated = async (
+export const editWalletNoteBudget = async (
 	token: string,
 	id: string,
 	data: TEditWalletNotePayload

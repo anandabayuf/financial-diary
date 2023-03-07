@@ -123,7 +123,7 @@ const ManagementCategoryPage: React.FC = () => {
 				</AppButton>
 			</div>
 			{isLoading ? (
-				<AppLoader />
+				<AppLoader isInPage />
 			) : categories.length > 0 ? (
 				<>
 					<div className='flex justify-start mb-3'>
@@ -148,7 +148,7 @@ const ManagementCategoryPage: React.FC = () => {
 					/>
 				</>
 			) : (
-				<AppEmpty />
+				<AppEmpty isInPage />
 			)}
 		</MainLayout>
 	);

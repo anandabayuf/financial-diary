@@ -169,7 +169,7 @@ export type TCategoryNotePayload = {
 	noteId: string;
 };
 
-export type TCategoryNoteEstimationPayload = {
+export type TCategoryNoteBudgetPayload = {
 	categoryId: string;
 	noteId: string;
 	estimated: {
@@ -204,7 +204,7 @@ export type TWalletNotePayload = {
 	noteId: string;
 };
 
-export type TWalletNoteEstimationPayload = {
+export type TWalletNoteBudgetPayload = {
 	walletId: string;
 	noteId: string;
 	estimated: {

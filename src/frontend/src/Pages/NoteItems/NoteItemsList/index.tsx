@@ -278,7 +278,7 @@ const NoteItemsPage: React.FC = () => {
 				</AppButton>
 			</div>
 			{isLoading ? (
-				<AppLoader />
+				<AppLoader isInPage />
 			) : data.length > 0 ? (
 				<>
 					<div className='flex justify-between items-center mb-5 gap-x-3'>
@@ -329,7 +329,7 @@ const NoteItemsPage: React.FC = () => {
 					/>
 				</>
 			) : (
-				<AppEmpty />
+				<AppEmpty isInPage />
 			)}
 			{isModalDeleteOpen && deletedData && (
 				<NoteItemsDeleteModal

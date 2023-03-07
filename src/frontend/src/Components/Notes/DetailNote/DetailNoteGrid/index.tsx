@@ -96,7 +96,7 @@ const DetailNoteGrid: React.FC<DetailNoteGridProps> = ({
 					})}
 				</StyledGrid>
 			) : (
-				<AppEmpty />
+				<AppEmpty isInPage />
 			)}
 		</div>
 	);

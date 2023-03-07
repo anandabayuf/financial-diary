@@ -121,7 +121,7 @@ const ManagementWalletPage: React.FC = () => {
 				</AppButton>
 			</div>
 			{isLoading ? (
-				<AppLoader />
+				<AppLoader isInPage />
 			) : wallets.length > 0 ? (
 				<>
 					<div className='flex justify-start mb-3'>
@@ -144,7 +144,7 @@ const ManagementWalletPage: React.FC = () => {
 					/>
 				</>
 			) : (
-				<AppEmpty />
+				<AppEmpty isInPage />
 			)}
 		</MainLayout>
 	);

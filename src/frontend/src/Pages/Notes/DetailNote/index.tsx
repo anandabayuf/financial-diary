@@ -115,7 +115,7 @@ const DetailNotePage: React.FC = () => {
 		<MainLayout>
 			<AppBreadcrumb />
 			{isLoading ? (
-				<AppLoader />
+				<AppLoader isInPage />
 			) : note ? (
 				<>
 					<div className='mb-5'>
@@ -139,7 +139,7 @@ const DetailNotePage: React.FC = () => {
 					/>
 				</>
 			) : (
-				<AppEmpty />
+				<AppEmpty isInPage />
 			)}
 		</MainLayout>
 	);

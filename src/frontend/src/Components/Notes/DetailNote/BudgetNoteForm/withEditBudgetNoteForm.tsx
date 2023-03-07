@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { editWalletNoteEstimated } from '../../../../Api/Wallet-Note';
+import { editWalletNoteBudget } from '../../../../Api/Wallet-Note';
 import { useAppSelector } from '../../../../Hooks/useRedux';
 import AppMessage from '../../../General/AppMessage/index';
-import { editCategoryNoteEstimated } from '../../../../Api/Category-Note';
+import { editCategoryNoteBudget } from '../../../../Api/Category-Note';
 import { BudgetNoteFormProps } from './interfaces/interfaces';
 import { errorHandling } from '../../../../Api/errorHandling';
 import { useNavigate } from 'react-router-dom';
@@ -46,7 +46,7 @@ const withEditBudgetNoteForm = (
 					};
 
 					try {
-						const res = await editWalletNoteEstimated(
+						const res = await editWalletNoteBudget(
 							token,
 							data._id,
 							payload
@@ -74,7 +74,7 @@ const withEditBudgetNoteForm = (
 						},
 					};
 					try {
-						const res = await editCategoryNoteEstimated(
+						const res = await editCategoryNoteBudget(
 							token,
 							data._id,
 							payload

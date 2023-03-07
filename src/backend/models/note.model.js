@@ -32,16 +32,16 @@ exports.getAll = (query, userId) => {
 	const value = new Date(search[key]);
 
 	return new Promise((resolve, reject) => {
-		schema.NoteSchema.find(
-			{ [key]: value, userId: userId },
-			async (err, result) => {
+		schema.NoteSchema.find({ [key]: value, userId: userId })
+			.lean()
+			.sort({ date: "ascending" })
+			.exec((err, result) => {
 				if (err) {
 					reject(err);
 				} else {
 					resolve(result);
 				}
-			}
-		).lean();
+			});
 	});
 };
 

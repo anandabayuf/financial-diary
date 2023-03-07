@@ -1,7 +1,7 @@
 import instance from './index';
 import {
-	TCategoryNoteEstimationPayload,
 	TEditCategoryNotePayload,
+	TWalletNoteBudgetPayload,
 } from './interfaces/types';
 import {
 	TCategoryNoteListResponseApi,
@@ -55,9 +55,9 @@ export const addCategoryToTheNote = async (
 	});
 };
 
-export const addCategoryNoteEstimated = async (
+export const addCategoryNoteBudget = async (
 	token: string,
-	data: TCategoryNoteEstimationPayload
+	data: TWalletNoteBudgetPayload
 ): Promise<TCategoryNoteListResponseApi> => {
 	return await instance({
 		url: `/category-note/estimated`,
@@ -67,7 +67,7 @@ export const addCategoryNoteEstimated = async (
 	});
 };
 
-export const editCategoryNoteEstimated = async (
+export const editCategoryNoteBudget = async (
 	token: string,
 	id: string,
 	data: TEditCategoryNotePayload

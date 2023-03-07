@@ -102,7 +102,7 @@ const ResetPasswordPage: React.FC = () => {
 					</div>
 				</div>
 				{isCheckToken ? (
-					<AppLoader />
+					<AppLoader isInPage />
 				) : (
 					<ResetPasswordForm
 						I18n={I18n}

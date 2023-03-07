@@ -169,7 +169,7 @@ const NotesListPage: React.FC = () => {
 				</AppButton>
 			</div>
 			{isLoading ? (
-				<AppLoader />
+				<AppLoader isInPage />
 			) : notesList.length > 0 ? (
 				<>
 					<div className='flex justify-end items-center mb-3 gap-x-3'>
@@ -214,7 +214,7 @@ const NotesListPage: React.FC = () => {
 					)}
 				</>
 			) : (
-				<AppEmpty />
+				<AppEmpty isInPage />
 			)}
 		</MainLayout>
 	);

@@ -5,9 +5,9 @@ import { useAppSelector, useAppDispatch } from '../../../../Hooks/useRedux';
 import AppModal from '../../../General/AppModal';
 import AppTitle from '../../../General/AppTitle';
 import { getAllUserCategoryNote } from '../../../../Api/Category-Note';
-import withAddEstimationNoteForm from '../BudgetNoteForm/withAddBudgetNoteForm';
-import EstimationNoteForm from '../BudgetNoteForm/index';
-import withEditEstimationNoteForm from '../BudgetNoteForm/withEditBudgetNoteForm';
+import withAddBudgetNoteForm from '../BudgetNoteForm/withAddBudgetNoteForm';
+import BudgetNoteForm from '../BudgetNoteForm/index';
+import withEditBudgetNoteForm from '../BudgetNoteForm/withEditBudgetNoteForm';
 import { setNotePaginationSize } from '../../../../Store/Note/NoteSlice';
 import { TableProps } from 'antd';
 import { errorHandling } from '../../../../Api/errorHandling';
@@ -155,11 +155,9 @@ const withBudgetNoteTab = (
 				modalEdit: false,
 			});
 
-		const AddEstimationNoteForm =
-			withAddEstimationNoteForm(EstimationNoteForm);
+		const AddBudgetNoteForm = withAddBudgetNoteForm(BudgetNoteForm);
 
-		const EditEstimationNoteForm =
-			withEditEstimationNoteForm(EstimationNoteForm);
+		const EditBudgetNoteForm = withEditBudgetNoteForm(BudgetNoteForm);
 
 		const ModalAdd = (
 			<>
@@ -174,7 +172,7 @@ const withBudgetNoteTab = (
 					}
 					open={isModalOpen.modalAdd}
 				>
-					<AddEstimationNoteForm
+					<AddBudgetNoteForm
 						noteId={noteId}
 						handleCancel={handleCancelAdd}
 						I18n={I18n}
@@ -198,7 +196,7 @@ const withBudgetNoteTab = (
 						}
 						open={isModalOpen.modalEdit}
 					>
-						<EditEstimationNoteForm
+						<EditBudgetNoteForm
 							noteId={noteId}
 							data={recordEdit}
 							handleCancel={handleCancelEdit}
