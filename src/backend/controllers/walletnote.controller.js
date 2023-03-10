@@ -128,22 +128,6 @@ router.post("/estimated", async (req, res) => {
 	}
 });
 
-router.put("/:id", async (req, res) => {
-	try {
-		res.status(201).json({
-			status: 201,
-			message: message["walletnote.success.edit"],
-			data: await walletNoteModel.edit(req.params.id, req.body),
-		});
-	} catch (err) {
-		res.status(404).json({
-			status: 404,
-			message: message["walletnote.failed.edit"],
-			detail: err,
-		});
-	}
-});
-
 router.put("/:id/estimated", async (req, res) => {
 	let data = req.body;
 

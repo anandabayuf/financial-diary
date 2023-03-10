@@ -3,50 +3,57 @@ const categoryModel = require("./category.model");
 const noteModel = require("./note.model");
 const message = require("../constants/message");
 
-exports.create = (datas) => {
+exports.create = (datas, noteId) => {
 	return new Promise((resolve, reject) => {
-		let checkDatas = datas.map(async (data) => {
-			const checkFromDB = await schema.CategoryNoteSchema.find({
-				noteId: data.noteId,
-				categoryId: data.categoryId,
-			}).lean();
+		noteModel.isClosed(noteId).then((isNoteClosed) => {
+			if (isNoteClosed) {
+				reject(message["note.is_closed"]);
+			} else {
+				let checkDatas = datas.map(async (data) => {
+					const checkFromDB = await schema.CategoryNoteSchema.find({
+						noteId: data.noteId,
+						categoryId: data.categoryId,
+					}).lean();
 
-			if (checkFromDB.length === 0) {
-				return data;
+					if (checkFromDB.length === 0) {
+						return data;
+					}
+				});
+
+				Promise.all(checkDatas)
+					.then((res) => {
+						const dataToAdd = res.filter((el) => el !== undefined);
+
+						if (dataToAdd.length !== datas.length) {
+							reject(message["categorynote.already_added"]);
+						} else {
+							let total = 0;
+							let noteId = "";
+							let savingData = datas.map(async (data) => {
+								noteId = data.noteId;
+								total += data.estimated.total;
+
+								const saveData =
+									await new schema.CategoryNoteSchema(
+										data
+									).save();
+
+								return saveData;
+							});
+
+							Promise.all(savingData)
+								.then((res) => {
+									noteModel
+										.addEstimatedBalance(noteId, -total)
+										.then((add) => resolve(res))
+										.catch((addErr) => reject(addErr));
+								})
+								.catch((err) => reject(err));
+						}
+					})
+					.catch((err) => reject(err));
 			}
 		});
-
-		Promise.all(checkDatas)
-			.then((res) => {
-				const dataToAdd = res.filter((el) => el !== undefined);
-
-				if (dataToAdd.length !== datas.length) {
-					reject(message["categorynote.already_added"]);
-				} else {
-					let total = 0;
-					let noteId = "";
-					let savingData = datas.map(async (data) => {
-						noteId = data.noteId;
-						total += data.estimated.total;
-
-						const saveData = await new schema.CategoryNoteSchema(
-							data
-						).save();
-
-						return saveData;
-					});
-
-					Promise.all(savingData)
-						.then((res) => {
-							noteModel
-								.addEstimatedBalance(noteId, -total)
-								.then((add) => resolve(res))
-								.catch((addErr) => reject(addErr));
-						})
-						.catch((err) => reject(err));
-				}
-			})
-			.catch((err) => reject(err));
 	});
 };
 
@@ -182,27 +189,37 @@ exports.addTotal = (id, total) => {
 
 exports.editEstimatedTotal = (id, noteId, total) => {
 	return new Promise((resolve, reject) => {
-		this.getById(id)
-			.then((catNote) => {
-				let currEstimatedTotalCatNote = catNote.estimated.total;
-				let addition = -currEstimatedTotalCatNote + total;
+		noteModel
+			.isClosed(noteId)
+			.then((isClosed) => {
+				if (isClosed) {
+					reject(message["note.is_closed"]);
+				} else {
+					this.getById(id)
+						.then((catNote) => {
+							let currEstimatedTotalCatNote =
+								catNote.estimated.total;
+							let addition = -currEstimatedTotalCatNote + total;
 
-				const newCatNote = {
-					...catNote,
-					estimated: {
-						remains: total - catNote.total,
-						total: total,
-					},
-				};
+							const newCatNote = {
+								...catNote,
+								estimated: {
+									remains: total - catNote.total,
+									total: total,
+								},
+							};
 
-				noteModel
-					.addEstimatedBalance(noteId, -addition)
-					.then((result) => {
-						this.edit(id, newCatNote)
-							.then((res) => resolve(res))
-							.catch((err) => reject(err));
-					})
-					.catch((err) => reject(err));
+							noteModel
+								.addEstimatedBalance(noteId, -addition)
+								.then((result) => {
+									this.edit(id, newCatNote)
+										.then((res) => resolve(res))
+										.catch((err) => reject(err));
+								})
+								.catch((err) => reject(err));
+						})
+						.catch((err) => reject(err));
+				}
 			})
 			.catch((err) => reject(err));
 	});

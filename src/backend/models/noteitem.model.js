@@ -97,10 +97,9 @@ exports.create = (noteId, data) => {
 		noteModel
 			.getById(noteId)
 			.then(async (note) => {
-				// const noteYear = new Date(note.date).getFullYear();
-				// const noteMonth = new Date(note.date).getMonth() + 1;
-
-				if (this.isCanAdd(note, data)) {
+				if (note.closed) {
+					reject(message["note.is_closed"]);
+				} else if (this.isCanAdd(note, data)) {
 					let payload = data;
 					switch (ITEM_TYPE[payload.type]) {
 						case "INCOME":
@@ -189,14 +188,7 @@ exports.create = (noteId, data) => {
 							break;
 					}
 				} else {
-					reject(
-						message["noteitem.invalid_date"]
-						// `Cannot add item. The range of note is from 26-${
-						// 	noteMonth - 1 === 0 ? 12 : noteMonth - 1
-						// }-${
-						// 	noteMonth - 1 === 0 ? noteYear - 1 : noteYear
-						// } to 25-${noteMonth}-${noteYear}`
-					);
+					reject(message["noteitem.invalid_date"]);
 				}
 			})
 			.catch((error) => reject(error));
@@ -313,7 +305,9 @@ exports.editFunction = (id, data) => {
 					.then((note) => {
 						// const noteYear = new Date(note.date).getFullYear();
 						// const noteMonth = new Date(note.date).getMonth() + 1;
-						if (
+						if (note.closed) {
+							reject(message["note.is_closed"]);
+						} else if (
 							(data.date && this.isCanAdd(note, data)) ||
 							data.date === undefined
 						) {
@@ -432,61 +426,70 @@ exports.deleteFunction = (id) => {
 	return new Promise((resolve, reject) => {
 		this.getById(id)
 			.then((noteItem) => {
-				switch (ITEM_TYPE[noteItem.type]) {
-					case "INCOME":
-						this.incomeTransaction(
-							noteItem.walletNote._id,
-							-noteItem.debit
-						)
-							.then((income) => {
-								this.delete(id)
-									.then((res) => resolve(res))
-									.catch((err) => reject(err));
-							})
-							.catch((err) => reject(err));
-						break;
-					case "WITHDRAW_OR_TRANSFER":
-						this.withdrawOrTransferTransaction(
-							noteItem.walletNote._id,
-							noteItem.walletNote2._id,
-							-noteItem.debit
-						)
-							.then((wott) => {
-								this.delete(id)
-									.then((res) => resolve(res))
-									.catch((err) => reject(err));
-							})
-							.catch((err) => reject(err));
-						break;
-					case "SPEND":
-						// console.log(noteItem);
-						this.spendTransaction(
-							noteItem.walletNote._id,
-							noteItem.categoryNote._id,
-							-noteItem.credit
-						)
-							.then((spend) => {
-								this.delete(id)
-									.then((res) => resolve(res))
-									.catch((err) => reject(err));
-							})
-							.catch((err) => reject(err));
-						break;
-					case "SPEND_ONLY_IN_WALLET":
-						this.spendOnlyInWalletTransaction(
-							noteItem.walletNote._id,
-							-noteItem.credit
-						)
-							.then((soiw) => {
-								this.delete(id)
-									.then((res) => resolve(res))
-									.catch((err) => reject(err));
-							})
-							.catch((err) => reject(err));
-						break;
-					default:
-						break;
-				}
+				noteModel
+					.isClosed(noteItem.noteId)
+					.then((isClosed) => {
+						if (isClosed) {
+							reject(message["note.is_closed"]);
+						} else {
+							switch (ITEM_TYPE[noteItem.type]) {
+								case "INCOME":
+									this.incomeTransaction(
+										noteItem.walletNote._id,
+										-noteItem.debit
+									)
+										.then((income) => {
+											this.delete(id)
+												.then((res) => resolve(res))
+												.catch((err) => reject(err));
+										})
+										.catch((err) => reject(err));
+									break;
+								case "WITHDRAW_OR_TRANSFER":
+									this.withdrawOrTransferTransaction(
+										noteItem.walletNote._id,
+										noteItem.walletNote2._id,
+										-noteItem.debit
+									)
+										.then((wott) => {
+											this.delete(id)
+												.then((res) => resolve(res))
+												.catch((err) => reject(err));
+										})
+										.catch((err) => reject(err));
+									break;
+								case "SPEND":
+									// console.log(noteItem);
+									this.spendTransaction(
+										noteItem.walletNote._id,
+										noteItem.categoryNote._id,
+										-noteItem.credit
+									)
+										.then((spend) => {
+											this.delete(id)
+												.then((res) => resolve(res))
+												.catch((err) => reject(err));
+										})
+										.catch((err) => reject(err));
+									break;
+								case "SPEND_ONLY_IN_WALLET":
+									this.spendOnlyInWalletTransaction(
+										noteItem.walletNote._id,
+										-noteItem.credit
+									)
+										.then((soiw) => {
+											this.delete(id)
+												.then((res) => resolve(res))
+												.catch((err) => reject(err));
+										})
+										.catch((err) => reject(err));
+									break;
+								default:
+									break;
+							}
+						}
+					})
+					.catch((err) => reject(err));
 			})
 			.catch((err) => reject(err));
 	});

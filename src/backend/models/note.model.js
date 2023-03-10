@@ -1,24 +1,19 @@
 const schema = require("./schema");
 const message = require("../constants/message");
+const { queryParser } = require("../utils/search.utils");
 
-exports.create = (data) => {
+exports.isNoteMonthExist = (date, userId) => {
 	return new Promise((resolve, reject) => {
 		schema.NoteSchema.find(
-			{ date: data.date, userId: data.userId },
+			{ date: date, userId: userId },
 			async (err, result) => {
 				if (err) {
 					reject(err);
 				} else {
 					if (result.length === 0) {
-						new schema.NoteSchema(data).save((err, response) => {
-							if (err) {
-								reject(err);
-							} else {
-								resolve(response.toObject());
-							}
-						});
+						resolve(false);
 					} else {
-						reject(message["note.month_already_available"]);
+						resolve(true);
 					}
 				}
 			}
@@ -26,13 +21,37 @@ exports.create = (data) => {
 	});
 };
 
-exports.getAll = (query, userId) => {
-	let { limit = 5, page = 1, ...search } = query;
-	const key = Object.keys(search);
-	const value = new Date(search[key]);
-
+exports.isClosed = (id) => {
 	return new Promise((resolve, reject) => {
-		schema.NoteSchema.find({ [key]: value, userId: userId })
+		this.getById(id)
+			.then((note) => resolve(note.closed))
+			.catch((err) => reject(err));
+	});
+};
+
+exports.create = (data) => {
+	return new Promise((resolve, reject) => {
+		this.isNoteMonthExist(data.date, data.userId)
+			.then((isExist) => {
+				if (isExist) {
+					reject(message["note.month_already_available"]);
+				} else {
+					new schema.NoteSchema(data).save((err, response) => {
+						if (err) {
+							reject(err);
+						} else {
+							resolve(response.toObject());
+						}
+					});
+				}
+			})
+			.catch((err) => reject(err));
+	});
+};
+
+exports.getAll = (query, userId) => {
+	return new Promise((resolve, reject) => {
+		schema.NoteSchema.find({ ...queryParser(query), userId: userId })
 			.lean()
 			.sort({ date: "ascending" })
 			.exec((err, result) => {
@@ -59,15 +78,27 @@ exports.getById = (id) => {
 
 exports.edit = (id, data) => {
 	return new Promise((resolve, reject) => {
-		schema.NoteSchema.findByIdAndUpdate(id, data, (err, result) => {
-			if (err) {
-				reject(err);
-			} else {
-				this.getById(id)
-					.then((res) => resolve(res))
-					.catch((error) => reject(error));
-			}
-		});
+		this.isClosed(id)
+			.then((isClosed) => {
+				if (isClosed) {
+					reject(message["note.is_closed"]);
+				} else {
+					schema.NoteSchema.findByIdAndUpdate(
+						id,
+						data,
+						(err, result) => {
+							if (err) {
+								reject(err);
+							} else {
+								this.getById(id)
+									.then((res) => resolve(res))
+									.catch((error) => reject(error));
+							}
+						}
+					);
+				}
+			})
+			.catch((err) => reject(err));
 	});
 };
 
@@ -106,6 +137,24 @@ exports.addEstimatedRemains = (id, remains) => {
 				this.edit(id, newData)
 					.then((edit) => resolve(edit))
 					.catch((err) => reject(err));
+			})
+			.catch((err) => reject(err));
+	});
+};
+
+exports.close = (id) => {
+	return new Promise((resolve, reject) => {
+		this.getById(id)
+			.then((note) => {
+				if (note.closed) {
+					reject(message["note.is_closed_already"]);
+				} else {
+					const editedNote = { closed: true };
+
+					this.edit(id, editedNote)
+						.then((edited) => resolve(edited))
+						.catch((err) => reject(err));
+				}
 			})
 			.catch((err) => reject(err));
 	});
