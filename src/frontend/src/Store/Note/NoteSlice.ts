@@ -3,6 +3,7 @@ import { DataViewTypeNames } from '../../Constants/DataViewTypeNames';
 import {
 	NotePaginationSizeType,
 	SelectedNoteType,
+	ShowClosedType,
 } from '../interfaces/interfaces';
 import {
 	NoteState,
@@ -15,6 +16,7 @@ const initialState: NoteState = {
 		id: null,
 		month: null,
 		year: null,
+		closed: null,
 	},
 	selectedCategoryNote: {
 		id: null,
@@ -25,6 +27,7 @@ const initialState: NoteState = {
 		name: null,
 	},
 	showYear: 'all-year',
+	showClosed: 'active',
 	activeKeyNoteTab: 'budget-note-tab',
 	dataViewType: {
 		category: DataViewTypeNames.LIST,
@@ -118,6 +121,15 @@ const NoteSlice = createSlice({
 				showYear: action.payload,
 			};
 		},
+		setNoteShowClosed: (
+			state: NoteState,
+			action: PayloadAction<ShowClosedType>
+		) => {
+			return {
+				...state,
+				showClosed: action.payload,
+			};
+		},
 		setNotePaginationSize: (
 			state: NoteState,
 			action: PayloadAction<NotePaginationSizeType>
@@ -139,6 +151,7 @@ export const {
 	setSelectedWalletNote,
 	setActiveKeyNoteTab,
 	setNoteShowYear,
+	setNoteShowClosed,
 	setNoteDataViewType,
 	setNotePaginationSize,
 } = NoteSlice.actions;

@@ -4,48 +4,58 @@ const walletModel = require("./wallet.model");
 const noteModel = require("./note.model");
 const message = require("../constants/message");
 
-exports.create = (datas) => {
+exports.create = (datas, noteId) => {
 	return new Promise((resolve, reject) => {
-		let checkDatas = datas.map(async (data) => {
-			const checkFromDB = await schema.WalletNoteSchema.find({
-				noteId: data.noteId,
-				walletId: data.walletId,
-			}).lean();
+		noteModel.isClosed(noteId).then((isClosed) => {
+			if (isClosed) {
+				reject(message["note.is_closed"]);
+			} else {
+				let checkDatas = datas.map(async (data) => {
+					const checkFromDB = await schema.WalletNoteSchema.find({
+						noteId: data.noteId,
+						walletId: data.walletId,
+					}).lean();
 
-			if (checkFromDB.length === 0) {
-				return data;
+					if (checkFromDB.length === 0) {
+						return data;
+					}
+				});
+
+				Promise.all(checkDatas)
+					.then((res) => {
+						const dataToAdd = res.filter((el) => el !== undefined);
+
+						if (dataToAdd.length !== datas.length) {
+							reject(message["walletnote.already_added"]);
+						} else {
+							let totalBalance = 0;
+							let noteId = "";
+							let savingData = datas.map(async (data) => {
+								totalBalance += data.estimated.balance;
+								noteId = data.noteId;
+								const saveData =
+									await new schema.WalletNoteSchema(
+										data
+									).save();
+
+								return saveData;
+							});
+							Promise.all(savingData)
+								.then((res) => {
+									noteModel
+										.addEstimatedBalance(
+											noteId,
+											totalBalance
+										)
+										.then((add) => resolve(res))
+										.catch((addErr) => reject(addErr));
+								})
+								.catch((err) => reject(err));
+						}
+					})
+					.catch((err) => reject(err));
 			}
 		});
-
-		Promise.all(checkDatas)
-			.then((res) => {
-				const dataToAdd = res.filter((el) => el !== undefined);
-
-				if (dataToAdd.length !== datas.length) {
-					reject(message["walletnote.already_added"]);
-				} else {
-					let totalBalance = 0;
-					let noteId = "";
-					let savingData = datas.map(async (data) => {
-						totalBalance += data.estimated.balance;
-						noteId = data.noteId;
-						const saveData = await new schema.WalletNoteSchema(
-							data
-						).save();
-
-						return saveData;
-					});
-					Promise.all(savingData)
-						.then((res) => {
-							noteModel
-								.addEstimatedBalance(noteId, totalBalance)
-								.then((add) => resolve(res))
-								.catch((addErr) => reject(addErr));
-						})
-						.catch((err) => reject(err));
-				}
-			})
-			.catch((err) => reject(err));
 	});
 };
 
@@ -170,27 +180,34 @@ exports.addBalance = (id, balance) => {
 
 exports.editEstimatedBalance = (id, noteId, balance) => {
 	return new Promise((resolve, reject) => {
-		this.getById(id)
-			.then((walletNote) => {
-				let currEstimatedBalanceWalletNote =
-					walletNote.estimated.balance;
-				let addition = -currEstimatedBalanceWalletNote + balance;
-				const newWalletNote = {
-					...walletNote,
-					estimated: {
-						balance: balance,
-					},
-				};
-				noteModel
-					.addEstimatedBalance(noteId, addition)
-					.then((result) => {
-						this.edit(id, newWalletNote)
-							.then((res) => resolve(res))
+		noteModel.isClosed(noteId).then((isClosed) => {
+			if (isClosed) {
+				reject(message["note.is_closed"]);
+			} else {
+				this.getById(id)
+					.then((walletNote) => {
+						let currEstimatedBalanceWalletNote =
+							walletNote.estimated.balance;
+						let addition =
+							-currEstimatedBalanceWalletNote + balance;
+						const newWalletNote = {
+							...walletNote,
+							estimated: {
+								balance: balance,
+							},
+						};
+						noteModel
+							.addEstimatedBalance(noteId, addition)
+							.then((result) => {
+								this.edit(id, newWalletNote)
+									.then((res) => resolve(res))
+									.catch((err) => reject(err));
+							})
 							.catch((err) => reject(err));
 					})
 					.catch((err) => reject(err));
-			})
-			.catch((err) => reject(err));
+			}
+		});
 	});
 };
 

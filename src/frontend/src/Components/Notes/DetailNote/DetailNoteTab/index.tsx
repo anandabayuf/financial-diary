@@ -13,6 +13,7 @@ import DetailNoteColumns from '../DetailNoteColumns/index';
 import AppSearchInput from '../../../General/AppSearchInput';
 import DetailNoteGrid from '../DetailNoteGrid/index';
 import { formatIDR } from '../../../../Utils/CurrencyUtils';
+import { useAppSelector } from '../../../../Hooks/useRedux';
 
 const DetailNoteTab: React.FC<DetailNoteTabProps> = ({
 	data,
@@ -33,6 +34,10 @@ const DetailNoteTab: React.FC<DetailNoteTabProps> = ({
 	handleChangeSearch,
 	handleSearch,
 }) => {
+	const isNoteClosed = useAppSelector(
+		(state) => state.note.selectedNote.closed
+	);
+
 	return (
 		<>
 			<div className='flex justify-between items-center mb-5'>
@@ -46,21 +51,23 @@ const DetailNoteTab: React.FC<DetailNoteTabProps> = ({
 					}
 					level={5}
 				/>
-				<AppButton
-					type='primary'
-					onClick={handleClickAdd}
-				>
-					<Space>
-						<div className='flex justify-center'>
-							<BsPlusLg />
-						</div>
-						{isWallet
-							? I18n?.t('label.create.note.wallet')
-							: isCategory
-							? I18n?.t('label.create.note.category')
-							: I18n?.t('label.create.note.budget')}
-					</Space>
-				</AppButton>
+				{isNoteClosed === false && (
+					<AppButton
+						type='primary'
+						onClick={handleClickAdd}
+					>
+						<Space>
+							<div className='flex justify-center'>
+								<BsPlusLg />
+							</div>
+							{isWallet
+								? I18n?.t('label.create.note.wallet')
+								: isCategory
+								? I18n?.t('label.create.note.category')
+								: I18n?.t('label.create.note.budget')}
+						</Space>
+					</AppButton>
+				)}
 			</div>
 
 			{isLoading ? (
@@ -119,6 +126,7 @@ const DetailNoteTab: React.FC<DetailNoteTabProps> = ({
 							<AppTable
 								dataSource={dataList}
 								columns={DetailNoteColumns({
+									isNoteClosed: isNoteClosed!,
 									isWallet: isWallet,
 									isCategory: isCategory,
 									isBudget: isBudget,

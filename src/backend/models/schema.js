@@ -89,6 +89,10 @@ exports.NoteSchema = mongoose.model("Note", {
 			required: true,
 		},
 	},
+	closed: {
+		type: Boolean,
+		required: true,
+	},
 });
 
 exports.NoteItemSchema = mongoose.model("NoteItem", {

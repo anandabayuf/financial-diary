@@ -9,6 +9,7 @@ import dayjs from 'dayjs';
 import { TNoteItemResponse } from '../../../Api/interfaces/types';
 
 const NoteItemColumns: NoteItemColumnsType = ({
+	isNoteClosed,
 	walletNoteId,
 	isCategory,
 	isWallet,
@@ -46,6 +47,45 @@ const NoteItemColumns: NoteItemColumnsType = ({
 								)}
 							/>
 						),
+					},
+			  ]
+			: [];
+
+	const actionRender: () => ColumnsType<TNoteItemResponse> = () =>
+		!isNoteClosed
+			? [
+					{
+						title: (
+							<AppText
+								text={I18n?.t('label.action')}
+								strong
+							/>
+						),
+						key: 'action',
+						align: 'center',
+						render: (_, record) => {
+							return (
+								<Space>
+									<AppButton
+										type='text'
+										onClick={() =>
+											handleEdit && handleEdit(record)
+										}
+									>
+										{I18n?.t('label.edit')}
+									</AppButton>
+									<AppButton
+										type='text'
+										onClick={() =>
+											handleDelete && handleDelete(record)
+										}
+										danger
+									>
+										{I18n?.t('label.delete')}
+									</AppButton>
+								</Space>
+							);
+						},
 					},
 			  ]
 			: [];
@@ -101,35 +141,7 @@ const NoteItemColumns: NoteItemColumnsType = ({
 				/>
 			),
 		},
-		{
-			title: (
-				<AppText
-					text={I18n?.t('label.action')}
-					strong
-				/>
-			),
-			key: 'action',
-			align: 'center',
-			render: (_, record) => {
-				return (
-					<Space>
-						<AppButton
-							type='text'
-							onClick={() => handleEdit && handleEdit(record)}
-						>
-							{I18n?.t('label.edit')}
-						</AppButton>
-						<AppButton
-							type='text'
-							onClick={() => handleDelete && handleDelete(record)}
-							danger
-						>
-							{I18n?.t('label.delete')}
-						</AppButton>
-					</Space>
-				);
-			},
-		},
+		...actionRender(),
 	];
 };
 

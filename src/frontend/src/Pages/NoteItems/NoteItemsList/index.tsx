@@ -265,17 +265,19 @@ const NoteItemsPage: React.FC = () => {
 					level={5}
 					className='max-[425px]:hidden'
 				/>
-				<AppButton
-					type='primary'
-					onClick={handleClickCreate}
-				>
-					<Space>
-						<div className='flex justify-center'>
-							<BsPlusLg />
-						</div>
-						{I18n.t('label.create.note.item')}
-					</Space>
-				</AppButton>
+				{!selectedNote.closed && (
+					<AppButton
+						type='primary'
+						onClick={handleClickCreate}
+					>
+						<Space>
+							<div className='flex justify-center'>
+								<BsPlusLg />
+							</div>
+							{I18n.t('label.create.note.item')}
+						</Space>
+					</AppButton>
+				)}
 			</div>
 			{isLoading ? (
 				<AppLoader isInPage />
@@ -318,6 +320,7 @@ const NoteItemsPage: React.FC = () => {
 					<AppTable
 						dataSource={dataList}
 						columns={NoteItemColumns({
+							isNoteClosed: selectedNote.closed!,
 							walletNoteId: selectedWalletNote.id!,
 							isCategory: selectedCategoryNote.id !== null,
 							isWallet: selectedWalletNote.id !== null,

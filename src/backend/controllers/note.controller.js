@@ -45,6 +45,7 @@ router.post("/", async (req, res) => {
 		balance: 0,
 		remains: 0,
 	};
+	data.closed = false;
 
 	try {
 		res.status(201).json({
@@ -61,21 +62,21 @@ router.post("/", async (req, res) => {
 	}
 });
 
-// router.put("/:id", async (req, res) => {
-// 	try {
-// 		res.status(201).json({
-// 			status: 201,
-// 			message: "Successfully edit user note data",
-// 			data: await noteModel.edit(req.params.id, req.body),
-// 		});
-// 	} catch (err) {
-// 		res.status(404).json({
-// 			status: 404,
-// 			message: "Failed to edit user note data",
-// 			detail: err,
-// 		});
-// 	}
-// });
+router.put("/close/:id", async (req, res) => {
+	try {
+		res.status(201).json({
+			status: 201,
+			message: message["note.success.closed"],
+			data: await noteModel.close(req.params.id),
+		});
+	} catch (err) {
+		res.status(404).json({
+			status: 404,
+			message: message["note.failed.close"],
+			detail: err,
+		});
+	}
+});
 
 // router.delete("/:id", async (req, res) => {
 // 	try {

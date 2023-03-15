@@ -3,6 +3,7 @@ import { i18n } from 'i18next';
 import { TNoteItemResponse } from '../../../../Api/interfaces/types';
 
 export interface NoteItemColumnsProps {
+	isNoteClosed?: boolean;
 	walletNoteId?: string;
 	isCategory?: boolean;
 	isWallet?: boolean;

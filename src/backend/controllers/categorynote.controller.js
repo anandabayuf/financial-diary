@@ -76,7 +76,7 @@ router.post("/", async (req, res) => {
 		res.status(201).json({
 			status: 201,
 			message: message["categorynote.success.create"],
-			data: await categoryNoteModel.create(payload),
+			data: await categoryNoteModel.create(payload, data.noteId),
 		});
 	} catch (err) {
 		res.status(404).json({
@@ -107,28 +107,12 @@ router.post("/estimated", async (req, res) => {
 		res.status(201).json({
 			status: 201,
 			message: message["categorynote.success.create"],
-			data: await categoryNoteModel.create(payload),
+			data: await categoryNoteModel.create(payload, payload[0].noteId),
 		});
 	} catch (err) {
 		res.status(404).json({
 			status: 404,
 			message: message["categorynote.failed.create"],
-			detail: err,
-		});
-	}
-});
-
-router.put("/:id", async (req, res) => {
-	try {
-		res.status(201).json({
-			status: 201,
-			message: message["categorynote.success.edit"],
-			data: await categoryNoteModel.edit(req.params.id, req.body),
-		});
-	} catch (err) {
-		res.status(404).json({
-			status: 404,
-			message: message["categorynote.failed.edit"],
 			detail: err,
 		});
 	}

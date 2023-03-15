@@ -1,5 +1,6 @@
 import { DataViewTypeNames } from '../../Constants/DataViewTypeNames';
 import { TUserResponse } from '../../Api/interfaces/types';
+import { VIEW_NOTE_TYPE } from '../../Constants/Constants';
 
 export interface persistConfigType {
 	key: string;
@@ -40,13 +41,17 @@ export interface SelectedNoteType {
 	id: string | null;
 	year: string | null;
 	month: string | null;
+	closed: boolean | null;
 }
+
+export type ShowClosedType = 'all' | 'active' | 'closed';
 
 export interface NoteState {
 	selectedNote: SelectedNoteType;
 	selectedWalletNote: NoteSelectedType;
 	selectedCategoryNote: NoteSelectedType;
 	showYear: number | string;
+	showClosed: ShowClosedType;
 	activeKeyNoteTab: string;
 	dataViewType: {
 		wallet: DataViewTypeNames;

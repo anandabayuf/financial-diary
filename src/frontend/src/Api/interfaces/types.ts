@@ -136,6 +136,7 @@ export type TNoteResponse = {
 		balance: number;
 		remains: number;
 	};
+	closed: boolean;
 };
 
 export type TNotesResponseApi = TFetchResponse<TNoteResponse[]>;

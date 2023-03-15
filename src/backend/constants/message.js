@@ -45,6 +45,9 @@ const exception = {
 	"note.month_already_available": "note.exception.001", // "Note with the month is already available"
 	"note.failed.get_all": "note.failed.get_all", // "Failed to get user note"
 	"note.failed.get": "note.failed.get", // "Failed to get user note data"
+	"note.is_closed": "note.exception.002", // "Note is closed",
+	"note.is_closed_already": "note.exception.003", // "Note is already closed",
+	"note.failed.close": "note.failed.close", //: "Failed to close note"
 
 	"categorynote.failed.create": "categorynote.failed.create", // "Failed to create category note"
 	"categorynote.already_added": "categorynote.exception.001", //"Cannot add category, there is Category which has been added"
@@ -107,6 +110,7 @@ const success = {
 	"note.success.create": "note.success.create", // "Successfully create user note"
 	"note.success.get_all": "note.success.get_all", // "Successfully get user note"
 	"note.success.get": "note.success.get", // "Successfully get user note data"
+	"note.success.closed": "note.success.closed", //"Successfully close note"
 
 	"categorynote.success.create": "categorynote.success.create", // "Successfully create category note"
 	"categorynote.success.get_all": "categorynote.success.get_all", // "Successfully get category note"
