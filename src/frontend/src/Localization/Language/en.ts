@@ -54,6 +54,10 @@ const content = {
 	'content.note_item_delete_confirmation':
 		'Are you sure you want to delete this item?',
 
+	'content.note_close_confirmation':
+		'Are you sure you want to close this note?',
+	'content.note': 'Note',
+
 	'content.what_is': 'What is',
 	'content.what_is.Income':
 		'Income is a type of note item to record income/value added.',
@@ -115,10 +119,16 @@ const label = {
 	'label.back_to_login': 'Back to Login',
 	'label.reset_password': 'Reset Password',
 
+	'label.close_note': 'Close Note',
+
 	'label.action': 'Action',
 	'label.year': 'Year',
 	'label.month': 'Month',
 	'label.all_year': 'All Year',
+	'label.status': 'Status',
+	'label.closed': 'Closed',
+	'label.all': 'All',
+	'label.active': 'Active',
 	'label.balance': 'Balance',
 	'label.total': 'Total',
 	'label.budget.balance': 'Balance Budget',
@@ -243,6 +253,7 @@ const titlepage = {
 	'title.note.detail_note_not_found': 'Monthly Note',
 
 	'title.note.item.delete': 'Delete Item',
+	'title.note.close': 'Close Note',
 };
 
 const info = {
@@ -323,6 +334,7 @@ const backend = {
 	'note.success.create': 'Successfully create note',
 	'note.success.get_all': 'Successfully get note',
 	'note.success.get': 'Successfully get note data',
+	'note.success.closed': 'Successfully close note',
 
 	'categorynote.success.create': 'Successfully create category on note',
 	'categorynote.success.get_all': 'Successfully get category note',
@@ -400,6 +412,9 @@ const backend = {
 	'note.exception.001': 'Note with the month is already available',
 	'note.failed.get_all': 'Failed to get user note',
 	'note.failed.get': 'Failed to get user note data',
+	'note.exception.002': 'Note is closed',
+	'note.exception.003': 'Note is already closed',
+	'note.failed.close': 'Failed to close note',
 
 	'categorynote.failed.create': 'Failed to create category note',
 	'categorynote.exception.001':

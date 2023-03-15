@@ -1,7 +1,7 @@
 import AppTitle from '../../../Components/General/AppTitle';
 import MainLayout from '../../../Layouts/MainLayout';
 import { useState, useEffect } from 'react';
-import { getUserNoteByDate } from '../../../Api/Notes';
+import { closeNote, getUserNoteByDate } from '../../../Api/Notes';
 import AppEmpty from '../../../Components/General/AppEmpty/index';
 import AppLoader from '../../../Components/General/AppLoader';
 import AppBreadcrumb from '../../../Components/General/AppBreadcrumb';
@@ -13,8 +13,12 @@ import DetailNoteTabs from '../../../Components/Notes/DetailNote/DetailNoteTabs/
 import {
 	getFullYearFromDate,
 	getLongMonthFromDate,
+	getTwoDigitMonthStringFromDate,
 } from '../../../Utils/DateUtils';
-import { setActiveKeyNoteTab } from '../../../Store/Note/NoteSlice';
+import {
+	setActiveKeyNoteTab,
+	setSelectedNote,
+} from '../../../Store/Note/NoteSlice';
 import useLocale from '../../../Hooks/useLocale';
 import { errorHandling } from '../../../Api/errorHandling';
 import { APP_NAME } from '../../../Constants/Constants';
@@ -22,6 +26,11 @@ import {
 	TFetchErrorResponse,
 	TNoteResponse,
 } from '../../../Api/interfaces/types';
+import AppButton from '../../../Components/General/AppButton';
+import AppTag from '../../../Components/General/AppTag';
+import { IoCloseOutline } from 'react-icons/io5';
+import { Space } from 'antd';
+import CloseNoteModal from '../../../Components/Notes/DetailNote/CloseNoteModal';
 
 const DetailNotePage: React.FC = () => {
 	const token = useAppSelector((state) => state.user.accessToken);
@@ -38,6 +47,10 @@ const DetailNotePage: React.FC = () => {
 	const [note, setNote] = useState<TNoteResponse>();
 
 	const [isLoading, setIsLoading] = useState<boolean>(false);
+
+	const [isClosingNote, setIsClosingNote] = useState<boolean>(false);
+	const [isCloseNoteModalOpen, setIsCloseNoteModalOpen] =
+		useState<boolean>(false);
 
 	useEffect(() => {
 		const navigateIfLocationIsNotMatch = () => {
@@ -77,6 +90,36 @@ const DetailNotePage: React.FC = () => {
 
 	const handleChangeTab = (activeKey: string) =>
 		dispatch(setActiveKeyNoteTab(activeKey));
+
+	const handleClickCloseNote = () => setIsCloseNoteModalOpen(true);
+
+	const handleCancelCloseNote = () => setIsCloseNoteModalOpen(false);
+
+	const handleCloseNote = async () => {
+		setIsClosingNote(true);
+
+		if (token && note) {
+			try {
+				const res = await closeNote(token, note._id);
+				const resNote = res.data.data;
+				setNote(resNote);
+				dispatch(
+					setSelectedNote({
+						closed: resNote.closed,
+						id: resNote._id,
+						month: getTwoDigitMonthStringFromDate(resNote.date),
+						year: getFullYearFromDate(resNote.date).toString(),
+					})
+				);
+
+				handleCancelCloseNote();
+			} catch (error) {
+				errorHandling(error as TFetchErrorResponse, navigate);
+			}
+		}
+
+		setIsClosingNote(false);
+	};
 
 	useEffect(() => {
 		const stateReceiveAction = () => {
@@ -118,7 +161,7 @@ const DetailNotePage: React.FC = () => {
 				<AppLoader isInPage />
 			) : note ? (
 				<>
-					<div className='mb-5'>
+					<div className='mb-5 flex justify-between items-center'>
 						<AppTitle
 							title={`${I18n.t(
 								'title.note.detail'
@@ -128,6 +171,24 @@ const DetailNotePage: React.FC = () => {
 							)} - ${getFullYearFromDate(note.date)}`}
 							level={5}
 						/>
+						{!selectedNote.closed ? (
+							<AppButton
+								type='primary'
+								danger
+								onClick={handleClickCloseNote}
+							>
+								<Space>
+									<div className='flex justify-center'>
+										<IoCloseOutline className='text-xl' />
+									</div>
+									{I18n.t('label.close_note')}
+								</Space>
+							</AppButton>
+						) : (
+							<AppTag color='error'>
+								{I18n?.t('label.closed')}
+							</AppTag>
+						)}
 					</div>
 					<AppTabs
 						items={DetailNoteTabs({
@@ -137,6 +198,17 @@ const DetailNotePage: React.FC = () => {
 						onChange={handleChangeTab}
 						activeKey={activeKeyNoteTab}
 					/>
+					{isCloseNoteModalOpen && (
+						<CloseNoteModal
+							data={note}
+							I18n={I18n}
+							isLoading={isClosingNote}
+							isModalOpen={isCloseNoteModalOpen}
+							language={language}
+							handleCancel={handleCancelCloseNote}
+							handleClose={handleCloseNote}
+						/>
+					)}
 				</>
 			) : (
 				<AppEmpty isInPage />

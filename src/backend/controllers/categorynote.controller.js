@@ -107,7 +107,7 @@ router.post("/estimated", async (req, res) => {
 		res.status(201).json({
 			status: 201,
 			message: message["categorynote.success.create"],
-			data: await categoryNoteModel.create(payload),
+			data: await categoryNoteModel.create(payload, payload[0].noteId),
 		});
 	} catch (err) {
 		res.status(404).json({

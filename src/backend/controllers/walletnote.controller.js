@@ -75,7 +75,7 @@ router.post("/", async (req, res) => {
 		res.status(201).json({
 			status: 201,
 			message: message["walletnote.success.create"],
-			data: await walletNoteModel.create(payload),
+			data: await walletNoteModel.create(payload, data.noteId),
 		});
 	} catch (err) {
 		res.status(404).json({
@@ -117,7 +117,7 @@ router.post("/estimated", async (req, res) => {
 		res.status(201).json({
 			status: 201,
 			message: message["walletnote.success.create"],
-			data: await walletNoteModel.create(payload),
+			data: await walletNoteModel.create(payload, payload[0].noteId),
 		});
 	} catch (err) {
 		res.status(404).json({

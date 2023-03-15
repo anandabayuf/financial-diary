@@ -10,10 +10,13 @@ import {
 	getFullYearFromDate,
 	getLongMonthFromDate,
 } from '../../../../Utils/DateUtils';
+import { Tag } from 'antd';
+import AppTag from '../../../General/AppTag';
 
 const NotesGrid: React.FC<NotesGridProps> = ({
 	data,
 	showYear,
+	showClosed,
 	handleView,
 	I18n,
 	language,
@@ -23,7 +26,7 @@ const NotesGrid: React.FC<NotesGridProps> = ({
 	return (
 		<div className='flex justify-center'>
 			<StyledGrid>
-				{data?.map((el, index) => {
+				{data?.map((note, index) => {
 					return (
 						<StyledNoteGridCard
 							key={index}
@@ -36,16 +39,35 @@ const NotesGrid: React.FC<NotesGridProps> = ({
 									size={32}
 								/>
 								<div>
+									{showClosed === 'all' && (
+										<div className='flex justify-end mb-2'>
+											<AppTag
+												color={
+													note.closed
+														? 'error'
+														: 'success'
+												}
+											>
+												{I18n?.t(
+													note.closed
+														? 'label.closed'
+														: 'label.active'
+												)}
+											</AppTag>
+										</div>
+									)}
 									{showYear === 'all-year' && (
 										<AppText
-											text={getFullYearFromDate(el.date)}
+											text={getFullYearFromDate(
+												note.date
+											)}
 											className='flex justify-end'
 										/>
 									)}
 									<div className='flex justify-end'>
 										<AppTitle
 											title={getLongMonthFromDate(
-												el.date,
+												note.date,
 												language
 											)}
 											level={4}
@@ -56,7 +78,9 @@ const NotesGrid: React.FC<NotesGridProps> = ({
 							<div className='flex justify-end'>
 								<AppButton
 									type='text'
-									onClick={() => handleView && handleView(el)}
+									onClick={() =>
+										handleView && handleView(note)
+									}
 								>
 									{I18n?.t('label.view')}
 								</AppButton>

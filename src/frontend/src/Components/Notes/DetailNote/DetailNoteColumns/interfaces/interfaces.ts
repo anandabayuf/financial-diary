@@ -6,6 +6,7 @@ export interface DetailNoteColumnsProps {
 	isCategory?: boolean;
 	isBudget?: boolean;
 	I18n?: i18n;
+	isNoteClosed?: boolean;
 	handleView?: (record: any) => void;
 	handleEdit?: (record: any) => void;
 }

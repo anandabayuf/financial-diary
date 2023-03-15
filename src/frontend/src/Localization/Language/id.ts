@@ -54,6 +54,10 @@ const content = {
 	'content.note_item_delete_confirmation':
 		'Apakah kamu yakin ingin menghapus item ini?',
 
+	'content.note_close_confirmation':
+		'Apakah kamu yakin ingin menutup pencatatan ini?',
+	'content.note': 'Pencatatan',
+
 	'content.what_is': 'Apa itu',
 	'content.what_is.Income':
 		'Pemasukan adalah jenis item pencatatan untuk mencatat pendapatan/nilai tambah.',
@@ -116,10 +120,16 @@ const label = {
 	'label.back_to_login': 'Kembali untuk Masuk',
 	'label.reset_password': 'Atur Ulang Kata Sandi',
 
+	'label.close_note': 'Tutup Pencatatan',
+
 	'label.action': 'Aksi',
 	'label.year': 'Tahun',
 	'label.month': 'Bulan',
 	'label.all_year': 'Semua Tahun',
+	'label.status': 'Status',
+	'label.all': 'Semua',
+	'label.closed': 'Ditutup',
+	'label.active': 'Aktif',
 	'label.balance': 'Saldo',
 	'label.total': 'Total',
 	'label.budget.balance': 'Anggaran Saldo',
@@ -249,6 +259,7 @@ const titlepage = {
 	'title.note.detail_note_not_found': 'Pencatatan Bulanan',
 
 	'title.note.item.delete': 'Hapus Item',
+	'title.note.close': 'Tutup Pencatatan',
 };
 
 const info = {
@@ -331,6 +342,7 @@ const backend = {
 	'note.success.create': 'Berhasil membuat pencatatan',
 	'note.success.get_all': 'Berhasil mendapatkan pencatatan',
 	'note.success.get': 'Berhasil mendapatkan data pencatatan',
+	'note.success.closed': 'Berhasil menutup pencatatan',
 
 	'categorynote.success.create':
 		'Berhasil menambahkan kategori pada pencatatan',
@@ -410,6 +422,9 @@ const backend = {
 	'note.exception.001': 'Pencatatan dengan bulan tersebut sudah tersedia',
 	'note.failed.get_all': 'Gagal mendapatkan pencatatan',
 	'note.failed.get': 'Gagal mendapatkan data pencatatan',
+	'note.exception.002': 'Pencatatan ditutup',
+	'note.exception.003': 'Pencatatan sudah ditutup',
+	'note.failed.close': 'Gagal menutup pencatatan',
 
 	'categorynote.failed.create': 'Gagal menambahkan kategori pada pencatatan',
 	'categorynote.exception.001':

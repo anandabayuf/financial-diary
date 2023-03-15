@@ -30,11 +30,14 @@ import {
 	setActiveKeyNoteTab,
 	setNoteDataViewType,
 	setNotePaginationSize,
+	setNoteShowClosed,
 	setNoteShowYear,
 	setSelectedNote,
 } from '../../../Store/Note/NoteSlice';
 import { APP_NAME } from '../../../Constants/Constants';
 import { appendKey } from '../../../Utils/TableUtils';
+import NotesOptionClosed from '../../../Components/Notes/NotesList/NoteOptionClosed/index';
+import { ShowClosedType } from '../../../Store/interfaces/interfaces';
 import {
 	TFetchErrorResponse,
 	TNoteResponse,
@@ -49,7 +52,7 @@ const NotesListPage: React.FC = () => {
 	const [notes, setNotes] = useState<TNoteResponse[]>([]);
 	const [notesList, setNotesList] = useState<TNoteResponse[]>([]);
 	const [optionYear, setOptionYear] = useState<number[]>([]);
-	const selectedYear = useAppSelector((state) => state.note.showYear);
+	const { showYear, showClosed } = useAppSelector((state) => state.note);
 
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -81,7 +84,15 @@ const NotesListPage: React.FC = () => {
 
 					setOptionYear(years);
 					setNotes(resNotes);
-					setNotesList(resNotes);
+					setNotesList(
+						resNotes.filter((note) =>
+							showClosed === 'active'
+								? note.closed === false
+								: showClosed === 'closed'
+								? note.closed === true
+								: note
+						)
+					);
 				} catch (error) {
 					errorHandling(error as TFetchErrorResponse, navigate);
 				}
@@ -101,19 +112,40 @@ const NotesListPage: React.FC = () => {
 		dispatch(setNoteDataViewType({ note: values }));
 
 	const handleChangeYear = (value: string | number) => {
-		// setSelectedYear(value);
 		dispatch(setNoteShowYear(value));
 
 		if (value === 'all-year') {
 			setNotesList(notes);
 		} else {
-			let newWalletLists = [...notes];
+			let newNoteList = [...notes];
 
-			newWalletLists = newWalletLists.filter(
-				(el) => new Date(el.date).getFullYear() === value
+			newNoteList = newNoteList.filter(
+				(note) => new Date(note.date).getFullYear() === value
 			);
 
-			setNotesList(newWalletLists);
+			setNotesList(newNoteList);
+		}
+	};
+
+	const handleChangeClosed = (value: ShowClosedType) => {
+		dispatch(setNoteShowClosed(value));
+
+		if (value === 'all') {
+			setNotesList(notes);
+		} else {
+			let newNoteList = [...notes];
+
+			if (value === 'active') {
+				newNoteList = newNoteList.filter(
+					(note) => note.closed === false
+				);
+			} else {
+				newNoteList = newNoteList.filter(
+					(note) => note.closed === true
+				);
+			}
+
+			setNotesList(newNoteList);
 		}
 	};
 
@@ -123,6 +155,7 @@ const NotesListPage: React.FC = () => {
 				id: record._id,
 				month: getTwoDigitMonthStringFromDate(record.date),
 				year: getFullYearFromDate(record.date).toString(),
+				closed: record.closed,
 			})
 		);
 		dispatch(setActiveKeyNoteTab('budget-note-tab'));
@@ -172,14 +205,22 @@ const NotesListPage: React.FC = () => {
 				<AppLoader isInPage />
 			) : notesList.length > 0 ? (
 				<>
-					<div className='flex justify-end items-center mb-3 gap-x-3'>
+					<div className='flex flex-wrap justify-end items-center mb-3 gap-3'>
 						<AppText
 							text={`${I18n.t('content.show')}:`}
 							className='text-sm max-[425px]:hidden'
 						/>
 						<AppSelect
+							value={showClosed}
+							options={NotesOptionClosed({
+								I18n: I18n,
+							})}
+							loading={isLoading}
+							onChange={handleChangeClosed}
+						/>
+						<AppSelect
 							placeholder={I18n.t('placeholder.select_year')}
-							value={selectedYear}
+							value={showYear}
 							options={NotesOptionYear({
 								years: optionYear,
 								I18n: I18n,
@@ -197,7 +238,8 @@ const NotesListPage: React.FC = () => {
 							dataSource={appendKey(notesList)}
 							columns={NotesColumns({
 								handleView,
-								showYear: selectedYear,
+								showYear: showYear,
+								showClosed: showClosed,
 								I18n: I18n,
 								language: language,
 							})}
@@ -206,7 +248,8 @@ const NotesListPage: React.FC = () => {
 					) : (
 						<NotesGrid
 							data={notesList}
-							showYear={selectedYear}
+							showYear={showYear}
+							showClosed={showClosed}
 							handleView={handleView}
 							I18n={I18n}
 							language={language}

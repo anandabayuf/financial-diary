@@ -31,7 +31,7 @@ const NoteItemsForm: React.FC<NoteItemsFormProps> = ({
 	const selectedWalletNoteId = useAppSelector(
 		(state) => state.note.selectedWalletNote?.id
 	);
-	const { month, year } = useAppSelector((state) => state.note.selectedNote!);
+	const { month, year } = useAppSelector((state) => state.note.selectedNote);
 
 	const { color } = useTheme();
 

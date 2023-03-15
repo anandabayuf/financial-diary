@@ -37,3 +37,14 @@ export const getUserNoteByDate = async (
 		headers: { Authorization: `Bearer ${token}` },
 	});
 };
+
+export const closeNote = async (
+	token: string,
+	id: string
+): Promise<TNoteResponseApi> => {
+	return await instance({
+		url: `/note/close/${id}`,
+		method: 'PUT',
+		headers: { Authorization: `Bearer ${token}` },
+	});
+};

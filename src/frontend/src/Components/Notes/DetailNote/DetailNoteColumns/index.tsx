@@ -2,15 +2,46 @@ import AppButton from '../../../General/AppButton';
 import AppText from '../../../General/AppText';
 import { DetailNoteColumnsType } from './interfaces/interfaces';
 import { formatIDR } from '../../../../Utils/CurrencyUtils';
+import { ColumnsType } from 'antd/es/table';
 
 const DetailNoteColumns: DetailNoteColumnsType = ({
 	isWallet,
 	isCategory,
 	isBudget,
 	I18n,
+	isNoteClosed,
 	handleView,
 	handleEdit,
 }) => {
+	const noteClosedColumns: () => ColumnsType<any> = () => {
+		if (isNoteClosed) {
+			return [];
+		}
+
+		return [
+			{
+				title: (
+					<AppText
+						text={I18n?.t('label.action')}
+						strong
+					/>
+				),
+				key: 'action',
+				align: 'center',
+				render: (_, record) => {
+					return (
+						<AppButton
+							type='text'
+							onClick={() => handleEdit && handleEdit(record)}
+						>
+							{I18n?.t('label.edit')}
+						</AppButton>
+					);
+				},
+			},
+		];
+	};
+
 	return isCategory || isWallet
 		? [
 				{
@@ -163,26 +194,7 @@ const DetailNoteColumns: DetailNoteColumnsType = ({
 							/>
 						),
 				},
-				{
-					title: (
-						<AppText
-							text={I18n?.t('label.action')}
-							strong
-						/>
-					),
-					key: 'action',
-					align: 'center',
-					render: (_, record) => {
-						return (
-							<AppButton
-								type='text'
-								onClick={() => handleEdit && handleEdit(record)}
-							>
-								{I18n?.t('label.edit')}
-							</AppButton>
-						);
-					},
-				},
+				...noteClosedColumns(),
 		  ];
 };
 

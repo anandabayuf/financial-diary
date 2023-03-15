@@ -11,3 +11,5 @@ export const PUBLIC_KEY =
 	process.env.REACT_APP_PUBLIC_KEY?.split(String.raw`\n`).join('\n') || '';
 export const APP_NAME = process.env.REACT_APP_APP_NAME || '';
 export const APP_VERSION = process.env.REACT_APP_APP_VERSION || '';
+
+export const VIEW_NOTE_TYPE = ['all', 'active', 'closed'];

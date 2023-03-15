@@ -5,13 +5,15 @@ import ThemeModeNames from '../../../../Constants/ThemeModeNames';
 
 const StyledButton = styled(Button)<StyledButtonProps>`
 	background-color: ${(props) =>
-		(props.type === 'default' || props.type === 'primary') &&
-		props.backgroundcolor};
+		props.danger && props.type === 'primary'
+			? '#ff4d4f'
+			: (props.type === 'default' || props.type === 'primary') &&
+			  props.backgroundcolor};
 
 	font-family: 'Comfortaa', cursive !important;
 	font-weight: 500 !important;
 	color: ${(props) =>
-		props.danger
+		props.danger && (props.type === 'default' || props.type === 'text')
 			? '#ff4d4f'
 			: props.type === 'default' || props.type === 'primary'
 			? props.textcolor
