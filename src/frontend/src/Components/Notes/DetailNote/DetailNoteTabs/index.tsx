@@ -14,21 +14,6 @@ const CategoryNoteTab = withCategoryNoteTab(DetailNoteTab);
 
 const DetailNoteTabs: DetailNoteTabsType = ({ noteId, I18n }) => [
 	{
-		key: 'budget-note-tab',
-		label: (
-			<div className='flex justify-center items-center gap-x-2'>
-				<FaRegMoneyBillAlt />
-				<AppText text={I18n?.t('label.budget')} />
-			</div>
-		),
-		children: (
-			<BudgetNoteTab
-				noteId={noteId}
-				I18n={I18n}
-			/>
-		),
-	},
-	{
 		key: 'wallet-note-tab',
 		label: (
 			<div className='flex justify-center items-center gap-x-2'>
@@ -53,6 +38,21 @@ const DetailNoteTabs: DetailNoteTabsType = ({ noteId, I18n }) => [
 		),
 		children: (
 			<CategoryNoteTab
+				noteId={noteId}
+				I18n={I18n}
+			/>
+		),
+	},
+	{
+		key: 'budget-note-tab',
+		label: (
+			<div className='flex justify-center items-center gap-x-2'>
+				<FaRegMoneyBillAlt />
+				<AppText text={I18n?.t('label.budget')} />
+			</div>
+		),
+		children: (
+			<BudgetNoteTab
 				noteId={noteId}
 				I18n={I18n}
 			/>
