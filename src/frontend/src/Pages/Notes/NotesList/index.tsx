@@ -125,7 +125,7 @@ const NotesListPage: React.FC = () => {
 				year: getFullYearFromDate(record.date).toString(),
 			})
 		);
-		dispatch(setActiveKeyNoteTab('budget-note-tab'));
+		dispatch(setActiveKeyNoteTab('wallet-note-tab'));
 		navigate(
 			`/notes/${getFullYearFromDate(
 				record.date
