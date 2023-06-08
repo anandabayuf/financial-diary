@@ -13,6 +13,7 @@ import { AiOutlineQuestionCircle } from 'react-icons/ai';
 import useTheme from '../../../Hooks/useTheme';
 import AppDatePicker from '../../General/AppDatePicker/index';
 import dayjs from 'dayjs';
+import AppInputCurrency from '../../General/AppInputCurrency';
 
 const NoteItemsForm: React.FC<NoteItemsFormProps> = ({
 	isWallet,
@@ -304,7 +305,7 @@ const NoteItemsForm: React.FC<NoteItemsFormProps> = ({
 									},
 								]}
 							>
-								<AppInput
+								<AppInputCurrency
 									placeholder={
 										getFieldValue('type') === 'Income'
 											? I18n?.t(
@@ -363,7 +364,7 @@ const NoteItemsForm: React.FC<NoteItemsFormProps> = ({
 									},
 								]}
 							>
-								<AppInput
+								<AppInputCurrency
 									placeholder={I18n?.t(
 										'form.placeholder.transfer_amount'
 									)}
