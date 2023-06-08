@@ -6,7 +6,7 @@ import AppButton from '../../../../Components/General/AppButton';
 import { BsPlusLg } from 'react-icons/bs';
 import { Space, TableProps } from 'antd';
 import AppTable from '../../../../Components/General/AppTable/index';
-import WalletColumns from '../../../../Components/Management/Wallets/WalletColumn';
+import CategoryColumn from '../../../../Components/Management/Category/CategoryColumn';
 import AppEmpty from '../../../../Components/General/AppEmpty/index';
 import AppLoader from '../../../../Components/General/AppLoader';
 import AppBreadcrumb from '../../../../Components/General/AppBreadcrumb';
@@ -140,7 +140,7 @@ const ManagementCategoryPage: React.FC = () => {
 					</div>
 					<AppTable
 						dataSource={appendKey(categoriesList)}
-						columns={WalletColumns({
+						columns={CategoryColumn({
 							navigate: navigate,
 							I18n: I18n,
 						})}
