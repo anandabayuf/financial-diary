@@ -89,8 +89,7 @@ const NoteItemsForm: React.FC<NoteItemsFormProps> = ({
 				date: dayjs(data?.date),
 				type: ITEM_TYPE[data?.type!],
 				walletNoteId:
-					selectedWalletNoteId === data?.walletNoteId2 &&
-					data?.type === 1
+					selectedWalletNoteId === data?.walletNoteId2 && data?.type === 1
 						? data.walletNoteId
 						: data?.type === 1
 						? data.walletNoteId2
@@ -99,28 +98,6 @@ const NoteItemsForm: React.FC<NoteItemsFormProps> = ({
 		}
 
 		return { date: dayjs(new Date(Date.now())) };
-	};
-
-	const disabledDate: DatePickerProps['disabledDate'] = (date) => {
-		const noteMonth = parseInt(month!);
-		const noteYear = parseInt(year!);
-		if (noteMonth - 1 === 0) {
-			return (
-				date &&
-				(date.valueOf() <=
-					new Date(`${noteYear - 1}-12-26`).getTime() ||
-					date.valueOf() >=
-						new Date(`${noteYear}-${noteMonth}-26`).getTime())
-			);
-		} else {
-			return (
-				date &&
-				(date.valueOf() <=
-					new Date(`${noteYear}-${noteMonth - 1}-26`).getTime() ||
-					date.valueOf() >=
-						new Date(`${noteYear}-${noteMonth}-26`).getTime())
-			);
-		}
 	};
 
 	return isFetching ? (
@@ -145,7 +122,6 @@ const NoteItemsForm: React.FC<NoteItemsFormProps> = ({
 				<AppDatePicker
 					placeholder={I18n?.t('form.placeholder.date')}
 					picker='date'
-					disabledDate={disabledDate}
 				/>
 			</AppFormItem>
 			<AppFormItem
@@ -158,9 +134,7 @@ const NoteItemsForm: React.FC<NoteItemsFormProps> = ({
 					},
 				]}
 			>
-				<AppInput
-					placeholder={I18n?.t('form.placeholder.description')}
-				/>
+				<AppInput placeholder={I18n?.t('form.placeholder.description')} />
 			</AppFormItem>
 			<AppFormItem
 				label={I18n?.t('form.label.item_type')}
@@ -190,24 +164,18 @@ const NoteItemsForm: React.FC<NoteItemsFormProps> = ({
 					getFieldValue('type') !== undefined && (
 						<>
 							<AppTooltip
-								title={I18n?.t(
-									`content.what_is.${getFieldValue('type')}`
-								)}
+								title={I18n?.t(`content.what_is.${getFieldValue('type')}`)}
 								trigger={'click'}
 								placement='topLeft'
 							>
 								<div className='flex justify-start items-center gap-x-2 mb-[24px]'>
 									<AppText
-										text={`${I18n?.t(
-											'content.what_is'
-										)} ${I18n?.t(
+										text={`${I18n?.t('content.what_is')} ${I18n?.t(
 											`label.${getFieldValue('type')}`
 										)}?`}
 										className='text-sm'
 									/>
-									<AiOutlineQuestionCircle
-										color={color?.text}
-									/>
+									<AiOutlineQuestionCircle color={color?.text} />
 								</div>
 							</AppTooltip>
 						</>
@@ -226,8 +194,7 @@ const NoteItemsForm: React.FC<NoteItemsFormProps> = ({
 					getFieldValue('type') === 'Spend Only In Wallet' ? (
 						<>
 							{!isCategory &&
-								getFieldValue('type') !==
-									'Spend Only In Wallet' &&
+								getFieldValue('type') !== 'Spend Only In Wallet' &&
 								getFieldValue('type') !== 'Income' && (
 									<AppFormItem
 										name={'categoryNoteId'}
@@ -235,16 +202,12 @@ const NoteItemsForm: React.FC<NoteItemsFormProps> = ({
 										rules={[
 											{
 												required: true,
-												message: I18n?.t(
-													'form.required.category'
-												)!,
+												message: I18n?.t('form.required.category')!,
 											},
 										]}
 									>
 										<AppSelect
-											placeholder={I18n?.t(
-												'form.placeholder.category'
-											)}
+											placeholder={I18n?.t('form.placeholder.category')}
 											options={categoryNoteOptions}
 											disabled={isEdit}
 											showSearch
@@ -258,16 +221,12 @@ const NoteItemsForm: React.FC<NoteItemsFormProps> = ({
 									rules={[
 										{
 											required: true,
-											message: I18n?.t(
-												'form.required.wallet'
-											)!,
+											message: I18n?.t('form.required.wallet')!,
 										},
 									]}
 								>
 									<AppSelect
-										placeholder={I18n?.t(
-											'form.placeholder.wallet'
-										)}
+										placeholder={I18n?.t('form.placeholder.wallet')}
 										options={walletNoteOptions}
 										disabled={isEdit}
 										showSearch
@@ -275,11 +234,7 @@ const NoteItemsForm: React.FC<NoteItemsFormProps> = ({
 								</AppFormItem>
 							)}
 							<AppFormItem
-								name={
-									getFieldValue('type') === 'Income'
-										? 'debit'
-										: 'credit'
-								}
+								name={getFieldValue('type') === 'Income' ? 'debit' : 'credit'}
 								label={
 									getFieldValue('type') === 'Income'
 										? I18n?.t('form.label.income_amount')
@@ -290,30 +245,20 @@ const NoteItemsForm: React.FC<NoteItemsFormProps> = ({
 										required: true,
 										message:
 											getFieldValue('type') === 'Income'
-												? I18n?.t(
-														'form.required.income_amount'
-												  )!
-												: I18n?.t(
-														'form.required.spend_amount'
-												  )!,
+												? I18n?.t('form.required.income_amount')!
+												: I18n?.t('form.required.spend_amount')!,
 									},
 									{
 										pattern: /^[0-9]*$/,
-										message: I18n?.t(
-											'form.validation.only_number'
-										)!,
+										message: I18n?.t('form.validation.only_number')!,
 									},
 								]}
 							>
 								<AppInputCurrency
 									placeholder={
 										getFieldValue('type') === 'Income'
-											? I18n?.t(
-													'form.placeholder.income_amount'
-											  )
-											: I18n?.t(
-													'form.placeholder.spend_amount'
-											  )
+											? I18n?.t('form.placeholder.income_amount')
+											: I18n?.t('form.placeholder.spend_amount')
 									}
 								/>
 							</AppFormItem>
@@ -323,24 +268,19 @@ const NoteItemsForm: React.FC<NoteItemsFormProps> = ({
 							<AppFormItem
 								name={'walletNoteId'}
 								label={
-									isEdit &&
-									selectedWalletNoteId === data?.walletNoteId2
+									isEdit && selectedWalletNoteId === data?.walletNoteId2
 										? I18n?.t('form.label.transfer_from')
 										: I18n?.t('form.label.transfer_to')
 								}
 								rules={[
 									{
 										required: true,
-										message: I18n?.t(
-											'form.required.transfer_to'
-										)!,
+										message: I18n?.t('form.required.transfer_to')!,
 									},
 								]}
 							>
 								<AppSelect
-									placeholder={I18n?.t(
-										'form.placeholder.transfer_to'
-									)}
+									placeholder={I18n?.t('form.placeholder.transfer_to')}
 									options={walletNoteOptions}
 									disabled={isEdit}
 									showSearch
@@ -352,22 +292,16 @@ const NoteItemsForm: React.FC<NoteItemsFormProps> = ({
 								rules={[
 									{
 										required: true,
-										message: I18n?.t(
-											'form.required.transfer_amount'
-										)!,
+										message: I18n?.t('form.required.transfer_amount')!,
 									},
 									{
 										pattern: /^[0-9]*$/,
-										message: I18n?.t(
-											'form.validation.only_number'
-										)!,
+										message: I18n?.t('form.validation.only_number')!,
 									},
 								]}
 							>
 								<AppInputCurrency
-									placeholder={I18n?.t(
-										'form.placeholder.transfer_amount'
-									)}
+									placeholder={I18n?.t('form.placeholder.transfer_amount')}
 								/>
 							</AppFormItem>
 						</>
